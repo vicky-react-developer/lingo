@@ -1,0 +1,32 @@
+.splash-container {
+  height: 100vh;
+  width: 100%;
+  background: linear-gradient(180deg, #2342a8 0%, #4a1ea8 100%);
+  color: white;
+  padding: 0 20px;
+}
+
+.app-logo {
+  width: 110px;
+  height: 110px;
+  object-fit: contain;
+  border-radius: 50%;
+}
+
+.app-title {
+  font-size: 30px;
+  letter-spacing: 0.5px;
+}
+
+.app-subtitle {
+  opacity: 0.85;
+  margin-top: -5px;
+}
+
+.powered-by-text {
+  opacity: 0.7;
+}
+
+.powered-by-brand {
+  font-weight: 600;
+}

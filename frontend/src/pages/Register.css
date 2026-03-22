@@ -1,0 +1,82 @@
+/* Background */
+.registration-wrapper {
+  min-height: 100vh;
+  background: rgb(8, 18, 78);
+}
+
+/* Card */
+.registration-card {
+  width: 95%;
+  max-width: 420px;
+  background: #ffffff;
+  border-radius: 5px;
+  padding: 30px 28px;
+}
+
+/* Title */
+.form-title {
+  font-size: 25px;
+  margin-bottom: 20px;
+  position: relative;
+  color: #000;
+}
+
+.form-title::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 30px;
+  border-radius: 5px;
+  background: linear-gradient(135deg, #71b7e6, #9b59b6);
+}
+
+.underline {
+  width: 45px;
+  height: 4px;
+  background: #87b5ff;
+  border-radius: 2px;
+  margin-top: 4px;
+}
+
+/* Inputs */
+.form-input {
+  height: 48px;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+.form-input::placeholder {
+  color: #bfbfbf;
+}
+
+/* Register Button */
+.btn-register {
+  background: #07115D;
+  color: white;
+  font-size: 18px;
+  padding: 10px;
+  border-radius: 5px;
+  font-weight: 500;
+  height: 45px;
+  border: none;
+}
+
+.scrollable-content {
+  max-height: 300px;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  padding: 0px 5px;
+}
+
+.scrollable-content::-webkit-scrollbar {
+  display: none;
+  /* Older Safari and Chromium */
+}
+
+.scrollable-content label {
+  font-weight: 600;
+  color: #000;
+}

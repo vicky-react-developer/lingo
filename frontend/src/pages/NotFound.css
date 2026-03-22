@@ -1,0 +1,59 @@
+.notfound-container {
+  min-height: 100vh;
+  background: linear-gradient(180deg,#f7f9fc,#ffffff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* Card */
+
+.notfound-card {
+  background: white;
+  padding: 35px 25px;
+  border-radius: 18px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  max-width: 380px;
+  width: 100%;
+}
+
+/* Icon */
+
+.notfound-icon {
+  font-size: 50px;
+  margin-bottom: 10px;
+}
+
+/* 404 text */
+
+.notfound-code {
+  font-size: 70px;
+  font-weight: 800;
+  color: #0d6efd;
+  margin: 0;
+}
+
+/* Title */
+
+.notfound-title {
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+/* Description */
+
+.notfound-text {
+  font-size: 14px;
+  color: #6c757d;
+  margin: 10px 0 20px 0;
+}
+
+/* Button */
+
+.notfound-btn {
+  width: 100%;
+  border-radius: 12px;
+  padding: 10px;
+}

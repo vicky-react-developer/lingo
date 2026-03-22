@@ -1,0 +1,68 @@
+body {
+  font-family: "Montserrat", sans-serif !important;
+  max-width: 768px;
+  margin: 0 auto !important;
+}
+
+.mont-regular {
+  font-family: "Montserrat";
+  font-weight: 400;
+}
+
+.mont-italic {
+  font-family: "Montserrat";
+  font-style: italic;
+}
+
+.mont-medium {
+  font-family: "Montserrat";
+  font-weight: 500 !important;
+}
+
+.mont-semiBold {
+  font-family: "Montserrat";
+  font-weight: 600;
+}
+
+.mont-bold {
+  font-family: "Montserrat";
+  font-weight: 700;
+}
+
+.mont-boldItalic {
+  font-family: "Montserrat";
+  font-style: italic;
+  font-weight: 700;
+}
+
+.fs-11 {
+  font-size: 11px;
+}
+
+.fs-12 {
+  font-size: 12px;
+}
+
+.fs-14 {
+  font-size: 14px;
+}
+
+.fs-16 {
+  font-size: 16px;
+}
+
+.fs-18 {
+  font-size: 18px;
+}
+
+.fs-20 {
+  font-size: 20px;
+}
+
+p {
+  margin-bottom: 0 !important;
+}
+
+.clickable {
+  cursor: pointer;
+}

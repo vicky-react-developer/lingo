@@ -1,0 +1,113 @@
+.login-wrapper {
+    width: 100%;
+    background: #ffffff;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Title */
+.brand-title {
+    font-size: 30px;
+    background: #07115D;
+    color: white;
+    padding: 6px 18px;
+    border-radius: 8px;
+    display: inline-block;
+}
+
+.brand-subtitle {
+    color: #07115D;
+    margin-top: 4px;
+}
+
+/* Illustration */
+.illustration-box {
+    margin-top: 15px;
+}
+
+.illustration-img {
+    width: 45%;
+    max-width: 350px;
+}
+
+/* Dark curved lower section */
+.bottom-card {
+    background: #030352;
+    margin-top: -20px;
+    border-top-left-radius: 140px;
+    border-top-right-radius: 140px;
+    padding-top: 65px;
+    padding-bottom: 20px;
+}
+
+/* Input fields */
+.login-input {
+    height: 48px;
+    border-radius: 18px !important;
+    background: #ffffff;
+    border: none !important;
+    text-align: center;
+    font-size: 16px !important;
+    color: #000 !important;
+}
+
+.login-input::placeholder {
+    color: #bfbfbf;
+}
+
+/* Sign-in button */
+.btn-login {
+    background: #00C6FF;
+    border-radius: 18px;
+    color: white;
+    border: none;
+    height: 48px;
+}
+
+/* Forgot password */
+.forgot-link {
+    color: #e0e0ff;
+    text-decoration: underline;
+}
+
+/* Social section */
+.connect-text {
+    color: white;
+    font-size: 15px;
+}
+
+.social-icon {
+    width: 44px;
+    height: 44px;
+}
+
+.divider {
+    width: 1px;
+    height: 40px;
+    background: #ffffff80;
+}
+
+/* Bottom sign up */
+.account-text {
+    color: #cfcfff;
+}
+
+.signup-link {
+    color: #00C6FF;
+    font-weight: 500;
+    text-decoration: underline;
+}
+
+.left-leaf {
+    position: absolute;
+    width: 73px;
+    top: 25px;
+    left: 15px;
+}
+
+.right-leaf {
+    position: absolute;
+    right: -33px;
+    width: 170px;
+    top: -50px;
+}
