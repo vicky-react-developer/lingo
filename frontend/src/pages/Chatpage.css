@@ -1,6 +1,5 @@
 .chat-page {
   height: 100vh;
-  max-width: 430px;
   margin: auto;
   display: flex;
   flex-direction: column;
@@ -212,6 +211,7 @@
     opacity: 0;
     transform: translateY(-6px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -275,4 +275,12 @@
   white-space: pre-wrap;
   max-height: 160px;
   overflow-y: auto;
+}
+
+.correction-box {
+  background: #fff3cd;
+  padding: 8px;
+  margin-top: 5px;
+  border-radius: 5px;
+  max-width: 90%;
 }

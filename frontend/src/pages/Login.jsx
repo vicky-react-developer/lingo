@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ManSittingImg, LeftLeaf, RightLeaf, GMail, Facebook } from "../helpers/Constants";
+import { ManSittingImg, LeftLeaf, RightLeaf, GMail, Facebook, Logo } from "../helpers/Constants";
 import "./Login.css";
 import { useNavigate, Link } from "react-router";
 import { loginUserApi } from "../services/authService";
@@ -52,21 +52,25 @@ const Login = () => {
   return (
     <div className="login-wrapper">
       <div className="text-center mt-4">
-        <h1 className="brand-title mont-italic">
-          Lingo<span className="mont-boldItalic">Refresh</span>
+        <img src={Logo} alt="logo" className="logo-icon" />
+        <h1 className="brand-title mont-boldItalic">
+          <span className="brand-lingo">Lingo</span><span className="brand-refresh">Refresh</span>
         </h1>
         <p className="brand-subtitle mont-italic fs-14">Refresh your spoken english</p>
       </div>
-      <div className="position-relative">
-        <img src={LeftLeaf} alt="illustration" className="left-leaf" />
-        <img src={RightLeaf} alt="illustration" className="right-leaf" />
-      </div>
-      <div className="illustration-box text-center">
-        <img src={ManSittingImg} alt="illustration" className="illustration-img" />
-      </div>
+
 
       <div className="bottom-card">
-        <div className="container px-4">
+        <div className="position-relative illustration-box">
+          <img src={LeftLeaf} alt="illustration" className="left-leaf" />
+          <div className="text-center">
+            <img src={ManSittingImg} alt="illustration" className="illustration-img" />
+          </div>
+          <img src={RightLeaf} alt="illustration" className="right-leaf" />
+        </div>
+
+        <div className="login-form">
+          <label className="input-label mont-semiBold">Username</label>
           <input
             type="text"
             className="form-control login-input mb-3 mont-medium"
@@ -75,6 +79,7 @@ const Login = () => {
             value={formData.userName}
             onChange={handleChange}
           />
+          <label className="input-label mont-semiBold">Password</label>
           <input
             type="password"
             className="form-control login-input mb-4 mont-medium"
@@ -93,30 +98,16 @@ const Login = () => {
           >
             {loading ? "Signing in..." : "Sign in"}
           </button>
+        </div>
 
-          <div className="text-center mb-4">
-            <p
-              className="forgot-link mont-regular fs-11 clickable"
-              onClick={() => navigate("/forgot-password")}
-            >
-              Forgot your password?
-            </p>
-          </div>
-
-          <div className="text-center mb-3">
-            <span className="connect-text fs-11 mont-medium">or connect with</span>
-          </div>
-
-          <div className="d-flex justify-content-center align-items-center gap-4 mb-4">
-            <img src={Facebook} alt="facebook" className="social-icon" />
-            <div className="divider"></div>
-            <img src={GMail} alt="gmail" className="social-icon" />
-          </div>
-
-          <div className="text-center pb-4 mont-medium fs-11">
-            <span className="account-text">Don't have an account? </span>
-            <Link className="signup-link" to="/register">Sign up</Link>
-          </div>
+        <div className="text-center mt-3">
+          <span className="account-text mont-medium fs-11">Don't have an account? </span>
+          <Link className="signup-link fs-11" to="/register">Sign up</Link>
+        </div>
+        <div className="text-center mt-1 pb-4">
+          <span className="forgot-link mont-regular fs-11 clickable" onClick={() => navigate("/forgot-password")}>
+            Forgot Password
+          </span>
         </div>
       </div>
     </div>

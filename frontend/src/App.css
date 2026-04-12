@@ -74,3 +74,11 @@ p {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.header-left {
+  width: 10%;
+}
+
+.header-right {
+  width: 90%;
+}

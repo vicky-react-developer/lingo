@@ -8,42 +8,73 @@
 /* Title */
 .brand-title {
     font-size: 30px;
-    background: #07115D;
-    color: white;
-    padding: 6px 18px;
-    border-radius: 8px;
+    font-style: italic;
     display: inline-block;
+    background: none;
+    padding: 0;
+}
+
+.brand-lingo {
+    color: #07115D;
+}
+
+.brand-refresh {
+    color: #00C6FF;
 }
 
 .brand-subtitle {
-    color: #07115D;
-    margin-top: 4px;
+    color: #030352;
+}
+
+.logo-icon {
+    width: 88px;
+    height: 88px;
+    display: block;
+    margin: 0 auto 8px;
+}
+
+.input-label {
+    display: block;
+    color: white;
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+.forgot-link {
+    color: #00C6FF;
+    text-decoration: underline;
+}
+
+.account-text {
+    color: #555;
 }
 
 /* Illustration */
-.illustration-box {
+/* .illustration-box {
     margin-top: 15px;
+} */
+
+.illustration-box {
+    top: -85px;
 }
 
 .illustration-img {
-    width: 45%;
+    width: 53%;
     max-width: 350px;
 }
 
 /* Dark curved lower section */
 .bottom-card {
     background: #030352;
-    margin-top: -20px;
-    border-top-left-radius: 140px;
-    border-top-right-radius: 140px;
-    padding-top: 65px;
-    padding-bottom: 20px;
+    margin-top: 90px;
+    padding: 0px 20px 50px 20px;
+    border-radius: 200px 200px 0px 0px;
 }
 
 /* Input fields */
 .login-input {
     height: 48px;
-    border-radius: 18px !important;
+    border-radius: 8px !important;
     background: #ffffff;
     border: none !important;
     text-align: center;
@@ -58,7 +89,7 @@
 /* Sign-in button */
 .btn-login {
     background: #00C6FF;
-    border-radius: 18px;
+    border-radius: 8px;
     color: white;
     border: none;
     height: 48px;
@@ -66,7 +97,7 @@
 
 /* Forgot password */
 .forgot-link {
-    color: #e0e0ff;
+    color: #00CCFF;
     text-decoration: underline;
 }
 
@@ -89,7 +120,7 @@
 
 /* Bottom sign up */
 .account-text {
-    color: #cfcfff;
+    color: #fff;
 }
 
 .signup-link {
@@ -101,13 +132,18 @@
 .left-leaf {
     position: absolute;
     width: 73px;
-    top: 25px;
-    left: 15px;
+    top: 45px;
+    left: -25px;
 }
 
 .right-leaf {
     position: absolute;
     right: -33px;
-    width: 170px;
-    top: -50px;
+    width: 150px;
+    top: -21px;
+}
+
+.login-form {
+    margin-top: -50px;
+    padding: 0px 30px 0px;
 }

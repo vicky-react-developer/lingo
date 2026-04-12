@@ -1,5 +1,5 @@
 .mode-container {
-  max-width: 420px;
+  /* max-width: 420px; */
   margin: auto;
   padding: 20px;
   min-height: 100vh;
@@ -47,9 +47,7 @@
 /* Icon */
 
 .mode-icon {
-  width: 50px;
-  height: 50px;
-  background: #0d6efd;
+  background: #00CCFF;
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -57,6 +55,7 @@
   color: white;
   font-size: 20px;
   margin-right: 14px;
+  padding: 10px 15px;
 }
 
 /* Content */

@@ -1,20 +1,20 @@
 import React, { useState } from "react";
-import { ManSittingImg, LeftLeaf, RightLeaf } from "../helpers/Constants";
+import { ManSittingImg, LeftLeaf, RightLeaf, Logo } from "../helpers/Constants";
 import "./ForgotPassword.css";   // reuses the same stylesheet
 import { useNavigate, useLocation, Link } from "react-router";
 import { resetPasswordApi } from "../services/authService";
 
 export default function ResetPassword() {
   const [formData, setFormData] = useState({
-    password:        "",
+    password: "",
     confirmPassword: "",
   });
-  const [error,   setError]   = useState("");
+  const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const navigate  = useNavigate();
-  const location  = useLocation();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   // resetToken was placed in navigation state by ForgotPassword
   const resetToken = location.state?.resetToken;
@@ -66,25 +66,24 @@ export default function ResetPassword() {
   return (
     <div className="login-wrapper">
       <div className="text-center mt-4">
-        <h1 className="brand-title mont-italic">
-          Lingo<span className="mont-boldItalic">Refresh</span>
+        <img src={Logo} alt="logo" className="logo-icon" />
+        <h1 className="brand-title mont-boldItalic">
+          <span className="brand-lingo">Lingo</span><span className="brand-refresh">Refresh</span>
         </h1>
         <p className="brand-subtitle mont-italic fs-14">Refresh your spoken english</p>
       </div>
 
-      <div className="position-relative">
-        <img src={LeftLeaf}  alt="illustration" className="left-leaf"  />
-        <img src={RightLeaf} alt="illustration" className="right-leaf" />
-      </div>
-
-      <div className="illustration-box text-center">
-        <img src={ManSittingImg} alt="illustration" className="illustration-img" />
-      </div>
 
       <div className="bottom-card">
-        <div className="container px-4">
+        <div className="position-relative illustration-box">
+          <img src={LeftLeaf} alt="illustration" className="left-leaf" />
+          <div className="text-center">
+            <img src={ManSittingImg} alt="illustration" className="illustration-img" />
+          </div>
+          <img src={RightLeaf} alt="illustration" className="right-leaf" />
+        </div>
 
-          <p className="page-heading mont-semiBold text-center mb-3">Reset Password</p>
+        <div className="login-form">
 
           <div>
             <label htmlFor="password" className="input-label mont-semiBold">New Password</label>
@@ -112,7 +111,7 @@ export default function ResetPassword() {
             />
           </div>
 
-          {error   && <p className="text-danger text-center fs-12">{error}</p>}
+          {error && <p className="text-danger text-center fs-12">{error}</p>}
           {success && <p className="text-success text-center fs-12">{success}</p>}
 
           <button
@@ -127,7 +126,6 @@ export default function ResetPassword() {
             <span className="account-text">Remember your password? </span>
             <Link className="signup-link" to="/login">Sign in</Link>
           </div>
-
         </div>
       </div>
     </div>

@@ -9,6 +9,7 @@ import "slick-carousel/slick/slick-theme.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import axios from "axios";
+import { userLogout } from './services/authService.js';
 
 axios.interceptors.request.use(
   (config) => {
@@ -26,10 +27,20 @@ axios.interceptors.request.use(
   }
 );
 
+axios.interceptors.response.use(function onFulfilled(response) {
+  return response;
+}, function onRejected(error) {
+  if (error.response?.status === 401) {
+    userLogout();
+    window.location.href = "/login";
+  }
+  return Promise.reject(error);
+});
+
 createRoot(document.getElementById('root')).render(
   // <StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>
   // </StrictMode>,
 )
