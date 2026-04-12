@@ -191,3 +191,88 @@
   }
 
 }
+
+/* Context banner */
+.context-banner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  margin: 8px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  background-color: #f0f4ff;
+  border-left: 4px solid #4a6cf7;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+  animation: slideDown 0.25s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Topic mode */
+.context-banner--topic .context-banner__icon {
+  font-size: 16px;
+}
+
+.context-banner--topic .context-banner__label {
+  font-weight: 600;
+  color: #4a6cf7;
+  white-space: nowrap;
+}
+
+.context-banner--topic .context-banner__value {
+  color: #333;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Passage mode */
+.context-banner--passage {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  border-left-color: #e07b39;
+  background-color: #fff7f0;
+}
+
+.context-banner--passage .context-banner__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.context-banner--passage .context-banner__label {
+  font-weight: 600;
+  color: #e07b39;
+  flex: 1;
+}
+
+.context-banner--passage .context-banner__toggle {
+  font-size: 12px;
+  color: #999;
+}
+
+.context-banner__passage-text {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #f0d8c8;
+  font-size: 13px;
+  color: #444;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  max-height: 160px;
+  overflow-y: auto;
+}

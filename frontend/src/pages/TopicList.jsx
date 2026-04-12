@@ -1,11 +1,15 @@
 import React, { useEffect, useState } from "react";
 import "./TopicList.css";
 import { getTopics } from "../services/topicService";
+import { useNavigate } from "react-router";
+import Header from "../components/Header";
 
-function TopicList({ onSelectTopic }) {
+function TopicList() {
 
     const [topics, setTopics] = useState([]);
     const [loading, setLoading] = useState(true);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchTopics();
@@ -26,6 +30,21 @@ function TopicList({ onSelectTopic }) {
         }
     };
 
+    const onSelectTopic = (topic) => {
+        navigate("/chat", {
+            state: {
+                sessionPayload: {
+                    mode: "topic",
+                    topicId: topic.id,
+                },
+                info: {
+                    title: topic.title,
+                    description: topic.description,
+                }
+            }
+        })
+    }
+
     if (loading) {
         return (
             <div className="topic-container text-center">
@@ -35,46 +54,48 @@ function TopicList({ onSelectTopic }) {
     }
 
     return (
-        <div className="topic-container">
+        <div>
+            <Header
+                primaryTitle="Choose a Topic"
+                secondaryTitle="Start a conversation with AI"
+            />
+            <div className="topic-container">
 
-            <div className="topic-header text-center">
-                <h4>Choose a Topic</h4>
-                <p>Start a conversation with AI</p>
+                <div className="topic-list">
+
+                    {topics.map(topic => (
+
+                        <div
+                            key={topic.id}
+                            className="topic-card"
+                            onClick={() => onSelectTopic(topic)}
+                        >
+
+                            <div className="topic-icon">
+                                💬
+                            </div>
+
+                            <div className="topic-content">
+
+                                <h6>{topic.title}</h6>
+
+                                <p>{topic.description}</p>
+
+                            </div>
+
+                            <div className="topic-arrow">
+                                ›
+                            </div>
+
+                        </div>
+
+                    ))}
+
+                </div>
+
             </div>
-
-            <div className="topic-list">
-
-                {topics.map(topic => (
-
-                    <div
-                        key={topic.id}
-                        className="topic-card"
-                        onClick={() => onSelectTopic(topic)}
-                    >
-
-                        <div className="topic-icon">
-                            💬
-                        </div>
-
-                        <div className="topic-content">
-
-                            <h6>{topic.title}</h6>
-
-                            <p>{topic.description}</p>
-
-                        </div>
-
-                        <div className="topic-arrow">
-                            ›
-                        </div>
-
-                    </div>
-
-                ))}
-
-            </div>
-
         </div>
+
     );
 }
 

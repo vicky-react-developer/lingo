@@ -1,8 +1,9 @@
 import React from "react";
 import "./ModeSelection.css";
 import { useNavigate } from "react-router";
+import Header from "../components/Header";
 
-function ModeSelection() {
+function ModeSelection({ onMenuToggle }) {
     const navigate = useNavigate();
 
     const modes = [
@@ -35,49 +36,57 @@ function ModeSelection() {
                 navigate("/passage");
                 break;
             default:
-                navigate("/chat", { state: { mode: "normal" } });
-
+                navigate("/chat", {
+                    state: {
+                        sessionPayload: {
+                            mode: "normal"
+                        },
+                    }
+                });
         }
     }
 
     return (
-        <div className="mode-container">
+        <div>
+            <Header
+                primaryTitle="Practice English"
+                secondaryTitle="Select a learning mode"
+                onMenuToggle={onMenuToggle}
+            />
+            <div className="mode-container">
 
-            <div className="mode-header text-center">
-                <h4>Practice English</h4>
-                <p>Select a learning mode</p>
+                <div className="mode-list">
+
+                    {modes.map((mode) => (
+
+                        <div
+                            key={mode.id}
+                            className="mode-card"
+                            onClick={() => handleNavigation(mode.id)}
+                        >
+
+                            <div className="mode-icon">
+                                <i className={`bi ${mode.icon}`}></i>
+                            </div>
+
+                            <div className="mode-content">
+                                <h5>{mode.title}</h5>
+                                <p>{mode.desc}</p>
+                            </div>
+
+                            <div className="mode-arrow">
+                                <i className="bi bi-chevron-right"></i>
+                            </div>
+
+                        </div>
+
+                    ))}
+
+                </div>
+
             </div>
-
-            <div className="mode-list">
-
-                {modes.map((mode) => (
-
-                    <div
-                        key={mode.id}
-                        className="mode-card"
-                        onClick={() => handleNavigation(mode.id)}
-                    >
-
-                        <div className="mode-icon">
-                            <i className={`bi ${mode.icon}`}></i>
-                        </div>
-
-                        <div className="mode-content">
-                            <h5>{mode.title}</h5>
-                            <p>{mode.desc}</p>
-                        </div>
-
-                        <div className="mode-arrow">
-                            <i className="bi bi-chevron-right"></i>
-                        </div>
-
-                    </div>
-
-                ))}
-
-            </div>
-
         </div>
+
     );
 }
 
