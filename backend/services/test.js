@@ -1,6 +1,6 @@
 const axios = require("axios");
 
-const API_KEY = "AIzaSyDxkpkZxbYD_AIL36aUauqm5gjIkG95B0w";
+const API_KEY = "AIzaSyAwFyJp7_tumfQ-mOnNewcOpsuyUisV6dk";
 
 async function listModels() {
   try {

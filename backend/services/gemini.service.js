@@ -8,7 +8,8 @@ const model = genAI.getGenerativeModel({
 
 
 const getPrompt = (payload) => {
-  const { mode } = payload;
+  const { mode } = payload.otherInfo;
+  console.log("payload", payload)
   switch (mode) {
     case "topic":
       return getTopicPrompt(payload);
@@ -51,7 +52,8 @@ Return ONLY JSON:
 }
 
 const getTopicPrompt = (payload) => {
-  const { text, history, title, description } = payload;
+  const { text, history } = payload;
+  const { title, description } = payload.otherInfo;
   const prompt = `
 You are an English tutor helping a student practice English.
 
@@ -87,7 +89,8 @@ Return ONLY JSON:
 }
 
 const getPassagePrompt = (payload) => {
-  const { text, history, tamilText } = payload;
+  const { text, history } = payload;
+  const { tamilText } = payload.otherInfo;
   const prompt = `
 You are an English tutor helping a student.
 
@@ -113,6 +116,7 @@ Instructions:
 4. Improve answer if needed
 5. Ask NEXT question from passage
 6. Keep conversation flowing
+7. If the answer is wrong, tell them that answer is wrong in a polite way and continue the conversation.
 
 Return JSON:
 {
@@ -144,6 +148,7 @@ const generateContent = async (prompt) => {
 async function askAI(payload) {
   const prompt = getPrompt(payload);
 
+  // console.log("prompt", prompt)
   const response = await generateContent(prompt);
 
   return response;

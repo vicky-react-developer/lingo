@@ -16,6 +16,8 @@ import Resetpassword from './pages/Resetpassword';
 import NotFound from './pages/NotFound';
 import Sidebar from './components/Sidebar';
 import ChatHistory from './pages/ChatHistory';
+import MyProfile from './pages/Myprofile';
+import ChangePassword from './pages/ChangePassword';
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -41,6 +43,8 @@ function App() {
           <Route path="/topic" element={<TopicList />} />
           <Route path="/passage" element={<PassageList />} />
           <Route path="/chat-history" element={<ChatHistory />} />
+          <Route path="/profile" element={<MyProfile />} />
+          <Route path="/change-password" element={<ChangePassword />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />

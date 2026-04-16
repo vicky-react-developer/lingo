@@ -5,8 +5,7 @@ export default function Sidebar({ isOpen, onClose }) {
     const navigate = useNavigate();
     const location = useLocation();
     const auth = useAuth();
-
-    const user = auth?.user
+    const user = auth?.user;
 
     const navItems = [
         { path: "/home", icon: "bi-house-fill", label: "Home" },
@@ -18,11 +17,26 @@ export default function Sidebar({ isOpen, onClose }) {
 
     const go = (path) => { navigate(path); onClose(); };
 
+    const handleLogout = async () => {
+        try {
+            await auth.logout();
+            navigate("/login");
+            onClose();
+        } catch (e) {
+            console.error("Logout error:", e);
+        }
+    };
+
     return (
         <>
             {isOpen && (
-                <div onClick={onClose}
-                    style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.35)', zIndex: 40 }} />
+                <div
+                    onClick={onClose}
+                    style={{
+                        position: 'fixed', inset: 0,
+                        background: 'rgba(0,0,0,0.35)', zIndex: 40
+                    }}
+                />
             )}
             <div style={{
                 position: 'fixed', top: 0, left: 0, bottom: 0, width: '260px',
@@ -30,19 +44,26 @@ export default function Sidebar({ isOpen, onClose }) {
                 zIndex: 50, transform: isOpen ? 'translateX(0)' : 'translateX(-100%)',
                 transition: 'transform 0.25s ease', display: 'flex', flexDirection: 'column'
             }}>
+                {/* User Header */}
                 <div className="p-3 border-bottom">
                     <div style={{
                         width: 44, height: 44, borderRadius: '50%', background: '#E6F1FB',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        fontWeight: 500, color: '#185FA5', marginBottom: 8
-                    }}>{user?.name[0]}</div>
+                        fontWeight: 600, color: '#185FA5', marginBottom: 8,
+                        fontSize: 18
+                    }}>
+                        {user?.name?.[0]?.toUpperCase()}
+                    </div>
                     <div style={{ fontWeight: 500 }}>{user?.name}</div>
                     <div className="text-muted" style={{ fontSize: 12 }}>{user?.userName}</div>
                 </div>
 
+                {/* Nav Items */}
                 <nav className="flex-grow-1 py-2">
                     {navItems.map(item => (
-                        <button key={item.path} onClick={() => go(item.path)}
+                        <button
+                            key={item.path}
+                            onClick={() => go(item.path)}
                             className="btn w-100 text-start d-flex align-items-center gap-3 px-3 py-2 rounded-0"
                             style={{
                                 fontSize: 14,
@@ -55,6 +76,48 @@ export default function Sidebar({ isOpen, onClose }) {
                         </button>
                     ))}
                 </nav>
+
+                {/* Bottom: My Profile + Logout */}
+                <div className="border-top py-2">
+                    <button
+                        onClick={() => go("/profile")}
+                        className="btn w-100 text-start d-flex align-items-center gap-3 px-3 py-2 rounded-0"
+                        style={{
+                            fontSize: 14,
+                            background: location.pathname === "/profile" ? '#E6F1FB' : 'transparent',
+                            color: location.pathname === "/profile" ? '#185FA5' : '#333',
+                            fontWeight: location.pathname === "/profile" ? 500 : 400,
+                        }}>
+                        <i className="bi bi-person-circle" style={{ fontSize: 16, width: 20, textAlign: 'center' }}></i>
+                        My Profile
+                    </button>
+
+                     <button
+                        onClick={() => go("/change-password")}
+                        className="btn w-100 text-start d-flex align-items-center gap-3 px-3 py-2 rounded-0"
+                        style={{
+                            fontSize: 14,
+                            background: location.pathname === "/change-password" ? '#E6F1FB' : 'transparent',
+                            color: location.pathname === "/change-password" ? '#185FA5' : '#333',
+                            fontWeight: location.pathname === "/change-password" ? 500 : 400,
+                        }}>
+                        <i className="bi bi-key" style={{ fontSize: 16, width: 20, textAlign: 'center' }}></i>
+                        Change Password
+                    </button>
+
+                    <button
+                        onClick={handleLogout}
+                        className="btn w-100 text-start d-flex align-items-center gap-3 px-3 py-2 rounded-0"
+                        style={{
+                            fontSize: 14,
+                            background: 'transparent',
+                            color: '#D9363E',
+                            fontWeight: 400,
+                        }}>
+                        <i className="bi bi-box-arrow-left" style={{ fontSize: 16, width: 20, textAlign: 'center' }}></i>
+                        Logout
+                    </button>
+                </div>
             </div>
         </>
     );

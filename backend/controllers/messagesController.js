@@ -29,7 +29,6 @@ exports.saveMessage = async (req, res) => {
 
         const ai = await askAI(payload);
 
-        console.log("ai", ai)
         const aiMessage = await Message.create({
             sessionId,
             sender: "ai",
@@ -108,7 +107,6 @@ exports.getAllMessages = async (req, res) => {
 
         messages = messages.map((item) => {
             const itemJSON = item.toJSON();
-            console.log("itemJSON", itemJSON)
             const payload = {
                 sender: itemJSON.sender,
                 text: itemJSON.text,

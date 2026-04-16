@@ -13,3 +13,25 @@ export const getOneUser = async () => {
         );
     }
 };
+
+export const updateUserProfile = async (payload) => {
+    try {
+        const { data } = await axios.put(`${USER_URL}/update-profile`, payload);
+        return data;
+    } catch (error) {
+        throw new Error(
+            error?.response?.data?.message || "Update failed. Please try again."
+        );
+    }
+};
+
+export const changeUserPassword = async (payload) => {
+    try {
+        const { data } = await axios.put(`${USER_URL}/change-password`, payload);
+        return data;
+    } catch (error) {
+        throw new Error(
+            error?.response?.data?.message || "changePassword failed. Please try again."
+        );
+    }
+};
