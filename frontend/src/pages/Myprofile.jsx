@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import { updateUserProfile } from "../services/userService";
 import Header from "../components/Header";
-import "./MyProfile.css";
+import "./Myprofile.css";
 
 const FIELD_CONFIG = [
     { label: "Full Name", name: "name", type: "text", icon: "bi-person", required: true },
