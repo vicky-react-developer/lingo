@@ -7,9 +7,17 @@ const sequelize = new Sequelize(
   dbConfig.PASSWORD,
   {
     host: dbConfig.HOST,
+    port: dbConfig.PORT, // ✅ ADD THIS
     dialect: dbConfig.dialect,
     pool: dbConfig.pool,
-    logging: false, // set true if you want SQL logs
+    logging: false,
+
+    dialectOptions: process.env.NODE_ENV === "production" ? {
+      ssl: {
+        require: false,
+        rejectUnauthorized: false
+      }
+    } : {}
   }
 );
 
