@@ -9,7 +9,7 @@ const registerRoutes = require("./routes");
 const app = express();
 
 app.use(cors({
-  origin: ["http://localhost:5173", "https://lingo-six-sigma.vercel.app/"],
+  origin: ["http://localhost:5173", "https://lingo-six-sigma.vercel.app"],
   credentials: true
 }));
 
