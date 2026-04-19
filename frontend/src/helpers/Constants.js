@@ -10,4 +10,4 @@ export { default as PracticeImg } from '../assets/images/practice.png'
 export { default as ReportImg } from '../assets/images/report.png'
 export { default as InstructionsImg } from '../assets/images/instructions.png'
 
-export const API_URL = "http://localhost:5163/api/";
+export const API_URL = "https://lingo-axlt.onrender.com/api/";

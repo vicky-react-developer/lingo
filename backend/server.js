@@ -9,7 +9,7 @@ const registerRoutes = require("./routes");
 const app = express();
 
 app.use(cors({
-  origin: ["https://b9cc-2401-4900-cac9-c505-e585-f820-cce4-739c.ngrok-free.app"],
+  origin: ["http://localhost:5173/"],
   credentials: true
 }));
 
