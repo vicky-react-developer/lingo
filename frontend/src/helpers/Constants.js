@@ -10,4 +10,4 @@ export { default as PracticeImg } from '../assets/images/practice.png'
 export { default as ReportImg } from '../assets/images/report.png'
 export { default as InstructionsImg } from '../assets/images/instructions.png'
 
-export const API_URL = "https://be1e-2401-4900-cabc-45d5-b93c-3cea-b4ed-a188.ngrok-free.app/api/";
+export const API_URL = " https://ff03-2401-4900-cab2-6683-f54c-e133-5acb-b4fb.ngrok-free.app/api/";
