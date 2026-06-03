@@ -23,7 +23,6 @@ const Login = () => {
   };
 
   const validate = () => {
-    console.log("Called")
     for (const key in formData) {
       if (!formData[key]) {
         setError("Please fill all the fields");
@@ -41,7 +40,6 @@ const Login = () => {
 
     try {
       const response = await loginUserApi(formData);
-      console.log("resp", response)
       if (response?.success) {
         login(response.token, response.data);
         navigate("/home");

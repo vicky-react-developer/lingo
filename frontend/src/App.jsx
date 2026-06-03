@@ -18,6 +18,8 @@ import Sidebar from './components/Sidebar';
 import ChatHistory from './pages/ChatHistory';
 import MyProfile from './pages/Myprofile';
 import ChangePassword from './pages/ChangePassword';
+import TaskList from './pages/TaskList';
+import FoundationalTask from './pages/FoundationalTask';
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -45,6 +47,8 @@ function App() {
           <Route path="/chat-history" element={<ChatHistory />} />
           <Route path="/profile" element={<MyProfile />} />
           <Route path="/change-password" element={<ChangePassword />} />
+          <Route path="/task-list" element={<TaskList />} />
+          <Route path="/foundational-task/:taskId" element={<FoundationalTask />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />
