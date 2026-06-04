@@ -1,13 +1,15 @@
-import { useState, useEffect, useRef } from "react";
-import ChatWindow from "../components/ChatWindow";
-import VoiceRecorder from "../components/VoiceRecorder";
-import useSpeech from "../hooks/useSpeech";
-import Header from "../components/Header";
-import ContextBanner from "../components/ContextBanner";
-import { createSession } from "../services/sessionService";
-import { saveMessage, initiateConversation, getAllMessages } from "../services/messageService";
 import "./ChatPage.css";
+
+import { getAllMessages, initiateConversation, saveMessage } from "../services/messageService";
+import { useEffect, useRef, useState } from "react";
+
+import ChatWindow from "../components/ChatWindow";
+import ContextBanner from "../components/ContextBanner";
+import Header from "../components/Header";
+import VoiceRecorder from "../components/VoiceRecorder";
+import { createSession } from "../services/sessionService";
 import { useLocation } from 'react-router';
+import useSpeech from "../hooks/useSpeech";
 
 export default function ChatPage() {
 
@@ -15,7 +17,7 @@ export default function ChatPage() {
   const [sessionId, setSessionId] = useState(null);
   const [text, setText] = useState("");
   const [listening, setListening] = useState(false);
-
+  const [isTyping, setIsTyping] = useState(false);
   const { speak } = useSpeech();
 
   const chatEndRef = useRef(null);
@@ -75,7 +77,8 @@ export default function ChatPage() {
   };
 
   const startConvo = async (sessionId, payload) => {
-    console.log("payload", payload)
+    setIsTyping(true);
+
     try {
       const res = await initiateConversation(sessionId, payload);
 
@@ -96,11 +99,12 @@ export default function ChatPage() {
 
     } catch (e) {
       console.log("startConvo error", e);
+    } finally {
+      setIsTyping(false);
     }
   };
 
   const sendMessage = async (messageText) => {
-
     if (!messageText) return;
 
     setMessages(prev => [
@@ -108,18 +112,25 @@ export default function ChatPage() {
       { sender: "user", text: messageText }
     ]);
 
-    const res = await saveMessage(sessionId, messageText, { ...sessionPayload, ...info });
+    setIsTyping(true); // Set typing to true
 
-    const { aiReply, correction } = res;
+    try {
+      const res = await saveMessage(sessionId, messageText, { ...sessionPayload, ...info });
+      const { aiReply, correction } = res;
 
-    const aiMessage = {
-      sender: "ai",
-      text: aiReply,
-      correction
-    };
+      const aiMessage = {
+        sender: "ai",
+        text: aiReply,
+        correction
+      };
 
-    setMessages(prev => [...prev, aiMessage]);
-    speak(aiReply);
+      setMessages(prev => [...prev, aiMessage]);
+      speak(aiReply);
+    } catch (error) {
+      console.error("Failed to send message", error);
+    } finally {
+      setIsTyping(false);
+    }
   };
 
   const handleSubmit = () => {
@@ -145,7 +156,7 @@ export default function ChatPage() {
 
       {/* Chat Area */}
       <div className="chat-body">
-        <ChatWindow messages={messages} />
+        <ChatWindow messages={messages} isTyping={isTyping} />
         <div ref={chatEndRef}></div>
       </div>
 

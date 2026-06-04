@@ -284,3 +284,45 @@
   border-radius: 5px;
   max-width: 90%;
 } 
+
+
+/* Thinking/Typing Bubble */
+.typing-bubble {
+  width: fit-content;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+}
+
+.typing-dots {
+  display: flex;
+  gap: 4px;
+}
+
+.typing-dots span {
+  width: 8px;
+  height: 8px;
+  background-color: #6c63ff;
+  border-radius: 50%;
+  opacity: 0.4;
+  animation: typing-bounce 1.4s infinite ease-in-out both;
+}
+
+.typing-dots span:nth-child(1) {
+  animation-delay: -0.32s;
+}
+
+.typing-dots span:nth-child(2) {
+  animation-delay: -0.16s;
+}
+
+@keyframes typing-bounce {
+  0%, 80%, 100% { 
+    transform: scale(0);
+    opacity: 0.4;
+  } 
+  40% { 
+    transform: scale(1.0);
+    opacity: 1;
+  }
+}
