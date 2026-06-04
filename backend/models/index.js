@@ -112,6 +112,14 @@ db.Attempt.belongsTo(db.User, {
     foreignKey: "userId"
 });
 
+db.FoundationalTask.hasMany(db.Attempt, {
+    foreignKey: "taskId"
+});
+
+db.Attempt.belongsTo(db.FoundationalTask, {
+    foreignKey: "taskId"
+});
+
 db.TamilSentence.hasMany(db.Attempt, {
     foreignKey: "sentenceId"
 });

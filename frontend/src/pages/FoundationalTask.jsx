@@ -54,7 +54,8 @@ export default function FoundationalTask() {
                 tamilText: currentQuestion.tamilText,
                 expectedEnglish: currentQuestion.expectedEnglish,
                 userAnswer: answer,
-                sentenceId: currentQuestion.id
+                sentenceId: currentQuestion.id,
+                taskId
             }
             const res = await submitTamilTranslation(payload);
             if (!res.success) {
@@ -69,6 +70,7 @@ export default function FoundationalTask() {
     const handleNext = () => {
         setResult(null);
         setAnswer("");
+        currentIndex(prev => prev + 1);
     };
 
     const currentQuestion = questions[currentIndex];

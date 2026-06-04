@@ -1,7 +1,7 @@
 const db = require("../models");
 const { askAI, getPrompt } = require("../services/gemini.service");
 
-const { FoundationalTask, TamilSentence, Attempt } = db;
+const { FoundationalTask, TamilSentence, Attempt, WordTask } = db;
 
 exports.getTasks = async (req, res) => {
 
@@ -9,10 +9,25 @@ exports.getTasks = async (req, res) => {
 
         const { type } = req.params;
 
+        const include = [{
+            model: Attempt,
+            where: {
+                userId: req.user.id,
+            },
+            required: false
+        }]
+
+        if (type === "tamil_to_english") {
+            include.push({ model: TamilSentence });
+        } else if (type === "own_words") {
+            include.push({ model: WordTask });
+        }
+
         const tasks = await FoundationalTask.findAll({
             where: {
                 type
-            }
+            },
+            include
         });
 
         return res.json({
@@ -67,11 +82,11 @@ exports.submitTamilTranslation = async (req, res) => {
 
     try {
 
-        // const {
-        //     tamilText,
-        //     expectedEnglish,
-        //     userAnswer
-        // } = req.body;
+        const {
+            sentenceId,
+            userAnswer,
+            taskId
+        } = req.body;
 
         const prompt = getPrompt("foundationalTOE", req.body)
 
@@ -79,8 +94,9 @@ exports.submitTamilTranslation = async (req, res) => {
 
         const attempt = await Attempt.create({
             userId: req.user.id,
-            sentenceId: req.body.sentenceId,
-            userAnswer: answer,
+            taskId,
+            sentenceId,
+            userAnswer,
             correctedAnswer: ai.correctedText,
             explanation: ai.explanation,
             isCorrect: ai.isCorrect

@@ -75,8 +75,9 @@ export default function TaskList() {
                 {tasks.length > 0 ?
                     <>
                         {tasks.map((task) => {
-
-                            const progress = (task.completed / task.totalQuestions) * 100;
+                            const completed = task.Attempts?.length;
+                            const totalQuestions = tasktype === "tamil_to_english" ? task.TamilSentences?.length : task.WordTask?.length;
+                            const progress = (completed / totalQuestions) * 100;
 
                             return (
 
@@ -92,12 +93,12 @@ export default function TaskList() {
                                             <h5>{task.title}</h5>
 
                                             <span>
-                                                {task.completed}/{task.totalQuestions} Completed
+                                                {completed}/{totalQuestions} Completed
                                             </span>
 
                                         </div>
 
-                                        {task.completed === task.totalQuestions ? (
+                                        {completed === totalQuestions ? (
 
                                             <div className="task-status completed">
                                                 <i className="bi bi-check-circle-fill"></i>
@@ -125,9 +126,9 @@ export default function TaskList() {
 
                                     <button className="task-btn" onClick={() => navigate(`/foundational-task/${task.id}`, { state: { taskType: task.type } })}>
 
-                                        {task.completed === 0
+                                        {completed === 0
                                             ? "Start"
-                                            : task.completed === task.totalQuestions
+                                            : completed === totalQuestions
                                                 ? "Review"
                                                 : "Continue"}
 

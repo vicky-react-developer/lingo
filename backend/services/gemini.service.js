@@ -184,7 +184,17 @@ const generateContent = async (prompt) => {
 async function askAI(prompt) {
   // const prompt = getPrompt(payload);
 
-  const response = await generateContent(prompt);
+  const response = await generateContent({
+    contents: [
+      {
+        role: "user",
+        parts: [{ text: prompt }]
+      }
+    ],
+    generationConfig: {
+      responseMimeType: "application/json"
+    }
+  });
 
   return response;
 }
