@@ -3,10 +3,12 @@ const router = express.Router();
 const { protect } = require("../middleware/auth");
 const {
     getTasks,
-    getTaskQuestions
+    getTamilSentences,
+    submitTamilTranslation
 } = require("../controllers/foundationTaskController");
 
-router.get("/get-tasks/:type", getTasks);
-router.get("/get-task-questions/:taskId", getTaskQuestions);
+router.get("/get-tasks/:type",protect, getTasks);
+router.get("/get-tamil-sentences/:taskId",protect, getTamilSentences);
+router.post("/submit-tamil-translation",protect, submitTamilTranslation);
 
 module.exports = router;

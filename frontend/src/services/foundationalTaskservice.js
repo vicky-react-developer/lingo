@@ -13,13 +13,24 @@ export const getTasks = async (type) => {
   }
 };
 
-export const getTaskQuestions = async (taskId) => {
+export const getTamilSentences = async (taskId) => {
   try {
-    const { data } = await axios.get(`${API_URL}foundational-tasks/get-task-questions/${taskId}`);
+    const { data } = await axios.get(`${API_URL}foundational-tasks/get-tamil-sentences/${taskId}`);
     return data;
   } catch (error) {
     throw new Error(
       error?.response?.data?.message || "getTamilSentences failed. Please try again."
+    );
+  }
+};
+
+export const submitTamilTranslation = async (payload) => {
+  try {
+    const { data } = await axios.post(`${API_URL}foundational-tasks/submit-tamil-translation`, payload);
+    return data;
+  } catch (error) {
+    throw new Error(
+      error?.response?.data?.message || "submitTamilTranslation failed. Please try again."
     );
   }
 };

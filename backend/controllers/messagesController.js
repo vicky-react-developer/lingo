@@ -1,5 +1,5 @@
 const { Message, Correction, ChatSession, Topic, Passage } = require("../models");
-const { askAI, startAI } = require("../services/gemini.service");
+const { askAI, startAI, getPrompt } = require("../services/gemini.service");
 
 exports.saveMessage = async (req, res) => {
     try {
@@ -27,7 +27,9 @@ exports.saveMessage = async (req, res) => {
             otherInfo
         }
 
-        const ai = await askAI(payload);
+        const prompt = getPrompt(payload.otherInfo?.mode, payload)
+
+        const ai = await askAI(prompt);
 
         const aiMessage = await Message.create({
             sessionId,
