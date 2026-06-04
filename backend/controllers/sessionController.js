@@ -77,3 +77,24 @@ exports.getOneSession = async (req, res) => {
         });
     }
 }
+
+exports.getOneTest = async (req, res) => {
+    try {
+        const { sessionId } = req.params;
+        const session = await ChatSession.findOne({
+            where: {
+                id: sessionId
+            }
+        });
+        return res.status(200).json({
+            success: true,
+            session
+        });
+    } catch (e) {
+        console.log("createSession error:", e);
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        });
+    }
+}
