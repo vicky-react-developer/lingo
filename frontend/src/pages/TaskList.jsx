@@ -123,7 +123,7 @@ export default function TaskList() {
                                         />
                                     </div>
 
-                                    <button className="task-btn" onClick={() => navigate(`/foundational-task/${task.id}`)}>
+                                    <button className="task-btn" onClick={() => navigate(`/foundational-task/${task.id}`, { state: { taskType: task.type } })}>
 
                                         {task.completed === 0
                                             ? "Start"

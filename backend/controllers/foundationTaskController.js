@@ -1,5 +1,5 @@
 const db = require("../models");
-const { askAI } = require("../services/gemini.service");
+const { askAI, getPrompt } = require("../services/gemini.service");
 
 const { FoundationalTask, TamilSentence, Attempt } = db;
 
@@ -32,7 +32,7 @@ exports.getTasks = async (req, res) => {
 };
 
 
-exports.getTaskQuestions = async (req, res) => {
+exports.getTamilSentences = async (req, res) => {
 
     try {
 
@@ -43,7 +43,7 @@ exports.getTaskQuestions = async (req, res) => {
                 taskId
             },
             order: [["orderNo", "ASC"]],
-            attributes: ["id", "tamilText"]
+            attributes: ["id", "tamilText", "expectedEnglish"]
         });
 
         return res.json({
@@ -67,38 +67,22 @@ exports.submitTamilTranslation = async (req, res) => {
 
     try {
 
-        const {
-            sentenceId,
-            answer
-        } = req.body;
+        // const {
+        //     tamilText,
+        //     expectedEnglish,
+        //     userAnswer
+        // } = req.body;
 
-        const ai = await askAI(`
-User translated Tamil to English.
+        const prompt = getPrompt("foundationalTOE", req.body)
 
-Correct grammar if needed.
-
-Sentence:
-"${answer}"
-
-Return JSON:
-{
- "correctedText":"",
- "explanation":"",
- "isCorrect":true
-}
-`);
+        const ai = await askAI(prompt);
 
         const attempt = await Attempt.create({
-
             userId: req.user.id,
-            sentenceId,
-
+            sentenceId: req.body.sentenceId,
             userAnswer: answer,
-
             correctedAnswer: ai.correctedText,
-
             explanation: ai.explanation,
-
             isCorrect: ai.isCorrect
         });
 

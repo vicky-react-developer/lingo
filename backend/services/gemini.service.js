@@ -7,14 +7,15 @@ const model = genAI.getGenerativeModel({
 });
 
 
-const getPrompt = (payload) => {
-  const { mode } = payload.otherInfo;
-  console.log("payload", payload)
+const getPrompt = (mode, payload) => {
+  // const { mode } = payload.otherInfo;
   switch (mode) {
     case "topic":
       return getTopicPrompt(payload);
     case "passage":
       return getPassagePrompt(payload);
+    case "foundationalTOE":
+      return getTOEPrompt(payload);
     default:
       return getNormalPrompt(payload);
   }
@@ -128,6 +129,41 @@ Return JSON:
   return prompt;
 }
 
+const getTOEPrompt = (payload) => {
+  const { tamilText, expectedEnglish, userAnswer } = payload;
+
+  const prompt = `
+User translated a Tamil sentence into English.
+
+Tamil Sentence:
+"${tamilText}"
+
+Expected Meaning:
+"${expectedEnglish}"
+
+User Answer:
+"${userAnswer}"
+
+Rules:
+
+1. Compare meaning.
+2. Ignore minor wording differences.
+3. If correct return isCorrect=true.
+4. If incorrect return corrected sentence.
+5. Explain briefly.
+
+Return JSON only.
+
+{
+    "isCorrect": true,
+    "correctedText": "",
+    "explanation": ""
+}
+`;
+
+  return prompt;
+}
+
 
 const generateContent = async (prompt) => {
   const result = await model.generateContent(prompt);
@@ -145,10 +181,9 @@ const generateContent = async (prompt) => {
   }
 }
 
-async function askAI(payload) {
-  const prompt = getPrompt(payload);
+async function askAI(prompt) {
+  // const prompt = getPrompt(payload);
 
-  // console.log("prompt", prompt)
   const response = await generateContent(prompt);
 
   return response;
@@ -238,4 +273,4 @@ async function startAI(payload) {
   return response;
 }
 
-module.exports = { askAI, startAI };
+module.exports = { askAI, startAI, getPrompt };
