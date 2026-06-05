@@ -57,8 +57,17 @@ exports.getTamilSentences = async (req, res) => {
             where: {
                 taskId
             },
-            order: [["orderNo", "ASC"]],
-            attributes: ["id", "tamilText", "expectedEnglish"]
+            order: [["id", "ASC"]],
+            attributes: ["id", "tamilText", "expectedEnglish"],
+            include: [
+                {
+                    model: Attempt,
+                    where: {
+                        userId: req.user.id
+                    },
+                    required: false
+                }
+            ]
         });
 
         return res.json({
@@ -88,7 +97,7 @@ exports.submitTamilTranslation = async (req, res) => {
             taskId
         } = req.body;
 
-        const prompt = getPrompt("foundationalTOE", req.body)
+        const prompt = getPrompt("tamil_to_english", req.body)
 
         const ai = await askAI(prompt);
 
@@ -110,6 +119,85 @@ exports.submitTamilTranslation = async (req, res) => {
     } catch (e) {
 
         console.log("submitTamilTranslation error", e);
+
+        return res.status(500).json({
+            success: false
+        });
+
+    }
+};
+
+exports.getWordTasks = async (req, res) => {
+
+    try {
+
+        const { taskId } = req.params;
+
+        const data = await WordTask.findAll({
+            where: {
+                taskId
+            },
+            order: [["id", "ASC"]],
+            attributes: ["id", "word"],
+            include: [
+                {
+                    model: Attempt,
+                    where: {
+                        userId: req.user.id
+                    },
+                    required: false
+                }
+            ]
+        });
+
+        return res.json({
+            success: true,
+            data
+        });
+
+    } catch (e) {
+
+        console.log("getWords error", e);
+
+        return res.status(500).json({
+            success: false
+        });
+
+    }
+};
+
+exports.submitWordTask = async (req, res) => {
+
+    try {
+
+        const {
+            wordTaskId,
+            userAnswer,
+            taskId
+        } = req.body;
+
+        const prompt = getPrompt("own_words", req.body)
+
+        const ai = await askAI(prompt);
+
+        const attempt = await Attempt.create({
+            userId: req.user.id,
+            taskId,
+            wordTaskId,
+            userAnswer,
+            correctedAnswer: ai.correctedText,
+            explanation: ai.explanation,
+            isCorrect: ai.isCorrect
+        });
+
+        return res.json({
+            success: true,
+            data: attempt
+        });
+
+    } catch (e) {
+
+        console.log("submitWordTask error", e);
 
         return res.status(500).json({
             success: false

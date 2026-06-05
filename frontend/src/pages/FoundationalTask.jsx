@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import "./FoundationalTask.css";
 import Header from "../components/Header";
-import { getTamilSentences } from "../services/foundationalTaskservice";
 import { useParams, useLocation } from "react-router";
 import MySpinner from "../components/MySpinner";
-import { submitTamilTranslation } from "../services/foundationalTaskservice";
+import { getTamilSentences, submitTamilTranslation, getWordTasks, submitWordTask } from "../services/foundationalTaskservice";
 
 export default function FoundationalTask() {
     const { taskId } = useParams();
@@ -15,12 +14,17 @@ export default function FoundationalTask() {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [loading, setLoading] = useState(false);
     const [result, setResult] = useState(null);
+    const [answered, setAnswered] = useState(0);
 
     const { taskType } = location.state || {}
 
     useEffect(() => {
         if (taskType === "tamil_to_english") {
             fetchTamilSentences();
+        }
+
+        if (taskType === "own_words") {
+            fetchWordTasks();
         }
     }, [taskType]);
 
@@ -31,10 +35,45 @@ export default function FoundationalTask() {
             if (!res.success) {
                 return;
             };
-            const questions = res.data;
-            setQuestions(res.data);
+            let answered = 0;
+            const questions = res.data?.map(item => {
+                if (item.Attempts?.length > 0) answered += 1;
+                return {
+                    id: item.id,
+                    question: item.tamilText,
+                    answer: item.expectedEnglish
+                }
+            });
+            setAnswered(answered);
+            setCurrentIndex(answered);
+            setQuestions(questions);
         } catch (e) {
             console.log("fetchTamilSentences err:", e)
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    const fetchWordTasks = async () => {
+        try {
+            setLoading(true);
+            const res = await getWordTasks(taskId)
+            if (!res.success) {
+                return;
+            };
+            let answered = 0;
+            const questions = res.data?.map(item => {
+                if (item.Attempts?.length > 0) answered += 1;
+                return {
+                    id: item.id,
+                    question: item.word,
+                }
+            });
+            setAnswered(answered);
+            setCurrentIndex(answered);
+            setQuestions(questions);
+        } catch (e) {
+            console.log("fetchWordTasks err:", e)
         } finally {
             setLoading(false);
         }
@@ -45,14 +84,17 @@ export default function FoundationalTask() {
         if (taskType === "tamil_to_english") {
             handleTamilTranslationSubmit();
         }
+        if (taskType === "own_words") {
+            handleSubmitWordTask();
+        }
     };
 
     const handleTamilTranslationSubmit = async () => {
         try {
             const currentQuestion = questions[currentIndex]
             const payload = {
-                tamilText: currentQuestion.tamilText,
-                expectedEnglish: currentQuestion.expectedEnglish,
+                tamilText: currentQuestion.question,
+                expectedEnglish: currentQuestion.answer,
                 userAnswer: answer,
                 sentenceId: currentQuestion.id,
                 taskId
@@ -67,39 +109,61 @@ export default function FoundationalTask() {
         }
     }
 
+    const handleSubmitWordTask = async () => {
+        try {
+            const currentQuestion = questions[currentIndex]
+            const payload = {
+                word: currentQuestion.question,
+                userAnswer: answer,
+                wordTaskId: currentQuestion.id,
+                taskId
+            }
+            const res = await submitWordTask(payload);
+            if (!res.success) {
+                alert(res.message);
+            };
+            setResult(res?.data);
+        } catch (e) {
+            console.log("handleTamilTranslationSubmit err:", e)
+        }
+    }
+
     const handleNext = () => {
         setResult(null);
         setAnswer("");
-        currentIndex(prev => prev + 1);
+        setCurrentIndex(prev => prev + 1);
+        setAnswered(prev => prev + 1);
     };
 
+
     const currentQuestion = questions[currentIndex];
+    const progress = (currentIndex / questions?.length) * 100;
 
     return (
         <div>
             <Header
-                primaryTitle="Foundational Tamil → English"
-                secondaryTitle="Transalte the Tamil sentence into English"
+                primaryTitle={taskType === "tamil_to_english" ? "Foundational Tamil → English" : taskType === "own_words" ? "Foundational Own Words" : ""}
+                secondaryTitle={taskType === "tamil_to_english" ? "Translate Tamil sentences into English." : taskType === "own_words" ? "Create English sentences using given words and improve sentence formation." : ""}
             />
             {questions?.length > 0 &&
                 <div className="lesson-page">
                     <div className="lesson-header">
 
-                        <button className="back-btn">
+                        {/* <button className="back-btn">
                             <i className="bi bi-arrow-left"></i>
-                        </button>
+                        </button> */}
 
                         <div className="progress">
 
                             <div
                                 className="progress-bar"
-                                style={{ width: "50%" }}
+                                style={{ width: `${progress}%` }}
                             />
 
                         </div>
 
                         <span className="question-count">
-                            12 / 50
+                            {currentIndex} / {questions?.length}
                         </span>
 
                     </div>
@@ -112,7 +176,7 @@ export default function FoundationalTask() {
                         </span>
 
                         <h2>
-                            {currentQuestion?.tamilText}
+                            {currentQuestion?.question}
                         </h2>
 
                     </div>
@@ -165,16 +229,17 @@ export default function FoundationalTask() {
 
                             </div>
 
-                            <div className="result-block">
+                            {result?.correctedAnswer &&
+                                <div className="result-block">
 
-                                <label>Correct Answer</label>
+                                    <label>Correct Answer</label>
 
-                                <p className="correct-answer">
-                                    {result?.correctedAnswer}
-                                </p>
+                                    <p className="correct-answer">
+                                        {result?.correctedAnswer}
+                                    </p>
 
-                            </div>
-
+                                </div>
+                            }
                             <div className="result-block">
 
                                 <label>Explanation</label>

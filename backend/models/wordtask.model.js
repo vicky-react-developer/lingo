@@ -8,15 +8,8 @@ module.exports = (sequelize, DataTypes) => {
         },
 
         type: {
-            type: DataTypes.STRING
-        },
-
-        exampleSentence: {
-            type: DataTypes.TEXT
-        },
-
-        orderNo: {
-            type: DataTypes.INTEGER
+            type: DataTypes.STRING,
+            allowNull: true
         }
 
     });
