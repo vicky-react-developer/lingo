@@ -36,39 +36,12 @@ export default function TaskList() {
         }
     }
 
-    // const tasks = [
-    //     {
-    //         id: 1,
-    //         title: "Basic Greetings",
-    //         totalQuestions: 50,
-    //         completed: 12
-    //     },
-    //     {
-    //         id: 2,
-    //         title: "Daily Activities",
-    //         totalQuestions: 50,
-    //         completed: 0
-    //     },
-    //     {
-    //         id: 3,
-    //         title: "Family Members",
-    //         totalQuestions: 50,
-    //         completed: 50
-    //     },
-    //     {
-    //         id: 4,
-    //         title: "School & Education",
-    //         totalQuestions: 50,
-    //         completed: 25
-    //     }
-    // ];
-
     return (
 
         <div className="task-page">
             <Header
-                primaryTitle="Foundational Tamil → English"
-                secondaryTitle="Complete exercises and improve your English sentence formation."
+                primaryTitle={tasktype === "tamil_to_english" ? "Foundational Tamil → English" : tasktype === "own_words" ? "Foundational Own Words" : ""}
+                secondaryTitle={tasktype === "tamil_to_english" ? "Translate Tamil sentences into English." : tasktype === "own_words" ? "Create English sentences using given words and improve sentence formation." : ""}
             />
 
             <div className="task-list mt-3">
@@ -76,7 +49,7 @@ export default function TaskList() {
                     <>
                         {tasks.map((task) => {
                             const completed = task.Attempts?.length;
-                            const totalQuestions = tasktype === "tamil_to_english" ? task.TamilSentences?.length : task.WordTask?.length;
+                            const totalQuestions = tasktype === "tamil_to_english" ? task.TamilSentences?.length : task.WordTasks?.length;
                             const progress = (completed / totalQuestions) * 100;
 
                             return (

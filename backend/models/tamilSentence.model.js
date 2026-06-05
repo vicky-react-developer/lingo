@@ -8,11 +8,8 @@ module.exports = (sequelize, DataTypes) => {
         },
 
         expectedEnglish: {
-            type: DataTypes.TEXT
-        },
-
-        orderNo: {
-            type: DataTypes.INTEGER
+            type: DataTypes.TEXT,
+            allowNull: false
         }
 
     });

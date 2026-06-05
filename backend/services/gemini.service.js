@@ -14,8 +14,10 @@ const getPrompt = (mode, payload) => {
       return getTopicPrompt(payload);
     case "passage":
       return getPassagePrompt(payload);
-    case "foundationalTOE":
+    case "tamil_to_english":
       return getTOEPrompt(payload);
+    case "own_words":
+      return getWordTaskPrompt(payload);
     default:
       return getNormalPrompt(payload);
   }
@@ -164,6 +166,38 @@ Return JSON only.
   return prompt;
 }
 
+const getWordTaskPrompt = (payload) => {
+  const { word, userAnswer } = payload;
+
+  const prompt = `
+You are an English tutor.
+
+Target Word:
+"${word}"
+
+Student Sentence:
+"${userAnswer}"
+
+Rules:
+
+1. Check whether the target word is used.
+2. Check grammar.
+3. Check if the sentence sounds natural.
+4. If correct return isCorrect=true.
+5. If incorrect provide corrected sentence.
+6. Keep explanation short.
+
+Return JSON only.
+
+{
+    "isCorrect": true,
+    "correctedText": "",
+    "explanation": ""
+}
+`;
+
+  return prompt;
+}
 
 const generateContent = async (prompt) => {
   const result = await model.generateContent(prompt);

@@ -34,3 +34,25 @@ export const submitTamilTranslation = async (payload) => {
     );
   }
 };
+
+export const getWordTasks = async (taskId) => {
+  try {
+    const { data } = await axios.get(`${API_URL}foundational-tasks/get-word-tasks/${taskId}`);
+    return data;
+  } catch (error) {
+    throw new Error(
+      error?.response?.data?.message || "getWordTasks failed. Please try again."
+    );
+  }
+};
+
+export const submitWordTask = async (payload) => {
+  try {
+    const { data } = await axios.post(`${API_URL}foundational-tasks/submit-word-task`, payload);
+    return data;
+  } catch (error) {
+    throw new Error(
+      error?.response?.data?.message || "submitWordTask failed. Please try again."
+    );
+  }
+};
