@@ -20,6 +20,8 @@ import MyProfile from './pages/Myprofile';
 import ChangePassword from './pages/ChangePassword';
 import TaskList from './pages/TaskList';
 import FoundationalTask from './pages/FoundationalTask';
+import Duolingo from './pages/Duolingo';
+import StoryTranslation from './pages/StoryTranslation';
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -49,6 +51,8 @@ function App() {
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/task-list" element={<TaskList />} />
           <Route path="/foundational-task/:taskId" element={<FoundationalTask />} />
+          <Route path="/duolingo" element={<Duolingo />} />
+          <Route path="/story-translation" element={<StoryTranslation />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />

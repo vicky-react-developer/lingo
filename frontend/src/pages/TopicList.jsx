@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
 import "./TopicList.css";
 import { getTopics } from "../services/topicService";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import Header from "../components/Header";
+import MySpinner from "../components/MySpinner";
 
 function TopicList() {
+    const navigate = useNavigate();
+    const location = useLocation();
 
     const [topics, setTopics] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const navigate = useNavigate();
+    const { type } = location.state || {};
 
     useEffect(() => {
         fetchTopics();
@@ -34,7 +37,7 @@ function TopicList() {
         navigate("/chat", {
             state: {
                 sessionPayload: {
-                    mode: "topic",
+                    mode: type === "duolingo" ? "duolingoTopic" : "topic",
                     topicId: topic.id,
                 },
                 info: {
@@ -43,14 +46,6 @@ function TopicList() {
                 }
             }
         })
-    }
-
-    if (loading) {
-        return (
-            <div className="topic-container text-center">
-                <div className="spinner-border text-primary"></div>
-            </div>
-        );
     }
 
     return (
@@ -62,39 +57,44 @@ function TopicList() {
             <div className="topic-container">
 
                 <div className="topic-list">
+                    {topics?.length > 0 ?
+                        <>
+                            {
+                                topics.map(topic => (
+                                    <div
+                                        key={topic.id}
+                                        className="topic-card"
+                                        onClick={() => onSelectTopic(topic)}
+                                    >
 
-                    {topics.map(topic => (
+                                        <div className="topic-icon">
+                                            💬
+                                        </div>
 
-                        <div
-                            key={topic.id}
-                            className="topic-card"
-                            onClick={() => onSelectTopic(topic)}
-                        >
+                                        <div className="topic-content">
 
-                            <div className="topic-icon">
-                                💬
-                            </div>
+                                            <h6>{topic.title}</h6>
 
-                            <div className="topic-content">
+                                            <p>{topic.description}</p>
 
-                                <h6>{topic.title}</h6>
+                                        </div>
 
-                                <p>{topic.description}</p>
+                                        <div className="topic-arrow">
+                                            ›
+                                        </div>
 
-                            </div>
+                                    </div>
 
-                            <div className="topic-arrow">
-                                ›
-                            </div>
-
-                        </div>
-
-                    ))}
-
+                                ))
+                            }
+                        </>
+                        :
+                        <MySpinner loading={loading} />
+                    }
                 </div>
 
             </div>
-        </div>
+        </div >
 
     );
 }

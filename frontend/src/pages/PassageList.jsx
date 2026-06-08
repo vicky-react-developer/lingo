@@ -1,24 +1,27 @@
 import React, { useEffect, useState } from "react";
 import "./PassageList.css";
 import { getPassages } from "../services/passageService";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router";
 import Header from "../components/Header";
+import MySpinner from "../components/MySpinner";
 
 function PassageList() {
+    const location = useLocation();
+    const navigate = useNavigate();
 
     const [passages, setPassages] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    const navigate = useNavigate();
+    const { type } = location?.state || {};
 
     useEffect(() => {
         fetchPassages();
-    }, []);
+    }, [type]);
 
     const fetchPassages = async () => {
         try {
             setLoading(true);
-            const res = await getPassages()
+            const res = await getPassages(type || "story-QA")
             if (!res.success) {
                 return;
             }
@@ -31,67 +34,88 @@ function PassageList() {
     };
 
     const onSelectPassage = (passage) => {
-        navigate("/chat", {
-            state: {
-                sessionPayload: {
-                    mode: "passage",
-                    passageId: passage.id,
-                },
-                info: {
-                    title: passage.title,
-                    tamilText: passage.tamilText,
+        if (type === "story-conversion") {
+            navigate("/story-translation", {
+                state: {
+                    passageId: passage.id
                 }
-            }
-        })
+            });
+        } else {
+            navigate("/chat", {
+                state: {
+                    sessionPayload: {
+                        mode: "passage",
+                        passageId: passage.id,
+                    },
+                    info: {
+                        title: passage.title,
+                        tamilText: passage.tamilText,
+                    }
+                }
+            });
+        }
     }
 
-    if (loading) {
-        return (
-            <div className="passage-container text-center">
-                <div className="spinner-border text-primary"></div>
-            </div>
-        );
-    }
 
     return (
         <div>
             <Header
-                primaryTitle="Choose a Passage"
-                secondaryTitle="Read the Tamil passage and answer AI questions"
+                primaryTitle={type === "story-conversion" ? "Story Conversion" : "Story Q/A"}
+                secondaryTitle={type === "story-conversion" ? "Read the Tamil passage and translate it into English" : "Read the Tamil passage and answer AI questions"}
             />
             <div className="passage-container">
                 <div className="passage-list">
+                    {passages.length > 0 ?
+                        <>
+                            {passages.map((passage) => (
 
-                    {passages.map((passage) => (
+                                <div
+                                    key={passage.id}
+                                    className="passage-card"
+                                    onClick={() => onSelectPassage(passage)}
+                                >
 
-                        <div
-                            key={passage.id}
-                            className="passage-card"
-                            onClick={() => onSelectPassage(passage)}
-                        >
+                                    <div className="passage-icon">
+                                        📖
+                                    </div>
 
-                            <div className="passage-icon">
-                                📖
-                            </div>
+                                    <div className="passage-content">
 
-                            <div className="passage-content">
+                                        <div className="passage-title-row">
 
-                                <h6>{passage.title}</h6>
+                                            <h6>{passage.title}</h6>
 
-                                <p className="passage-preview">
-                                    {passage.tamilText?.slice(0, 80)}...
-                                </p>
+                                            {(type === "story-conversion" && passage.Attempts?.length > 0) && (
+                                                <>
+                                                    <span className="attempted-badge">
+                                                        Attempted
+                                                    </span>
 
-                            </div>
+                                                    <span className="score-badge">
+                                                        {passage.Attempts[0]?.score}%
+                                                    </span>
+                                                </>
+                                            )}
 
-                            <div className="passage-arrow">
-                                ›
-                            </div>
+                                        </div>
 
-                        </div>
+                                        <p className="passage-preview">
+                                            {passage.tamilText?.slice(0, 80)}...
+                                        </p>
 
-                    ))}
+                                    </div>
 
+                                    <div className="passage-arrow">
+                                        ›
+                                    </div>
+
+                                </div>
+
+                            ))}
+                        </>
+                        :
+                        <MySpinner loading={loading} />
+                    }
                 </div>
 
             </div>

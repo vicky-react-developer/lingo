@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
 import "./FoundationalTask.css";
 import Header from "../components/Header";
-import { useParams, useLocation } from "react-router";
+import { useParams, useLocation, useNavigate } from "react-router";
 import MySpinner from "../components/MySpinner";
 import { getTamilSentences, submitTamilTranslation, getWordTasks, submitWordTask } from "../services/foundationalTaskservice";
+import VoiceRecorder from "../components/VoiceRecorder";
 
 export default function FoundationalTask() {
     const { taskId } = useParams();
     const location = useLocation();
+    const navigate = useNavigate();
 
     const [answer, setAnswer] = useState("");
     const [questions, setQuestions] = useState([]);
@@ -28,6 +30,20 @@ export default function FoundationalTask() {
         }
     }, [taskType]);
 
+    useEffect(() => {
+        const currentQuestion = questions[currentIndex];
+        if (currentQuestion?.attempts?.length > 0) {
+            const answer = currentQuestion?.attempts[0]
+            setResult(answer);
+            setAnswer(answer.userAnswer)
+        } else {
+            setResult(null);
+            setAnswer("");
+        }
+    }, [currentIndex, questions]);
+
+    console.log(questions)
+
     const fetchTamilSentences = async () => {
         try {
             setLoading(true);
@@ -36,16 +52,22 @@ export default function FoundationalTask() {
                 return;
             };
             let answered = 0;
-            const questions = res.data?.map(item => {
-                if (item.Attempts?.length > 0) answered += 1;
+            let currentIndex = 0;
+            const questions = res.data?.map((item, index) => {
+                if (item.Attempts?.length > 0) {
+                    answered += 1
+                } else if (currentIndex === 0) {
+                    currentIndex = index
+                }
                 return {
                     id: item.id,
                     question: item.tamilText,
-                    answer: item.expectedEnglish
+                    answer: item.expectedEnglish,
+                    attempts: item.Attempts
                 }
             });
             setAnswered(answered);
-            setCurrentIndex(answered);
+            setCurrentIndex(currentIndex);
             setQuestions(questions);
         } catch (e) {
             console.log("fetchTamilSentences err:", e)
@@ -62,15 +84,21 @@ export default function FoundationalTask() {
                 return;
             };
             let answered = 0;
-            const questions = res.data?.map(item => {
-                if (item.Attempts?.length > 0) answered += 1;
+            let currentIndex = 0;
+            const questions = res.data?.map((item, index) => {
+                if (item.Attempts?.length > 0) {
+                    answered += 1
+                } else if (currentIndex === 0) {
+                    currentIndex = index
+                }
                 return {
                     id: item.id,
                     question: item.word,
+                    attempts: item.Attempts
                 }
             });
             setAnswered(answered);
-            setCurrentIndex(answered);
+            setCurrentIndex(currentIndex);
             setQuestions(questions);
         } catch (e) {
             console.log("fetchWordTasks err:", e)
@@ -103,6 +131,7 @@ export default function FoundationalTask() {
             if (!res.success) {
                 alert(res.message);
             };
+            setAnswered(prev => prev + 1);
             setResult(res?.data);
         } catch (e) {
             console.log("handleTamilTranslationSubmit err:", e)
@@ -122,6 +151,7 @@ export default function FoundationalTask() {
             if (!res.success) {
                 alert(res.message);
             };
+            setAnswered(prev => prev + 1);
             setResult(res?.data);
         } catch (e) {
             console.log("handleTamilTranslationSubmit err:", e)
@@ -129,15 +159,23 @@ export default function FoundationalTask() {
     }
 
     const handleNext = () => {
-        setResult(null);
-        setAnswer("");
-        setCurrentIndex(prev => prev + 1);
-        setAnswered(prev => prev + 1);
+        if (currentIndex < questions?.length - 1) {
+            setCurrentIndex(prev => prev + 1);
+        } else {
+            navigate(-1);
+        }
+    };
+
+    const handlePrevious = () => {
+        if (currentIndex !== 0) {
+            setCurrentIndex(prev => prev - 1);
+        }
     };
 
 
     const currentQuestion = questions[currentIndex];
-    const progress = (currentIndex / questions?.length) * 100;
+    const progress = (answered / questions?.length) * 100;
+    const isLastQuestion = currentIndex === questions?.length - 1
 
     return (
         <div>
@@ -149,9 +187,11 @@ export default function FoundationalTask() {
                 <div className="lesson-page">
                     <div className="lesson-header">
 
-                        {/* <button className="back-btn">
-                            <i className="bi bi-arrow-left"></i>
-                        </button> */}
+                        {currentIndex !== 0 &&
+                            <button className="back-btn" onClick={handlePrevious}>
+                                <i className="bi bi-arrow-left"></i>
+                            </button>
+                        }
 
                         <div className="progress">
 
@@ -163,8 +203,14 @@ export default function FoundationalTask() {
                         </div>
 
                         <span className="question-count">
-                            {currentIndex} / {questions?.length}
+                            {answered} / {questions?.length}
                         </span>
+
+                        {!isLastQuestion &&
+                            <button className="back-btn" onClick={handleNext}>
+                                <i className="bi bi-arrow-right"></i>
+                            </button>
+                        }
 
                     </div>
 
@@ -172,7 +218,7 @@ export default function FoundationalTask() {
                     <div className="question-card">
 
                         <span className="task-badge">
-                            Translate to English
+                            {taskType === "tamil_to_english" ? "Translate to English" : taskType === "own_words" ? "Form a Sentence" : ""}
                         </span>
 
                         <h2>
@@ -189,33 +235,44 @@ export default function FoundationalTask() {
                             onChange={(e) => setAnswer(e.target.value)}
                             className="answer-box"
                             placeholder="Type your answer here..."
+                            disabled={result}
                         />
 
-                        <button className="mic-btn">
+                        {/* <button className="mic-btn">
                             <i className="bi bi-mic-fill"></i>
-                        </button>
+                        </button> */}
 
                     </div>
 
-                    <button
-                        className="submit-btn"
-                        onClick={handleSubmit}
-                    >
-                        Submit Answer
-                    </button>
+                    {!result &&
+                        <div className="d-flex justify-content-center mt-3">
+                            <VoiceRecorder
+                                onText={setAnswer}
+                            // setListening={setListening}
+                            />
+                        </div>
+                    }
+
+                    {!result &&
+                        <button
+                            className="submit-btn"
+                            onClick={handleSubmit}
+                        >
+                            Submit Answer
+                        </button>
+                    }
 
 
                     {result && (
-
                         <div className="result-sheet">
 
                             <div className="sheet-handle"></div>
 
                             <div className="result-status">
 
-                                <i className="bi bi-x-circle-fill"></i>
+                                <i className={`${result?.isCorrect ? "bi bi-check-circle text-success" : "bi bi-x-circle-fill text-danger"}`}></i>
 
-                                <span>Needs Improvement</span>
+                                <span className={`${result?.isCorrect ? "text-success" : "text-danger"}`}>{result?.isCorrect ? "Congradulations" : "Needs Improvement"}</span>
 
                             </div>
 
@@ -240,25 +297,27 @@ export default function FoundationalTask() {
 
                                 </div>
                             }
-                            <div className="result-block">
 
-                                <label>Explanation</label>
+                            {result?.explanation &&
+                                <div className="result-block">
 
-                                <p>
-                                    {result?.explanation}
-                                </p>
+                                    <label>Explanation</label>
 
-                            </div>
+                                    <p>
+                                        {result?.explanation}
+                                    </p>
+
+                                </div>
+                            }
 
                             <button
                                 className="next-btn"
                                 onClick={handleNext}
                             >
-                                Continue
+                                {isLastQuestion ? "Finish" : "Continue"}
                             </button>
 
                         </div>
-
                     )}
 
                 </div>

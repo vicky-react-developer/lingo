@@ -6,7 +6,8 @@ const {
     getTamilSentences,
     submitTamilTranslation,
     getWordTasks,
-    submitWordTask
+    submitWordTask,
+    submitPassageTranslation
 } = require("../controllers/foundationTaskController");
 
 router.get("/get-tasks/:type",protect, getTasks);

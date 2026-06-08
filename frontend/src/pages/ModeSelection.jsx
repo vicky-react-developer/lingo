@@ -65,7 +65,7 @@ function ModeSelection({ onMenuToggle }) {
                 break;
 
             case "story-conversion":
-                navigate("/story-conversion");
+                navigate("/passage", { state: { type: "story-conversion" } });
                 break;
 
             case "foundational-tof":
