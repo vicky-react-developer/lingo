@@ -25,6 +25,8 @@ export default function ChatPage() {
 
   const { sessionPayload, info } = location?.state || {};
 
+  console.log("sessionPayload", sessionPayload, info)
+
   useEffect(() => {
     if (sessionPayload?.sessionId) {
       setSessionId(sessionPayload.sessionId);
@@ -173,7 +175,7 @@ export default function ChatPage() {
 
         <VoiceRecorder
           onText={sendMessage}
-          setListening={setListening}
+          // setListening={setListening}
         />
       </div>
     </div>

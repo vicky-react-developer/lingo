@@ -18,6 +18,12 @@ const getPrompt = (mode, payload) => {
       return getTOEPrompt(payload);
     case "own_words":
       return getWordTaskPrompt(payload);
+    case "duolingoChat":
+      return getDuolingoChatPrompt(payload);
+    case "duolingoTopic":
+      return getDuolingoTopicPrompt(payload);
+    case "passageTranslation":
+      return getPassageTransaltionPrompt(payload);
     default:
       return getNormalPrompt(payload);
   }
@@ -26,29 +32,31 @@ const getPrompt = (mode, payload) => {
 const getNormalPrompt = (payload) => {
   const { text, history } = payload;
   const prompt = `
-You are an English tutor helping a student improve their spoken English.
+You are an English tutor.
 
-Conversation history:
+Conversation History:
 ${history}
 
-User: "${text}"
+User:
+"${text}"
 
-Instructions:
-1. If the sentence has grammar mistakes:
-   - Provide correctedText
-   - Provide explanation
-2. If the sentence is already correct:
-   - correctedText MUST be ""
-   - explanation MUST be ""
-3. Continue the conversation naturally
-4. Stay on topic and do NOT change context
+Rules:
+- Continue the conversation naturally.
+- Stay consistent with the conversation context.
+- Correct grammar ONLY if needed.
+- If correction is needed, provide correctedText and explanation.
+- If the sentence is already correct:
+  - correctedText = ""
+  - explanation = ""
+- Reply in English only.
+- Keep replies brief.
 
 Return ONLY JSON:
 
 {
- "correctedText": "",
- "explanation": "",
- "reply": ""
+  "correctedText": "",
+  "explanation": "",
+  "reply": ""
 }
 `;
   return prompt;
@@ -58,34 +66,114 @@ const getTopicPrompt = (payload) => {
   const { text, history } = payload;
   const { title, description } = payload.otherInfo;
   const prompt = `
-You are an English tutor helping a student practice English.
+You are an English tutor.
 
-Topic: "${title}"
-Description: "${description}"
+Topic: ${title}
+Description: ${description}
 
-Conversation history:
+Conversation History:
 ${history}
 
-User: "${text}"
+User:
+"${text}"
 
-Instructions:
-
-1. Stay STRICTLY within the topic
-2. Ask questions related to the topic
-3. Keep conversation engaging
-4. If grammar mistake:
-   - provide correctedText + explanation
-5. If correct:
-   - correctedText = ""
-   - explanation = ""
-6. Do NOT change topic
+Rules:
+- Stay strictly within the topic.
+- Ask relevant follow-up questions.
+- Correct grammar ONLY if needed.
+- If the sentence is already correct:
+  - correctedText = ""
+  - explanation = ""
+- Keep replies brief.
+- Reply in English only.
 
 Return ONLY JSON:
 
 {
- "correctedText": "",
- "explanation": "",
- "reply": ""
+  "correctedText": "",
+  "explanation": "",
+  "reply": ""
+}
+`;
+  return prompt;
+}
+
+const getDuolingoChatPrompt = (payload) => {
+  console.log("getDuolingoChatPrompt prompt inside");
+
+  const { text, history } = payload;
+  const prompt = `
+You are a Duolingo-style English tutor.
+
+Conversation History:
+${history}
+
+Student:
+"${text}"
+
+Rules:
+- The student may use English, Tamil, Tanglish, or a mix of them.
+- Understand the intended meaning.
+- Convert the student's message into natural English when needed.
+- If the student's message is not natural English:
+  - provide correctedText and explanation.
+- If the message is already good English:
+  - correctedText = ""
+  - explanation = ""
+- Continue the conversation naturally.
+- Encourage English speaking.
+- Reply in English only.
+- Keep replies brief.
+
+Return ONLY JSON:
+
+{
+  "correctedText": "",
+  "explanation": "",
+  "reply": ""
+}
+`;
+  return prompt;
+}
+
+const getDuolingoTopicPrompt = (payload) => {
+  console.log("duolingoTopic prompt inside");
+
+  const { text, history } = payload;
+  const { title, description } = payload.otherInfo;
+  const prompt = `
+You are a Duolingo-style English tutor.
+
+Topic: ${title}
+Description: ${description}
+
+Conversation History:
+${history}
+
+Student:
+"${text}"
+
+Rules:
+- Stay strictly within the topic.
+- The student may use English, Tamil, Tanglish, or mixed language.
+- Understand the intended meaning.
+- Convert the student's message into natural English when needed.
+- If the student's message is not natural English:
+  - provide correctedText and explanation.
+- If the message is already good English:
+  - correctedText = ""
+  - explanation = ""
+- Ask one simple follow-up question related to the topic.
+- Encourage English speaking.
+- Reply in English only.
+- Keep replies brief.
+
+Return ONLY JSON:
+
+{
+  "correctedText": "",
+  "explanation": "",
+  "reply": ""
 }
 `;
   return prompt;
@@ -126,6 +214,46 @@ Return JSON:
  "correctedText": "",
  "explanation": "",
  "reply": ""
+}
+`;
+  return prompt;
+}
+
+const getPassageTransaltionPrompt = (payload) => {
+  const { tamilText, translation } = payload;
+  const prompt = `
+You are an English teacher.
+
+Tamil Passage:
+${tamilText}
+
+Student Translation:
+${translation}
+
+Instructions:
+
+1. Check whether the meaning matches the Tamil passage.
+2. Check grammar and sentence structure.
+3. Assign a score from 0 to 100.
+4. If the translation is excellent:
+   - isCorrect = true
+   - score = 100
+   - correctedText = ""
+   - explanation = ""
+5. Otherwise:
+   - isCorrect = false
+   - provide score
+   - provide correctedText
+   - provide explanation
+6. Keep explanation under 50 words.
+
+Return ONLY JSON:
+
+{
+    "isCorrect": true,
+    "score": 100,
+    "correctedText": "",
+    "explanation": ""
 }
 `;
   return prompt;
@@ -303,6 +431,8 @@ async function startAI(payload) {
   let prompt;
   switch (mode) {
     case "topic":
+    case "duolingoTopic":
+      console.log("duolingoTopic inside");
       prompt = getTopicInitializationPrompt(payload.title, payload.description);
       break;
     case "passage":

@@ -3,7 +3,7 @@ import { useState } from "react";
 export default function ContextBanner({ mode, info }) {
   const [expanded, setExpanded] = useState(false);
 
-  if (mode === "topic") {
+  if (mode === "topic" || mode === "duolingoTopic") {
     return (
       <div className="context-banner context-banner--topic">
         <span className="context-banner__icon">📌</span>
@@ -13,7 +13,7 @@ export default function ContextBanner({ mode, info }) {
     );
   }
 
-  if (mode === "passage") {
+  if (mode === "passage" || mode === "passageTranslation") {
     return (
       <div className={`context-banner context-banner--passage ${expanded ? "context-banner--expanded" : ""}`}>
         <div className="context-banner__header" onClick={() => setExpanded(prev => !prev)}>

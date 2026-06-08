@@ -1,13 +1,28 @@
-const { Passage } = require("../models");
+const { where } = require("sequelize");
+const { Passage, Attempt } = require("../models");
+const { askAI, getPrompt } = require("../services/gemini.service");
 
 // Get all passages
 exports.getAllPassages = async (req, res) => {
 
     try {
+        const { type } = req.query;
+        const { id: userId } = req.user;
 
         const passages = await Passage.findAll({
             attributes: ["id", "title", "tamilText"],
-            order: [["createdAt", "ASC"]]
+            order: [["createdAt", "ASC"]],
+            ...(type === "story-conversion" ? {
+                include: [
+                    {
+                        model: Attempt,
+                        where: {
+                            userId
+                        },
+                        required: false
+                    }
+                ]
+            } : {})
         });
 
         res.json({
@@ -35,8 +50,23 @@ exports.getPassageById = async (req, res) => {
     try {
 
         const { id } = req.params;
+        const { id: userId } = req.user;
 
-        const passage = await Passage.findByPk(id);
+        const passage = await Passage.findOne({
+            where: {
+                id
+            },
+            attributes: ["id", "title", "tamilText"],
+            include: [
+                {
+                    model: Attempt,
+                    where: {
+                        userId
+                    },
+                    required: false
+                }
+            ]
+        });
 
         if (!passage) {
 
@@ -64,3 +94,47 @@ exports.getPassageById = async (req, res) => {
     }
 
 };
+
+exports.submitPassageTranslation = async (req, res) => {
+    try {
+
+        const { tamilText, translation, passageId } = req.body;
+        const { id: userId } = req.user;
+
+        if (!tamilText || !translation) {
+            return res.status(400).json({
+                success: false,
+                message: "Passage and translation are required"
+            });
+        }
+
+        const prompt = getPrompt("passageTranslation", req.body)
+
+        const aiResult = await askAI(prompt);
+
+        const attempt = await Attempt.create({
+            userId,
+            passageId,
+            userAnswer: translation,
+            correctedAnswer: aiResult.correctedText,
+            explanation: aiResult.explanation,
+            isCorrect: aiResult.isCorrect,
+            score: aiResult.score
+        });
+
+        return res.status(200).json({
+            success: true,
+            data: attempt
+        });
+
+    } catch (e) {
+
+        console.log("submitPassageTranslation error:", e);
+
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        });
+
+    }
+}

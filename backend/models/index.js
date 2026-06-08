@@ -136,6 +136,14 @@ db.Attempt.belongsTo(db.WordTask, {
     foreignKey: "wordTaskId"
 });
 
+db.Passage.hasMany(db.Attempt, {
+    foreignKey: "passageId"
+});
+
+db.Attempt.belongsTo(db.Passage, {
+    foreignKey: "passageId"
+});
+
 
 db.connectDB = async () => {
   try {
