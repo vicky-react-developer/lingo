@@ -9,9 +9,9 @@ export default function Sidebar({ isOpen, onClose }) {
 
     const navItems = [
         { path: "/home", icon: "bi-house-fill", label: "Home" },
-        { path: "/chat", icon: "bi-chat-dots-fill", label: "Normal Chat" },
-        { path: "/topic", icon: "bi-lightbulb-fill", label: "Topic Practice" },
-        { path: "/passage", icon: "bi-book-fill", label: "Passage Practice" },
+        // { path: "/chat", icon: "bi-chat-dots-fill", label: "Normal Chat" },
+        // { path: "/topic", icon: "bi-lightbulb-fill", label: "Topic Practice" },
+        // { path: "/passage", icon: "bi-book-fill", label: "Passage Practice" },
         { path: "/chat-history", icon: "bi-chat-dots", label: "Chat History" },
     ];
 

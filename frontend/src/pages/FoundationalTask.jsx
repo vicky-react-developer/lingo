@@ -5,6 +5,7 @@ import { useParams, useLocation, useNavigate } from "react-router";
 import MySpinner from "../components/MySpinner";
 import { getTamilSentences, submitTamilTranslation, getWordTasks, submitWordTask } from "../services/foundationalTaskservice";
 import VoiceRecorder from "../components/VoiceRecorder";
+import Loader from "../components/Loader";
 
 export default function FoundationalTask() {
     const { taskId } = useParams();
@@ -17,6 +18,7 @@ export default function FoundationalTask() {
     const [loading, setLoading] = useState(false);
     const [result, setResult] = useState(null);
     const [answered, setAnswered] = useState(0);
+    const [submitting, setSubmitting] = useState(false);
 
     const { taskType } = location.state || {}
 
@@ -41,8 +43,6 @@ export default function FoundationalTask() {
             setAnswer("");
         }
     }, [currentIndex, questions]);
-
-    console.log(questions)
 
     const fetchTamilSentences = async () => {
         try {
@@ -118,6 +118,7 @@ export default function FoundationalTask() {
     };
 
     const handleTamilTranslationSubmit = async () => {
+        setSubmitting(true);
         try {
             const currentQuestion = questions[currentIndex]
             const payload = {
@@ -135,10 +136,13 @@ export default function FoundationalTask() {
             setResult(res?.data);
         } catch (e) {
             console.log("handleTamilTranslationSubmit err:", e)
+        } finally {
+            setSubmitting(false);
         }
     }
 
     const handleSubmitWordTask = async () => {
+        setSubmitting(true);
         try {
             const currentQuestion = questions[currentIndex]
             const payload = {
@@ -155,6 +159,8 @@ export default function FoundationalTask() {
             setResult(res?.data);
         } catch (e) {
             console.log("handleTamilTranslationSubmit err:", e)
+        } finally {
+            setSubmitting(false);
         }
     }
 
@@ -238,17 +244,12 @@ export default function FoundationalTask() {
                             disabled={result}
                         />
 
-                        {/* <button className="mic-btn">
-                            <i className="bi bi-mic-fill"></i>
-                        </button> */}
-
                     </div>
 
                     {!result &&
                         <div className="d-flex justify-content-center mt-3">
                             <VoiceRecorder
                                 onText={setAnswer}
-                            // setListening={setListening}
                             />
                         </div>
                     }
@@ -257,8 +258,12 @@ export default function FoundationalTask() {
                         <button
                             className="submit-btn"
                             onClick={handleSubmit}
+                            disabled={submitting}
                         >
                             Submit Answer
+                            {submitting &&
+                                <Loader />
+                            }
                         </button>
                     }
 

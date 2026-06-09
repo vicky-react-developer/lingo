@@ -6,23 +6,47 @@ export default function useVoiceInput(onResult) {
 
   const startListening = () => {
 
-    const recognition = new window.webkitSpeechRecognition();
+    const SpeechRecognition =
+      window.SpeechRecognition ||
+      window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      alert("Speech recognition is not supported");
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
 
     recognition.lang = "en-US";
-    recognition.start();
+    recognition.interimResults = false;
+    recognition.continuous = false;
 
-    setListening(true);
+    recognition.onstart = () => {
+      setListening(true);
+    };
 
     recognition.onresult = (event) => {
       const text = event.results[0][0].transcript;
       onResult(text);
+    };
+
+    recognition.onerror = (event) => {
+      console.log("Speech error:", event.error);
+    };
+
+    recognition.onnomatch = () => {
+      console.log("No speech detected");
+    };
+
+    recognition.onend = () => {
       setListening(false);
     };
 
-    recognition.onerror = () => {
-      setListening(false);
-    };
+    recognition.start();
   };
 
-  return { listening, startListening };
+  return {
+    listening,
+    startListening
+  };
 }
