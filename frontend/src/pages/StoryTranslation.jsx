@@ -3,6 +3,8 @@ import { getOnePassage, submitPassageTranslation } from "../services/passageServ
 import { useLocation, useNavigate } from "react-router";
 import Header from "../components/Header";
 import "./StoryTranslation.css";
+import VoiceRecorder from "../components/VoiceRecorder";
+import Loader from "../components/Loader";
 
 export default function StoryTranslation() {
     const location = useLocation();
@@ -12,6 +14,7 @@ export default function StoryTranslation() {
     const [passage, setPassage] = useState(null);
     const [result, setResult] = useState(null);
     const [loading, setLoading] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
 
     const { passageId } = location.state || {};
 
@@ -42,9 +45,9 @@ export default function StoryTranslation() {
 
     const handleSubmit = async () => {
         if (!translation) {
-            alert("Please fill the text box!");
             return;
         }
+        setSubmitting(true);
         try {
             const payload = {
                 passageId: passage?.id,
@@ -59,10 +62,10 @@ export default function StoryTranslation() {
             setResult(res?.data);
         } catch (e) {
             console.log("submitPassageTranslation err:", e)
+        } finally {
+            setSubmitting(false);
         }
     }
-
-    console.log(result)
 
     return (
         <div>
@@ -93,15 +96,26 @@ export default function StoryTranslation() {
                             placeholder="Type your English translation..."
                         />
 
+                        <div className="d-flex justify-content-center mt-3">
+                            <VoiceRecorder
+                                onText={setTranslation}
+                            />
+                        </div>
+
                         <button
                             className="submit-btn"
                             onClick={handleSubmit}
+                            disabled={submitting}
                         >
                             Submit Translation
+                            {submitting &&
+                                <Loader />
+                            }
                         </button>
 
                     </div>
                 }
+
 
                 {result && (
                     <div className="result-section">
