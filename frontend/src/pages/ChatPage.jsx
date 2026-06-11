@@ -18,14 +18,12 @@ export default function ChatPage() {
   const [text, setText] = useState("");
   const [listening, setListening] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
-  const { speak } = useSpeech();
+  const { speak, stop } = useSpeech();
 
   const chatEndRef = useRef(null);
   const location = useLocation();
 
   const { sessionPayload, info } = location?.state || {};
-
-  console.log("sessionPayload", sessionPayload, info)
 
   useEffect(() => {
     if (sessionPayload?.sessionId) {
@@ -34,6 +32,8 @@ export default function ChatPage() {
     } else {
       createCurrentSession();
     }
+
+    return () => stop();
   }, [location]);
 
   useEffect(() => {
@@ -109,6 +109,7 @@ export default function ChatPage() {
   const sendMessage = async (messageText) => {
     if (!messageText) return;
 
+    stop();
     setMessages(prev => [
       ...prev,
       { sender: "user", text: messageText }

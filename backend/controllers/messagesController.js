@@ -5,21 +5,19 @@ exports.saveMessage = async (req, res) => {
     try {
         const { sessionId, text, otherInfo } = req.body;
 
-        const userMessage = await Message.create({
-            sessionId,
-            sender: "user",
-            text
-        });
-
         const previousMessages = await Message.findAll({
             where: { sessionId },
-            order: [["createdAt", "ASC"]],
-            // limit: 10
+            order: [["id", "ASC"]],
+            // limit: 5
         });
+
+        console.log("previousMessages", previousMessages)
 
         const history = previousMessages.map(msg => {
             return `${msg.sender === "user" ? "User" : "AI"}: ${msg.text}`;
         }).join("\n");
+
+        console.log("history",history)
 
         const payload = {
             text,
@@ -30,6 +28,14 @@ exports.saveMessage = async (req, res) => {
         const prompt = getPrompt(payload.otherInfo?.mode, payload)
 
         const ai = await askAI(prompt);
+
+        console.log("ai", ai)
+
+        const userMessage = await Message.create({
+            sessionId,
+            sender: "user",
+            text
+        });
 
         const aiMessage = await Message.create({
             sessionId,
@@ -113,8 +119,8 @@ exports.getAllMessages = async (req, res) => {
                 sender: itemJSON.sender,
                 text: itemJSON.text,
             }
-            if(itemJSON.Correction) {
-                const {wrongText, correctedText, explanation} = itemJSON.Correction;
+            if (itemJSON.Correction) {
+                const { wrongText, correctedText, explanation } = itemJSON.Correction;
                 payload.correction = {
                     wrongText,
                     correctedText,
