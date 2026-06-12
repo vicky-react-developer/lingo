@@ -5,6 +5,7 @@ import Header from "../components/Header";
 import "./StoryTranslation.css";
 import VoiceRecorder from "../components/VoiceRecorder";
 import Loader from "../components/Loader";
+import useSpeech from "../hooks/useSpeech";
 
 export default function StoryTranslation() {
     const location = useLocation();
@@ -15,6 +16,7 @@ export default function StoryTranslation() {
     const [result, setResult] = useState(null);
     const [loading, setLoading] = useState(false);
     const [submitting, setSubmitting] = useState(false);
+    const { speak, stop } = useSpeech();
 
     const { passageId } = location.state || {};
 
@@ -23,6 +25,8 @@ export default function StoryTranslation() {
         if (passageId) {
             fetchOnePassage();
         }
+
+        return () => stop();
     }, [passageId])
 
     const fetchOnePassage = async () => {
@@ -44,7 +48,7 @@ export default function StoryTranslation() {
     };
 
     const handleSubmit = async () => {
-        if (!translation) {
+        if (!translation.trim()) {
             return;
         }
         setSubmitting(true);
@@ -60,6 +64,7 @@ export default function StoryTranslation() {
                 return;
             };
             setResult(res?.data);
+            speak(res.data?.explanation);
         } catch (e) {
             console.log("submitPassageTranslation err:", e)
         } finally {

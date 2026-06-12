@@ -29,8 +29,6 @@ exports.saveMessage = async (req, res) => {
 
         const ai = await askAI(prompt);
 
-        console.log("ai", ai)
-
         const userMessage = await Message.create({
             sessionId,
             sender: "user",

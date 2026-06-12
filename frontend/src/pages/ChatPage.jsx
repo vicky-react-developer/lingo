@@ -107,7 +107,7 @@ export default function ChatPage() {
   };
 
   const sendMessage = async (messageText) => {
-    if (!messageText) return;
+    if (!messageText.trim()) return;
 
     stop();
     setMessages(prev => [

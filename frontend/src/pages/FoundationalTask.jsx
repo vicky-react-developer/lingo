@@ -6,6 +6,7 @@ import MySpinner from "../components/MySpinner";
 import { getTamilSentences, submitTamilTranslation, getWordTasks, submitWordTask } from "../services/foundationalTaskservice";
 import VoiceRecorder from "../components/VoiceRecorder";
 import Loader from "../components/Loader";
+import useSpeech from "../hooks/useSpeech";
 
 export default function FoundationalTask() {
     const { taskId } = useParams();
@@ -19,6 +20,7 @@ export default function FoundationalTask() {
     const [result, setResult] = useState(null);
     const [answered, setAnswered] = useState(0);
     const [submitting, setSubmitting] = useState(false);
+    const { speak, stop } = useSpeech();
 
     const { taskType } = location.state || {}
 
@@ -30,6 +32,8 @@ export default function FoundationalTask() {
         if (taskType === "own_words") {
             fetchWordTasks();
         }
+
+        return () => stop();
     }, [taskType]);
 
     useEffect(() => {
@@ -133,8 +137,10 @@ export default function FoundationalTask() {
                 alert(res.message);
             };
             setAnswered(prev => prev + 1);
-            setResult(res?.data);
+            injectAttempt(currentQuestion.id, res?.data)
+            speak(res.data?.explanation);
         } catch (e) {
+            alert("Something went wrong!");
             console.log("handleTamilTranslationSubmit err:", e)
         } finally {
             setSubmitting(false);
@@ -156,15 +162,30 @@ export default function FoundationalTask() {
                 alert(res.message);
             };
             setAnswered(prev => prev + 1);
-            setResult(res?.data);
+            injectAttempt(currentQuestion.id, res?.data)
+            speak(res.data?.explanation);
         } catch (e) {
+            alert("Something went wrong!");
             console.log("handleTamilTranslationSubmit err:", e)
         } finally {
             setSubmitting(false);
         }
     }
 
+    const injectAttempt = (questionId, attempt) => {
+        if (!questionId) return;
+        setQuestions(prev => prev.map(item => {
+            if (item.id === questionId) {
+                const itemCopy = { ...item };
+                itemCopy.attempts = [attempt];
+                return itemCopy
+            }
+            return item;
+        }))
+    }
+
     const handleNext = () => {
+        stop();
         if (currentIndex < questions?.length - 1) {
             setCurrentIndex(prev => prev + 1);
         } else {
@@ -173,6 +194,7 @@ export default function FoundationalTask() {
     };
 
     const handlePrevious = () => {
+        stop();
         if (currentIndex !== 0) {
             setCurrentIndex(prev => prev - 1);
         }
