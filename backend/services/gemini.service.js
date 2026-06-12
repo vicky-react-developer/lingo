@@ -331,87 +331,49 @@ const generateContent = async (prompt) => {
   const result = await model.generateContent(prompt);
 
   const text = result.response.text();
+
   try {
     const clean = text.replace(/```json|```/g, "").trim();
-    return JSON.parse(clean);
-  } catch {
+
+    let parsed = JSON.parse(clean);
+
+    // Handle double-stringified JSON
+    if (typeof parsed === "string") {
+      parsed = JSON.parse(parsed);
+    }
+
+    return parsed;
+
+  } catch (error) {
+
+    console.log("Raw Gemini Response:", text);
+    console.log("Parse Error:", error);
+
     return {
       correctedText: "",
       explanation: "",
       reply: text
     };
   }
-}
-
-function parseGeminiResponse(text) {
-
-  try {
-
-    // Remove markdown wrappers if Gemini adds them
-    let cleaned = text
-      .replace(/```json/g, "")
-      .replace(/```/g, "")
-      .trim();
-
-    let result = JSON.parse(cleaned);
-
-    // Handle double stringified JSON
-    if (typeof result === "string") {
-      result = JSON.parse(result);
-    }
-
-    return {
-      correctedText: result.correctedText || "",
-      explanation: result.explanation || "",
-      reply: result.reply || "",
-      isCorrect: result.isCorrect ?? false,
-      score: result.score ?? 0
-    };
-
-  } catch (error) {
-
-    console.error("Failed to parse Gemini response");
-    console.error(text);
-
-    return {
-      correctedText: "",
-      explanation: "",
-      reply: "Sorry, I couldn't understand the AI response.",
-      isCorrect: false,
-      score: 0
-    };
-  }
-}
+};
 
 async function askAI(prompt) {
-  try {
 
-    const response = await generateContent({
-      contents: [
-        {
-          role: "user",
-          parts: [{ text: prompt }]
-        }
-      ],
-      generationConfig: {
-        responseMimeType: "application/json"
+  const response = await generateContent({
+    contents: [
+      {
+        role: "user",
+        parts: [{ text: prompt }]
       }
-    });
+    ],
+    generationConfig: {
+      responseMimeType: "application/json"
+    }
+  });
 
-    const text = response.text();
+  console.log("AI Response:", response);
 
-    return parseGeminiResponse(text);
-
-  } catch (error) {
-
-    console.error("askAI error:", error);
-
-    return {
-      correctedText: "",
-      explanation: "",
-      reply: "Sorry, something went wrong.",
-    };
-  }
+  return response;
 }
 
 const getChatInitializationPrompt = () => {
