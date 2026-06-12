@@ -343,22 +343,75 @@ const generateContent = async (prompt) => {
   }
 }
 
-async function askAI(prompt) {
-  // const prompt = getPrompt(payload);
+function parseGeminiResponse(text) {
 
-  const response = await generateContent({
-    contents: [
-      {
-        role: "user",
-        parts: [{ text: prompt }]
-      }
-    ],
-    generationConfig: {
-      responseMimeType: "application/json"
+  try {
+
+    // Remove markdown wrappers if Gemini adds them
+    let cleaned = text
+      .replace(/```json/g, "")
+      .replace(/```/g, "")
+      .trim();
+
+    let result = JSON.parse(cleaned);
+
+    // Handle double stringified JSON
+    if (typeof result === "string") {
+      result = JSON.parse(result);
     }
-  });
 
-  return response;
+    return {
+      correctedText: result.correctedText || "",
+      explanation: result.explanation || "",
+      reply: result.reply || "",
+      isCorrect: result.isCorrect ?? false,
+      score: result.score ?? 0
+    };
+
+  } catch (error) {
+
+    console.error("Failed to parse Gemini response");
+    console.error(text);
+
+    return {
+      correctedText: "",
+      explanation: "",
+      reply: "Sorry, I couldn't understand the AI response.",
+      isCorrect: false,
+      score: 0
+    };
+  }
+}
+
+async function askAI(prompt) {
+  try {
+
+    const response = await generateContent({
+      contents: [
+        {
+          role: "user",
+          parts: [{ text: prompt }]
+        }
+      ],
+      generationConfig: {
+        responseMimeType: "application/json"
+      }
+    });
+
+    const text = response.text();
+
+    return parseGeminiResponse(text);
+
+  } catch (error) {
+
+    console.error("askAI error:", error);
+
+    return {
+      correctedText: "",
+      explanation: "",
+      reply: "Sorry, something went wrong.",
+    };
+  }
 }
 
 const getChatInitializationPrompt = () => {
