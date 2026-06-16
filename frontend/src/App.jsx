@@ -22,6 +22,7 @@ import TaskList from './pages/TaskList';
 import FoundationalTask from './pages/FoundationalTask';
 import Duolingo from './pages/Duolingo';
 import StoryTranslation from './pages/StoryTranslation';
+import HistoryCategory from './pages/HistoryCategory';
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -53,6 +54,7 @@ function App() {
           <Route path="/foundational-task/:taskId" element={<FoundationalTask />} />
           <Route path="/duolingo" element={<Duolingo />} />
           <Route path="/story-translation" element={<StoryTranslation />} />
+          <Route path="/history-category" element={<HistoryCategory />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />

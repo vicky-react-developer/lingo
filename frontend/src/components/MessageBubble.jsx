@@ -6,6 +6,9 @@ export default function MessageBubble({ message }) {
 
   return (
     <>
+      {!isUser && message.correction && (
+        <CorrectionBox correction={message.correction} />
+      )}
       {
         !isUser ?
           <div className="ai-message-card">
@@ -31,9 +34,6 @@ export default function MessageBubble({ message }) {
             {message.text}
           </div>
       }
-      {!isUser && message.correction && (
-        <CorrectionBox correction={message.correction} />
-      )}
     </>
   );
 }

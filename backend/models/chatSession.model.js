@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
   const ChatSession = sequelize.define("ChatSession", {
     mode: {
-      type: DataTypes.ENUM("normal", "topic", "passage"),
+      type: DataTypes.ENUM("normal", "topic", "passage", "duolingoChat", "duolingoTopic"),
       allowNull: false
     },
 

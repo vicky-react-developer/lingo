@@ -14,9 +14,9 @@ export const createSession = async (payload) => {
   }
 };
 
-export const getSessions = async () => {
+export const getSessions = async (mode) => {
   try {
-    const { data } = await axios.get(`${SESSION_URL}/get-sessions`);
+    const { data } = await axios.get(`${SESSION_URL}/get-sessions?mode=${mode}`);
     return data;
   } catch (error) {
     throw new Error(

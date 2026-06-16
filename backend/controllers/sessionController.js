@@ -5,6 +5,7 @@ exports.createSession = async (req, res) => {
     try {
         const { id } = req.user;
         const { payload } = req.body;
+                console.log("getSessions", payload)
         const session = await ChatSession.create({
             userId: id,
             ...payload
@@ -24,11 +25,12 @@ exports.createSession = async (req, res) => {
 
 exports.getSessions = async (req, res) => {
     try {
+        const { mode } = req.query;
         const { id } = req.user;
-        console.log("id", id)
         const sessions = await ChatSession.findAll({
             where: {
-                userId: id
+                userId: id,
+                mode
             },
             include: [
                 {
@@ -42,7 +44,7 @@ exports.getSessions = async (req, res) => {
                     limit: 1,
                     order: [["createdAt", "DESC"]]
                 }
-            ]
+            ],
         });
         return res.status(200).json({
             success: true,

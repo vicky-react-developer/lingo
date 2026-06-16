@@ -3,20 +3,25 @@ import "./ChatHistory.css";
 import Header from "../components/Header";
 import { getSessions } from "../services/sessionService";
 import { useNavigate } from "react-router";
+import { useLocation } from "react-router";
 
 export default function ChatHistory() {
+    const location = useLocation();
+    const navigate = useNavigate();
 
     const [sessions, setSessions] = useState([]);
 
-    const navigate = useNavigate();
+    const { mode, modeTitle } = location.state || {}
 
     useEffect(() => {
-        fetchSessions();
-    }, []);
+        if (mode) {
+            fetchSessions();
+        }
+    }, [mode]);
 
     const fetchSessions = async () => {
         try {
-            const response = await getSessions();
+            const response = await getSessions(mode);
             if (response?.success) {
                 setSessions(response?.data);
             }
@@ -34,13 +39,14 @@ export default function ChatHistory() {
     const getTitle = (session) => {
         if (session.mode === "topic") return session.Topic?.title;
         if (session.mode === "passage") return session.Passage?.title;
-        return "General Chat";
+
+        return modeTitle;
     };
 
     const handleNavigation = (session) => {
         console.log("check", session)
         const info = {};
-        switch(session.mode) {
+        switch (session.mode) {
             case "topic":
                 info.title = session.Topic.title;
                 info.description = session.Topic.description;
@@ -67,6 +73,7 @@ export default function ChatHistory() {
         <div>
             <Header
                 primaryTitle="Chat History"
+                secondaryTitle={modeTitle}
             />
 
             <div className="history-page">

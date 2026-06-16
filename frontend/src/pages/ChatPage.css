@@ -316,6 +316,7 @@
   animation-delay: -0.16s;
 }
 
+
 @keyframes typing-bounce {
   0%, 80%, 100% { 
     transform: scale(0);

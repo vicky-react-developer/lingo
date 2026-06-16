@@ -176,7 +176,6 @@ export default function ChatPage() {
 
         <VoiceRecorder
           onText={sendMessage}
-          // setListening={setListening}
         />
       </div>
     </div>

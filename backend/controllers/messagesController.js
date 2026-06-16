@@ -8,16 +8,11 @@ exports.saveMessage = async (req, res) => {
         const previousMessages = await Message.findAll({
             where: { sessionId },
             order: [["id", "ASC"]],
-            // limit: 5
         });
-
-        console.log("previousMessages", previousMessages)
 
         const history = previousMessages.map(msg => {
             return `${msg.sender === "user" ? "User" : "AI"}: ${msg.text}`;
         }).join("\n");
-
-        console.log("history",history)
 
         const payload = {
             text,

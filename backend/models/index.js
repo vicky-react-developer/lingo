@@ -36,7 +36,6 @@ db.FoundationalTask = require("./foundationalTask.model")(sequelize, DataTypes);
 db.TamilSentence = require("./tamilSentence.model")(sequelize, DataTypes);
 db.WordTask = require("./wordtask.model")(sequelize, DataTypes);
 db.Attempt = require("./attempt.model")(sequelize, DataTypes);
-db.StoryConversion = require("./storyConversion.model")(sequelize, DataTypes);
 
 // User ↔ ChatSession
 db.User.hasMany(db.ChatSession, {

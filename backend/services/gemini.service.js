@@ -8,7 +8,6 @@ const model = genAI.getGenerativeModel({
 
 
 const getPrompt = (mode, payload) => {
-  // const { mode } = payload.otherInfo;
   switch (mode) {
     case "topic":
       return getTopicPrompt(payload);
@@ -30,8 +29,10 @@ const getPrompt = (mode, payload) => {
 }
 
 const getNormalPrompt = (payload) => {
+  console.log("Normal Chat reply")
   const { text, history } = payload;
-  const prompt = `
+
+  return `
 You are an English tutor.
 
 Conversation History:
@@ -41,15 +42,19 @@ User:
 "${text}"
 
 Rules:
+
 - Continue the conversation naturally.
 - Stay consistent with the conversation context.
-- Correct grammar ONLY if needed.
-- If correction is needed, provide correctedText and explanation.
-- If the sentence is already correct:
+- Correct English ONLY when necessary.
+- If correction is needed:
+  - provide correctedText
+  - explanation under 15 words.
+- If no correction is needed:
   - correctedText = ""
   - explanation = ""
+- Briefly respond and continue the conversation.
+- Keep reply under 30 words.
 - Reply in English only.
-- Keep replies brief.
 
 Return ONLY JSON:
 
@@ -59,17 +64,22 @@ Return ONLY JSON:
   "reply": ""
 }
 `;
-  return prompt;
-}
+};
 
 const getTopicPrompt = (payload) => {
+    console.log("TOpic Chat reply")
+
   const { text, history } = payload;
   const { title, description } = payload.otherInfo;
-  const prompt = `
+
+  return `
 You are an English tutor.
 
-Topic: ${title}
-Description: ${description}
+Topic:
+${title}
+
+Description:
+${description}
 
 Conversation History:
 ${history}
@@ -78,13 +88,17 @@ User:
 "${text}"
 
 Rules:
+
 - Stay strictly within the topic.
-- Ask relevant follow-up questions.
-- Correct grammar ONLY if needed.
-- If the sentence is already correct:
+- Correct English ONLY when necessary.
+- If correction is needed:
+  - provide correctedText
+  - explanation under 15 words.
+- If no correction is needed:
   - correctedText = ""
   - explanation = ""
-- Keep replies brief.
+- Briefly respond and ask one follow-up question.
+- Keep reply under 30 words.
 - Reply in English only.
 
 Return ONLY JSON:
@@ -95,15 +109,15 @@ Return ONLY JSON:
   "reply": ""
 }
 `;
-  return prompt;
-}
+};
 
 const getDuolingoChatPrompt = (payload) => {
-  console.log("getDuolingoChatPrompt prompt inside");
+      console.log("Duo Chat reply")
 
   const { text, history } = payload;
-  const prompt = `
-You are a Duolingo-style English tutor.
+
+  return `
+You are a Duolingo-style English tutor helping Tamil-speaking students learn spoken English.
 
 Conversation History:
 ${history}
@@ -112,18 +126,44 @@ Student:
 "${text}"
 
 Rules:
-- The student may use English, Tamil, Tanglish, or a mix of them.
+
+- Student may use English, Tamil, Tanglish, or mixed language.
 - Understand the intended meaning.
-- Convert the student's message into natural English when needed.
-- If the student's message is not natural English:
-  - provide correctedText and explanation.
-- If the message is already good English:
+- Encourage English communication.
+- Correct English ONLY when necessary.
+- If correction is needed:
+  - provide correctedText
+  - explanation under 15 words.
+- If no correction is needed:
   - correctedText = ""
   - explanation = ""
-- Continue the conversation naturally.
-- Encourage English speaking.
-- Reply in English only.
-- Keep replies brief.
+
+- Reply should:
+  - briefly respond
+  - ask the next question
+
+- Include the question in:
+  - English
+  - Tamil
+
+- Tamil must use Tamil script.
+- Never use Tanglish.
+- Keep reply under 40 words.
+- reply format:
+
+<brief response>
+
+<English question>
+
+<Tamil question>
+
+Example:
+
+That's great!
+
+What do you usually do after work?
+
+வேலை முடிந்த பிறகு நீங்கள் வழக்கமாக என்ன செய்வீர்கள்?
 
 Return ONLY JSON:
 
@@ -133,19 +173,22 @@ Return ONLY JSON:
   "reply": ""
 }
 `;
-  return prompt;
-}
+};
 
 const getDuolingoTopicPrompt = (payload) => {
-  console.log("duolingoTopic prompt inside");
+        console.log("Duo topic reply")
 
   const { text, history } = payload;
   const { title, description } = payload.otherInfo;
-  const prompt = `
-You are a Duolingo-style English tutor.
 
-Topic: ${title}
-Description: ${description}
+  return `
+You are a Duolingo-style English tutor helping Tamil-speaking students learn spoken English.
+
+Topic:
+${title}
+
+Description:
+${description}
 
 Conversation History:
 ${history}
@@ -154,19 +197,45 @@ Student:
 "${text}"
 
 Rules:
+
 - Stay strictly within the topic.
-- The student may use English, Tamil, Tanglish, or mixed language.
+- Student may use English, Tamil, Tanglish, or mixed language.
 - Understand the intended meaning.
-- Convert the student's message into natural English when needed.
-- If the student's message is not natural English:
-  - provide correctedText and explanation.
-- If the message is already good English:
+- Encourage English communication.
+- Correct English ONLY when necessary.
+- If correction is needed:
+  - provide correctedText
+  - explanation under 15 words.
+- If no correction is needed:
   - correctedText = ""
   - explanation = ""
-- Ask one simple follow-up question related to the topic.
-- Encourage English speaking.
-- Reply in English only.
-- Keep replies brief.
+
+- Reply should:
+  - briefly respond
+  - ask one topic-related follow-up question
+
+- Include the question in:
+  - English
+  - Tamil
+
+- Tamil must use Tamil script.
+- Never use Tanglish.
+- Keep reply under 40 words.
+- reply format:
+
+<brief response>
+
+<English question>
+
+<Tamil question>
+
+Example:
+
+That's great!
+
+What do you usually do after work?
+
+வேலை முடிந்த பிறகு நீங்கள் வழக்கமாக என்ன செய்வீர்கள்?
 
 Return ONLY JSON:
 
@@ -176,93 +245,60 @@ Return ONLY JSON:
   "reply": ""
 }
 `;
-  return prompt;
-}
+};
 
 const getPassagePrompt = (payload) => {
+        console.log("Passage reply")
+
   const { text, history } = payload;
   const { tamilText } = payload.otherInfo;
-  const prompt = `
-You are an English tutor helping a student.
 
-Tamil Passage:
-"${tamilText}"
-
-Conversation:
-${history}
-
-User answer:
-"${text}"
-
-Instructions:
-
-1. Check if answer is correct based on passage
-2. If grammar mistake:
-   - correctedText
-   - explanation
-3. If correct grammar:
-   - correctedText = ""
-   - explanation = ""
-
-4. Improve answer if needed
-5. Ask NEXT question from passage
-6. Keep conversation flowing
-7. If the answer is wrong, tell them that answer is wrong in a polite way and continue the conversation.
-
-Return JSON:
-{
- "correctedText": "",
- "explanation": "",
- "reply": ""
-}
-`;
-  return prompt;
-}
-
-const getPassageTransaltionPrompt = (payload) => {
-  const { tamilText, translation } = payload;
-  const prompt = `
-You are an English teacher.
+  return `
+You are an English tutor.
 
 Tamil Passage:
 ${tamilText}
 
-Student Translation:
-${translation}
+Conversation:
+${history}
 
-Instructions:
+Student Answer:
+"${text}"
 
-1. Check whether the meaning matches the Tamil passage.
-2. Check grammar and sentence structure.
-3. Assign a score from 0 to 100.
-4. If the translation is excellent:
-   - isCorrect = true
-   - score = 100
-   - correctedText = ""
-   - explanation = ""
-5. Otherwise:
-   - isCorrect = false
-   - provide score
-   - provide correctedText
-   - provide explanation
-6. Keep explanation under 50 words.
+Rules:
+
+- Check whether the answer matches the passage.
+- Correct English ONLY when necessary.
+- If correction is needed:
+  - provide correctedText
+  - explanation under 15 words.
+- If no correction is needed:
+  - correctedText = ""
+  - explanation = ""
+
+- If the answer is wrong:
+  - politely indicate it.
+
+- Ask the next question from the passage.
+- Keep reply under 40 words.
+- Reply in English only.
 
 Return ONLY JSON:
 
 {
-    "isCorrect": true,
-    "score": 100,
-    "correctedText": "",
-    "explanation": ""
+  "correctedText": "",
+  "explanation": "",
+  "reply": ""
 }
 `;
-  return prompt;
-}
+};
 
 const getTOEPrompt = (payload) => {
+        console.log("TOE reply")
+
   const { tamilText, expectedEnglish, userAnswer } = payload;
 
-  const prompt = `
+  return `
 User translated a Tamil sentence into English.
 
 Tamil Sentence:
@@ -276,28 +312,34 @@ User Answer:
 
 Rules:
 
-1. Compare meaning.
-2. Ignore minor wording differences.
-3. If correct return isCorrect=true.
-4. If incorrect return corrected sentence.
-5. Explain briefly.
+- Compare meaning.
+- Ignore minor wording differences.
+- Check grammar.
+- If correct:
+  - isCorrect = true
+  - correctedText = ""
+  - explanation = ""
+- Otherwise:
+  - isCorrect = false
+  - provide correctedText
+  - explanation under 15 words.
 
-Return JSON only.
+Return ONLY JSON:
 
 {
-    "isCorrect": true,
-    "correctedText": "",
-    "explanation": ""
+  "isCorrect": true,
+  "correctedText": "",
+  "explanation": ""
 }
 `;
-
-  return prompt;
-}
+};
 
 const getWordTaskPrompt = (payload) => {
+        console.log("Word task reply")
+
   const { word, userAnswer } = payload;
 
-  const prompt = `
+  return `
 You are an English tutor.
 
 Target Word:
@@ -308,24 +350,70 @@ Student Sentence:
 
 Rules:
 
-1. Check whether the target word is used.
-2. Check grammar.
-3. Check if the sentence sounds natural.
-4. If correct return isCorrect=true.
-5. If incorrect provide corrected sentence.
-6. Keep explanation short.
+- Verify the target word is used.
+- Check grammar.
+- Check whether the sentence sounds natural.
 
-Return JSON only.
+- If correct:
+  - isCorrect = true
+  - correctedText = ""
+  - explanation = ""
+
+- Otherwise:
+  - isCorrect = false
+  - provide correctedText
+  - explanation under 15 words.
+
+Return ONLY JSON:
 
 {
-    "isCorrect": true,
-    "correctedText": "",
-    "explanation": ""
+  "isCorrect": true,
+  "correctedText": "",
+  "explanation": ""
 }
 `;
+};
 
-  return prompt;
+const getPassageTranslationPrompt = (payload) => {
+  const { tamilText, translation } = payload;
+
+  return `
+You are an English teacher.
+
+Tamil Passage:
+${tamilText}
+
+Student Translation:
+${translation}
+
+Rules:
+
+- Check meaning accuracy.
+- Check grammar.
+- Assign score from 0-100.
+
+- If excellent:
+  - isCorrect = true
+  - score = 100
+  - correctedText = ""
+  - explanation = ""
+
+- Otherwise:
+  - isCorrect = false
+  - provide score
+  - provide correctedText
+  - explanation under 20 words.
+
+Return ONLY JSON:
+
+{
+  "isCorrect": true,
+  "score": 100,
+  "correctedText": "",
+  "explanation": ""
 }
+`;
+};
 
 const generateContent = async (prompt) => {
   const result = await model.generateContent(prompt);
@@ -377,6 +465,7 @@ async function askAI(prompt) {
 }
 
 const getChatInitializationPrompt = () => {
+  console.log("Normal initialisation")
   const prompt = `
 You are a friendly English tutor helping a student practice spoken English.
 
@@ -400,6 +489,8 @@ Return ONLY JSON:
 }
 
 const getTopicInitializationPrompt = (title, description) => {
+    console.log("Topic initialisation")
+
   const prompt = `
 Start a conversation with a student on this topic:
 
@@ -417,7 +508,85 @@ Return ONLY JSON:
   return prompt;
 }
 
+const getDuolingoChatInitializationPrompt = () => {
+      console.log("duo chat initialisation")
+
+  const prompt = `
+You are a Duolingo-style English tutor helping Tamil-speaking students learn spoken English.
+
+Rules:
+
+- Welcome the student.
+- Ask one simple conversation question.
+- Include English and Tamil versions.
+- Tamil must use Tamil script.
+- Never use Tanglish.
+- Keep under 30 words.
+- reply format:
+
+<English question>
+
+<Tamil question>
+
+Example:
+
+What do you usually do after work?
+
+வேலை முடிந்த பிறகு நீங்கள் வழக்கமாக என்ன செய்வீர்கள்?
+
+Return ONLY JSON:
+
+{
+  "reply": ""
+}
+`;
+  return prompt;
+}
+
+const getDuolingoTopicInitializationPrompt = (title, description) => {
+        console.log("duo topic initialisation")
+
+  const prompt = `
+You are a Duolingo-style English tutor helping Tamil-speaking students learn spoken English.
+
+Topic:
+${title}
+
+Description:
+${description}
+
+Rules:
+
+- Briefly introduce the topic.
+- Ask one simple opening question.
+- Include English and Tamil versions.
+- Tamil must use Tamil script.
+- Never use Tanglish.
+- Keep under 30 words.
+- reply format:
+
+<English question>
+
+<Tamil question>
+
+Example:
+
+What do you usually do after work?
+
+வேலை முடிந்த பிறகு நீங்கள் வழக்கமாக என்ன செய்வீர்கள்?
+
+Return ONLY JSON:
+
+{
+  "reply": ""
+}
+`;
+  return prompt;
+}
+
 const getPassageInitializationPrompt = (passageText) => {
+        console.log("passage initialisation")
+
   const prompt = `
 You are an English tutor.
 
@@ -446,12 +615,16 @@ async function startAI(payload) {
   let prompt;
   switch (mode) {
     case "topic":
-    case "duolingoTopic":
-      console.log("duolingoTopic inside");
       prompt = getTopicInitializationPrompt(payload.title, payload.description);
       break;
     case "passage":
       prompt = getPassageInitializationPrompt(payload.tamilText);
+      break;
+    case "duolingoChat":
+      prompt = getDuolingoChatInitializationPrompt();
+      break;
+    case "duolingoTopic":
+      prompt = getDuolingoChatInitializationPrompt(payload.title, payload.description);
       break;
     default:
       prompt = getChatInitializationPrompt();
