@@ -147,9 +147,11 @@ export default function ChatPage() {
     }
   };
 
-  const handleVoice = (text) => {
-    setText(prev => prev + "\n" + text);
+  const handleVoice = (value) => {
+    setText(prev => prev + value + "\n");
   }
+
+  console.log(text)
 
   return (
 
@@ -170,28 +172,26 @@ export default function ChatPage() {
       {/* Input */}
       <div className="chat-input-container">
 
-        <input
+        <textarea
           className="chat-input"
           placeholder="Type your message..."
           value={text}
           onChange={(e) => setText(e.target.value)}
           onKeyDown={handleKeyDown}
+          rows={1}
         />
 
+        <VoiceRecorder
+          language="en-US"
+          icon="bi-mic-fill"
+          onText={handleVoice}
+        />
         {sessionPayload?.mode?.startsWith("duolingo") && (
-          <>
-            <VoiceRecorder
-              language="en-US"
-              icon="bi-mic-fill"
-              onText={handleVoice}
-            />
-
-            <VoiceRecorder
-              language="ta-IN"
-              icon="bi-translate"
-              onText={handleVoice}
-            />
-          </>
+          <VoiceRecorder
+            language="ta-IN"
+            icon="bi-translate"
+            onText={handleVoice}
+          />
         )}
 
         <button

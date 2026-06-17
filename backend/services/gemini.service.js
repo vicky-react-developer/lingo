@@ -67,7 +67,7 @@ Return ONLY JSON:
 };
 
 const getTopicPrompt = (payload) => {
-    console.log("TOpic Chat reply")
+  console.log("TOpic Chat reply")
 
   const { text, history } = payload;
   const { title, description } = payload.otherInfo;
@@ -112,7 +112,7 @@ Return ONLY JSON:
 };
 
 const getDuolingoChatPrompt = (payload) => {
-      console.log("Duo Chat reply")
+  console.log("Duo Chat reply")
 
   const { text, history } = payload;
 
@@ -148,7 +148,7 @@ Rules:
 
 - Tamil must use Tamil script.
 - Never use Tanglish.
-- Keep reply under 40 words.
+- Keep reply under 30 words.
 - reply format:
 
 <brief response>
@@ -176,7 +176,7 @@ Return ONLY JSON:
 };
 
 const getDuolingoTopicPrompt = (payload) => {
-        console.log("Duo topic reply")
+  console.log("Duo topic reply")
 
   const { text, history } = payload;
   const { title, description } = payload.otherInfo;
@@ -220,7 +220,7 @@ Rules:
 
 - Tamil must use Tamil script.
 - Never use Tanglish.
-- Keep reply under 40 words.
+- Keep reply under 30 words.
 - reply format:
 
 <brief response>
@@ -248,7 +248,7 @@ Return ONLY JSON:
 };
 
 const getPassagePrompt = (payload) => {
-        console.log("Passage reply")
+  console.log("Passage reply")
 
   const { text, history } = payload;
   const { tamilText } = payload.otherInfo;
@@ -280,8 +280,13 @@ Rules:
   - politely indicate it.
 
 - Ask the next question from the passage.
-- Keep reply under 40 words.
+- Keep reply under 30 words.
 - Reply in English only.
+- The reply field MUST contain exactly two parts:
+  1. Feedback
+  2. Next question
+
+- Separate feedback and next question using the literal characters "\\n\\n".
 
 Return ONLY JSON:
 
@@ -294,7 +299,7 @@ Return ONLY JSON:
 };
 
 const getTOEPrompt = (payload) => {
-        console.log("TOE reply")
+  console.log("TOE reply")
 
   const { tamilText, expectedEnglish, userAnswer } = payload;
 
@@ -335,7 +340,7 @@ Return ONLY JSON:
 };
 
 const getWordTaskPrompt = (payload) => {
-        console.log("Word task reply")
+  console.log("Word task reply")
 
   const { word, userAnswer } = payload;
 
@@ -455,7 +460,16 @@ async function askAI(prompt) {
       }
     ],
     generationConfig: {
-      responseMimeType: "application/json"
+      responseMimeType: "application/json",
+      responseSchema: {
+        type: "OBJECT",
+        properties: {
+          correctedText: { type: "STRING" },
+          explanation: { type: "STRING" },
+          reply: { type: "STRING" }
+        }
+      }
+
     }
   });
 
@@ -489,7 +503,7 @@ Return ONLY JSON:
 }
 
 const getTopicInitializationPrompt = (title, description) => {
-    console.log("Topic initialisation")
+  console.log("Topic initialisation")
 
   const prompt = `
 Start a conversation with a student on this topic:
@@ -509,7 +523,7 @@ Return ONLY JSON:
 }
 
 const getDuolingoChatInitializationPrompt = () => {
-      console.log("duo chat initialisation")
+  console.log("duo chat initialisation")
 
   const prompt = `
 You are a Duolingo-style English tutor helping Tamil-speaking students learn spoken English.
@@ -544,7 +558,7 @@ Return ONLY JSON:
 }
 
 const getDuolingoTopicInitializationPrompt = (title, description) => {
-        console.log("duo topic initialisation")
+  console.log("duo topic initialisation")
 
   const prompt = `
 You are a Duolingo-style English tutor helping Tamil-speaking students learn spoken English.
@@ -585,7 +599,7 @@ Return ONLY JSON:
 }
 
 const getPassageInitializationPrompt = (passageText) => {
-        console.log("passage initialisation")
+  console.log("passage initialisation")
 
   const prompt = `
 You are an English tutor.

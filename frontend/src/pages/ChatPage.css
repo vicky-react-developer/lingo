@@ -96,6 +96,11 @@
   margin-left: auto;
 }
 
+.ai-text,
+.user-message {
+  white-space: pre-wrap;
+}
+
 /* INPUT AREA */
 
 .chat-input-container {
@@ -109,11 +114,14 @@
 
 .chat-input {
   flex: 1;
-  min-width: 0;
+  resize: none;
   border: 1px solid #ddd;
-  border-radius: 24px;
-  padding: 12px 14px;
-  font-size: 14px;
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 12px;
+  outline: none;
+  min-height: 70px;
+  max-height: 120px;
 }
 
 .english-mic,
@@ -178,21 +186,14 @@
 }
 
 .mic-button {
-
-  width: 50px;
-  height: 50px;
-
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
   border: none;
-
-  /* background: #6c63ff; */
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   cursor: pointer;
-
   transition: transform 0.2s;
 }
 

@@ -9,9 +9,9 @@ export { default as LibraryImg } from '../assets/images/library_1.png'
 export { default as PracticeImg } from '../assets/images/practice.png'
 export { default as ReportImg } from '../assets/images/report.png'
 export { default as InstructionsImg } from '../assets/images/instructions.png'
-export { default as TamilMic } from '../assets/images/tamil_mic.png'
-export { default as EnglishMic } from '../assets/images/eng_mic.png'
+export { default as TamilMic } from '../assets/images/mic_tamil.svg'
+export { default as EnglishMic } from '../assets/images/mic_english.svg'
 
-// export const API_URL = " https://unwrap-gig-building-regulations.trycloudflare.com/api/";
+// export const API_URL = " https://unwrap-gig-building-regulations.tryc loudflare.com/api/";
 
 export const API_URL = "http://localhost:5163/api/";
