@@ -72,6 +72,10 @@ export default function StoryTranslation() {
         }
     }
 
+    const handleVoice = (value) => {
+        setTranslation(prev => prev + value + " ");
+    }
+
     return (
         <div>
             <Header primaryTitle="Story Translation" />
@@ -103,7 +107,7 @@ export default function StoryTranslation() {
 
                         <div className="d-flex justify-content-center mt-3">
                             <VoiceRecorder
-                                onText={setTranslation}
+                                onText={handleVoice}
                             />
                         </div>
 
