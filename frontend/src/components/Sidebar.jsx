@@ -36,9 +36,9 @@ export default function Sidebar({ isOpen, onClose }) {
                 />
             )}
             <div style={{
-                position: 'fixed', top: 0, left: 0, bottom: 0, width: '260px',
-                background: '#fff', borderRight: '0.5px solid rgba(0,0,0,0.1)',
-                zIndex: 50, transform: isOpen ? 'translateX(0)' : 'translateX(-100%)',
+                position: 'fixed', top: 0, right: 0, bottom: 0, width: '260px',
+                background: '#fff', borderLeft: '0.5px solid rgba(0,0,0,0.1)',
+                zIndex: 50, transform: isOpen ? 'translateX(0)' : 'translateX(100%)',
                 transition: 'transform 0.25s ease', display: 'flex', flexDirection: 'column'
             }}>
                 {/* User Header */}
@@ -46,8 +46,7 @@ export default function Sidebar({ isOpen, onClose }) {
                     <div style={{
                         width: 44, height: 44, borderRadius: '50%', background: '#E6F1FB',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        fontWeight: 600, color: '#185FA5', marginBottom: 8,
-                        fontSize: 18
+                        fontWeight: 600, color: '#185FA5', marginBottom: 8, fontSize: 18
                     }}>
                         {user?.name?.[0]?.toUpperCase()}
                     </div>
@@ -74,7 +73,6 @@ export default function Sidebar({ isOpen, onClose }) {
                     ))}
                 </nav>
 
-                {/* Bottom: My Profile + Logout */}
                 <div className="border-top py-2">
                     <button
                         onClick={() => go("/profile")}
@@ -111,7 +109,7 @@ export default function Sidebar({ isOpen, onClose }) {
                             color: '#D9363E',
                             fontWeight: 400,
                         }}>
-                        <i className="bi bi-box-arrow-left" style={{ fontSize: 16, width: 20, textAlign: 'center' }}></i>
+                        <i className="bi bi-box-arrow-right" style={{ fontSize: 16, width: 20, textAlign: 'center' }}></i>
                         Logout
                     </button>
                 </div>

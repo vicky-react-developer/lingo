@@ -102,7 +102,7 @@ export default function StoryTranslation() {
                             rows={10}
                             value={translation}
                             onChange={(e) => setTranslation(e.target.value)}
-                            placeholder="Type your English translation..."
+                            placeholder="Speak your Answer..."
                         />
 
                         <div className="d-flex justify-content-center mt-3">

@@ -18,12 +18,14 @@ export default function ChatPage() {
   const [text, setText] = useState("");
   const [listening, setListening] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
-  const { speak, stop } = useSpeech();
+  const { speak, stop, speakTamil } = useSpeech();
 
   const chatEndRef = useRef(null);
   const location = useLocation();
 
   const { sessionPayload, info } = location?.state || {};
+
+  const isDuolingo = sessionPayload?.mode?.startsWith("duolingo");
 
   useEffect(() => {
     if (sessionPayload?.sessionId) {
@@ -97,13 +99,31 @@ export default function ChatPage() {
         }
       ]);
 
-      speak(aiReply);
+      if (isDuolingo) {
+        speakDuolingo(aiReply)
+      } else {
+        speak(aiReply);
+      }
 
     } catch (e) {
       console.log("startConvo error", e);
     } finally {
       setIsTyping(false);
     }
+  };
+
+  const speakDuolingo = (reply) => {
+    console.log("reply", reply)
+    const parts = reply.split("\n\n");
+
+    const english = parts[0];
+    const tamil = parts[1];
+
+    console.log("english", parts)
+
+    speak(english, () => {
+      speakTamil(tamil);
+    });
   };
 
   const sendMessage = async (messageText) => {
@@ -128,7 +148,11 @@ export default function ChatPage() {
       };
 
       setMessages(prev => [...prev, aiMessage]);
-      speak(aiReply);
+      if (isDuolingo) {
+        speakDuolingo(aiReply)
+      } else {
+        speak(aiReply);
+      }
     } catch (error) {
       console.error("Failed to send message", error);
     } finally {
@@ -148,10 +172,12 @@ export default function ChatPage() {
   };
 
   const handleVoice = (value) => {
-    setText(prev => prev + value + "\n");
+    if (isDuolingo) {
+      setText(prev => prev + value + "\n");
+    } else {
+      setText(value);
+    }
   }
-
-  console.log(text)
 
   return (
 
@@ -174,25 +200,26 @@ export default function ChatPage() {
 
         <textarea
           className="chat-input"
-          placeholder="Type your message..."
+          placeholder="Speak..."
           value={text}
           onChange={(e) => setText(e.target.value)}
           onKeyDown={handleKeyDown}
           rows={1}
         />
 
-        <VoiceRecorder
-          language="en-US"
-          icon="bi-mic-fill"
-          onText={handleVoice}
-        />
-        {sessionPayload?.mode?.startsWith("duolingo") && (
+        {isDuolingo && (
           <VoiceRecorder
             language="ta-IN"
             icon="bi-translate"
             onText={handleVoice}
           />
         )}
+
+        <VoiceRecorder
+          language="en-US"
+          icon="bi-mic-fill"
+          onText={handleVoice}
+        />
 
         <button
           className="send-button"

@@ -56,11 +56,11 @@ export default function FoundationalTask() {
                 return;
             };
             let answered = 0;
-            let currentIndex = 0;
+            let currentIndex = null;
             const questions = res.data?.map((item, index) => {
                 if (item.Attempts?.length > 0) {
                     answered += 1
-                } else if (currentIndex === 0) {
+                } else if (currentIndex === null) {
                     currentIndex = index
                 }
                 return {
@@ -88,11 +88,11 @@ export default function FoundationalTask() {
                 return;
             };
             let answered = 0;
-            let currentIndex = 0;
+            let currentIndex = null;
             const questions = res.data?.map((item, index) => {
                 if (item.Attempts?.length > 0) {
                     answered += 1
-                } else if (currentIndex === 0) {
+                } else if (currentIndex === null) {
                     currentIndex = index
                 }
                 return {
@@ -262,7 +262,7 @@ export default function FoundationalTask() {
                             value={answer}
                             onChange={(e) => setAnswer(e.target.value)}
                             className="answer-box"
-                            placeholder="Type your answer here..."
+                            placeholder="Speak your Answer..."
                             disabled={result}
                         />
 
@@ -299,7 +299,7 @@ export default function FoundationalTask() {
 
                                 <i className={`${result?.isCorrect ? "bi bi-check-circle text-success" : "bi bi-x-circle-fill text-danger"}`}></i>
 
-                                <span className={`${result?.isCorrect ? "text-success" : "text-danger"}`}>{result?.isCorrect ? "Congradulations" : "Needs Improvement"}</span>
+                                <span className={`${result?.isCorrect ? "text-success" : "text-danger"}`}>{result?.isCorrect ? "Congradulations!" : "Needs Improvement"}</span>
 
                             </div>
 

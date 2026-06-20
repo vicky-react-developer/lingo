@@ -22,7 +22,7 @@ const getPrompt = (mode, payload) => {
     case "duolingoTopic":
       return getDuolingoTopicPrompt(payload);
     case "passageTranslation":
-      return getPassageTransaltionPrompt(payload);
+      return getPassageTranslationPrompt(payload);
     default:
       return getNormalPrompt(payload);
   }
@@ -55,6 +55,11 @@ Rules:
 - Briefly respond and continue the conversation.
 - Keep reply under 30 words.
 - Reply in English only.
+- The reply field MUST contain strictly two parts:
+  1. Feedback
+  2. Next question
+
+- Strictly Separate feedback and next question using the literal characters "\\n\\n".
 
 Return ONLY JSON:
 
@@ -100,6 +105,11 @@ Rules:
 - Briefly respond and ask one follow-up question.
 - Keep reply under 30 words.
 - Reply in English only.
+- The reply field MUST contain exactly two parts:
+  1. Feedback
+  2. Next question
+
+- Separate feedback and next question using the literal characters "\\n\\n".
 
 Return ONLY JSON:
 
@@ -461,14 +471,14 @@ async function askAI(prompt) {
     ],
     generationConfig: {
       responseMimeType: "application/json",
-      responseSchema: {
-        type: "OBJECT",
-        properties: {
-          correctedText: { type: "STRING" },
-          explanation: { type: "STRING" },
-          reply: { type: "STRING" }
-        }
-      }
+      // responseSchema: {
+      //   type: "OBJECT",
+      //   properties: {
+      //     correctedText: { type: "STRING" },
+      //     explanation: { type: "STRING" },
+      //     reply: { type: "STRING" }
+      //   }
+      // }
 
     }
   });

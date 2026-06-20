@@ -4,12 +4,14 @@ import Header from "../components/Header";
 import { getSessions } from "../services/sessionService";
 import { useNavigate } from "react-router";
 import { useLocation } from "react-router";
+import MySpinner from "../components/MySpinner";
 
 export default function ChatHistory() {
     const location = useLocation();
     const navigate = useNavigate();
 
     const [sessions, setSessions] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     const { mode, modeTitle } = location.state || {}
 
@@ -21,12 +23,16 @@ export default function ChatHistory() {
 
     const fetchSessions = async () => {
         try {
+             setLoading(true);
             const response = await getSessions(mode);
             if (response?.success) {
                 setSessions(response?.data);
             }
         } catch (e) {
             console.log("Error while fetching sessions", e)
+        }
+        finally {
+            setLoading(false);
         }
     };
 
@@ -115,7 +121,7 @@ export default function ChatHistory() {
                             ))}
                         </>
                         :
-                        <p className="text-center text-danger">No data Found</p>
+                        <MySpinner loading={loading} />
                     }
                 </div>
             </div>
