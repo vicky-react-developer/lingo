@@ -113,13 +113,18 @@ export default function ChatPage() {
   };
 
   const speakDuolingo = (reply) => {
-    const [feedback, english, tamil] = reply
+    const parts = reply
       .replace(/\r\n/g, "\n")
       .split(/\n\s*\n/);
 
-      console.log("feedback", feedback, english, tamil)
+    const partsLength = parts.length;
 
-    speak(`${feedback} ${english}`, () => {
+    const english = parts.slice(0, partsLength - 1).join(" ")
+    const tamil = parts[partsLength - 1];
+
+    console.log("english", english, tamil)
+
+    speak(english, () => {
       if (tamil?.trim()) {
         speakTamil(tamil);
       }
