@@ -18,7 +18,7 @@ export default function MessageBubble({ message }) {
               </div>
 
               <div className="ai-name">
-                Lingo AI Teacher
+                NILA AI Teacher
               </div>
 
             </div>
