@@ -45,7 +45,7 @@ export default function Header({ primaryTitle, secondaryTitle, onMenuToggle, bra
     return (
         <div
             className="d-flex align-items-center bg-white border-bottom"
-            style={{ height: '56px', padding: '0 8px', position: 'relative' }}
+            style={{ height: '56px', padding: '0 8px', position: 'relative', justifyContent: "space-between" }}
         >
             {/* LEFT — Back button */}
             <div style={{ zIndex: 1, minWidth: 40 }}>
@@ -63,7 +63,6 @@ export default function Header({ primaryTitle, secondaryTitle, onMenuToggle, bra
 
             {/* CENTER — Title */}
             <div style={{
-                position: 'absolute', left: 0, right: 0,
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                 pointerEvents: 'none'
             }}>
@@ -71,13 +70,13 @@ export default function Header({ primaryTitle, secondaryTitle, onMenuToggle, bra
                     {primaryTitle}
                 </span>
                 {secondaryTitle && (
-                <span className="text-muted" style={{ fontSize: '12px', lineHeight: 1.3, marginTop: '1px' }}>
+                <span className="text-muted" style={{ fontSize: '12px', lineHeight: 1.3, marginTop: '1px', textAlign: 'center' }}>
                     {secondaryTitle}
                 </span>
                 )}
             </div>
 
-            <div style={{ marginLeft: 'auto', minWidth: 40 }} />
+            <div style={{ minWidth: 40 }} />
         </div>
     );
 }
