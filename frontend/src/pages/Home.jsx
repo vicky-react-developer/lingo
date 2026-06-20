@@ -1,45 +1,36 @@
 import React from "react";
-import "./ModeSelection.css";
+import "./Home.css";
 import { useNavigate } from "react-router";
 import Header from "../components/Header";
 
-export default function Duolingo({ onMenuToggle }) {
-
+export default function Home({ onMenuToggle }) {
     const navigate = useNavigate();
 
     const modes = [
         {
-            id: "duolingoChat",
+            id: "chat",
             icon: "bi-chat-dots-fill",
-            title: "Duolingo Chat",
-            desc: "Talk freely with AI and improve your English conversation skills."
+            title: "Chat",
         },
         {
-            id: "duolingoTopic",
-            icon: "bi-lightbulb-fill",
-            title: "Duolingo Topic",
-            desc: "Choose a topic and continue conversations with AI around that subject."
-        }
+            id: "duolingo",
+            icon: "bi-grid-1x2-fill",
+            title: "Duolingo Method",
+        },
+        {
+            id: "story",
+            icon: "bi-book-half",
+            title: "Story",
+        },
+        {
+            id: "foundationalTasks",
+            icon: "bi-pencil-square",
+            title: "Foundational Tasks",
+        },
     ];
 
     const handleNavigation = (mode) => {
-
-        switch (mode) {
-
-            case "duolingoTopic":
-                navigate("/topic", { state: { type: "duolingo" } });
-                break;
-
-            default:
-                navigate("/chat", {
-                    state: {
-                        sessionPayload: {
-                            mode: "duolingoChat"
-                        }
-                    }
-                });
-
-        }
+        navigate('/modes', { state: { category: mode.id, categoryTitle: mode.title} })
     };
 
     return (
@@ -47,8 +38,7 @@ export default function Duolingo({ onMenuToggle }) {
         <div className="mode-page">
 
             <Header
-                primaryTitle="Duolingo"
-                secondaryTitle="Select a learning mode"
+                brandTitle
                 onMenuToggle={onMenuToggle}
             />
 
@@ -61,7 +51,7 @@ export default function Duolingo({ onMenuToggle }) {
                         <div
                             key={mode.id}
                             className="mode-card"
-                            onClick={() => handleNavigation(mode.id)}
+                            onClick={() => handleNavigation(mode)}
                         >
 
                             <div className="mode-icon">
@@ -70,7 +60,7 @@ export default function Duolingo({ onMenuToggle }) {
 
                             <div className="mode-content">
                                 <h5>{mode.title}</h5>
-                                <p>{mode.desc}</p>
+                                {/* <p>{mode.desc}</p> */}
                             </div>
 
                             <div className="mode-arrow">

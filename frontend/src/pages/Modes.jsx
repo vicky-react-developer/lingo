@@ -1,42 +1,10 @@
 import React from "react";
-import "./ModeSelection.css";
-import { useNavigate } from "react-router";
+import "./Home.css";
+import { useNavigate, useLocation } from "react-router";
 import Header from "../components/Header";
 
-function ModeSelection({ onMenuToggle }) {
-    const navigate = useNavigate();
-
-    const modes = [
-        {
-            id: "duolingo",
-            icon: "bi-grid-1x2-fill",
-            title: "Duolingo Method",
-            desc: "Practice English freely using English + Tamil. AI helps correct your grammar while you speak naturally."
-        },
-        {
-            id: "foundational-tof",
-            icon: "bi-translate",
-            title: "Foundational Tamil to English",
-            desc: "Translate Tamil sentences into English."
-        },
-        {
-            id: "foundational-oww",
-            icon: "bi-pencil-square",
-            title: "Foundational Own Words",
-            desc: "Create English sentences using given words and improve sentence formation."
-        },
-        {
-            id: "passage",
-            icon: "bi-chat-square-text-fill",
-            title: "Story Q & A",
-            desc: "Read Tamil stories and answer AI questions in English to improve understanding."
-        },
-        {
-            id: "story-conversion",
-            icon: "bi-book-half",
-            title: "Story Conversion",
-            desc: "Convert complete Tamil passages into English."
-        },
+const allModes = {
+    chat: [
         {
             id: "normal",
             icon: "bi-chat-dots-fill",
@@ -49,12 +17,61 @@ function ModeSelection({ onMenuToggle }) {
             title: "Selected Topic",
             desc: "Choose a topic and continue conversations with AI around that subject."
         }
-    ];
+    ],
+    duolingo: [
+        {
+            id: "duolingoChat",
+            icon: "bi-chat-dots-fill",
+            title: "Duolingo Chat",
+            desc: "Talk freely with AI and improve your English conversation skills."
+        },
+        {
+            id: "duolingoTopic",
+            icon: "bi-lightbulb-fill",
+            title: "Duolingo Topic",
+            desc: "Choose a topic and continue conversations with AI around that subject."
+        }
+    ],
+    story: [
+        {
+            id: "passage",
+            icon: "bi-chat-square-text-fill",
+            title: "Story Q & A",
+            desc: "Read Tamil stories and answer AI questions in English to improve understanding."
+        },
+        {
+            id: "story-conversion",
+            icon: "bi-book-half",
+            title: "Story Conversion",
+            desc: "Convert complete Tamil passages into English."
+        },
+    ],
+    foundationalTasks: [
+        {
+            id: "foundational-tof",
+            icon: "bi-translate",
+            title: "Foundational Tamil to English",
+            desc: "Translate Tamil sentences into English."
+        },
+        {
+            id: "foundational-oww",
+            icon: "bi-pencil-square",
+            title: "Foundational Own Words",
+            desc: "Create English sentences using given words and improve sentence formation."
+        },
+    ]
+}
+
+export default function Modes({ onMenuToggle }) {
+
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const { category, categoryTitle } = location.state || {};
 
     const handleNavigation = (mode) => {
 
         switch (mode) {
-
             case "topic":
                 navigate("/topic");
                 break;
@@ -75,8 +92,18 @@ function ModeSelection({ onMenuToggle }) {
                 navigate("/task-list", { state: { tasktype: "own_words" } });
                 break;
 
-            case "duolingo":
-                navigate("/duolingo");
+            case "duolingoChat":
+                navigate("/chat", {
+                    state: {
+                        sessionPayload: {
+                            mode: "duolingoChat"
+                        }
+                    }
+                });
+                break;
+
+            case "duolingoTopic":
+                navigate("/topic", { state: { type: "duolingo" } });
                 break;
 
             default:
@@ -91,12 +118,15 @@ function ModeSelection({ onMenuToggle }) {
         }
     };
 
+    const modes = allModes[category];
+
     return (
 
         <div className="mode-page">
 
             <Header
-                brandTitle
+                primaryTitle={categoryTitle}
+                secondaryTitle="Select a learning mode"
                 onMenuToggle={onMenuToggle}
             />
 
@@ -137,5 +167,3 @@ function ModeSelection({ onMenuToggle }) {
 
     );
 }
-
-export default ModeSelection;

@@ -513,6 +513,7 @@ Return ONLY JSON:
 }
 
 const getTopicInitializationPrompt = (title, description) => {
+  console.log("title", title, description)
   console.log("Topic initialisation")
 
   const prompt = `
@@ -648,7 +649,7 @@ async function startAI(payload) {
       prompt = getDuolingoChatInitializationPrompt();
       break;
     case "duolingoTopic":
-      prompt = getDuolingoChatInitializationPrompt(payload.title, payload.description);
+      prompt = getDuolingoTopicInitializationPrompt(payload.title, payload.description);
       break;
     default:
       prompt = getChatInitializationPrompt();

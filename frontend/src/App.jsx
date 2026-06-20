@@ -9,7 +9,7 @@ import SplashScreen from './pages/SplashScreen';
 import ForgotPassword from './pages/ForgotPassword';
 import Register from './pages/Register';
 import ChatPage from './pages/ChatPage';
-import ModeSelection from './pages/ModeSelection';
+import Home from './pages/Home';
 import TopicList from './pages/TopicList';
 import PassageList from './pages/PassageList';
 import Resetpassword from './pages/Resetpassword';
@@ -20,9 +20,9 @@ import MyProfile from './pages/Myprofile';
 import ChangePassword from './pages/ChangePassword';
 import TaskList from './pages/TaskList';
 import FoundationalTask from './pages/FoundationalTask';
-import Duolingo from './pages/Duolingo';
 import StoryTranslation from './pages/StoryTranslation';
 import HistoryCategory from './pages/HistoryCategory';
+import Modes from './pages/Modes';
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -43,7 +43,7 @@ function App() {
 
         {/* Protected: must be logged in */}
         <Route element={<ProtectedRoute />}>
-          <Route path="/home" element={<ModeSelection onMenuToggle={() => setSidebarOpen(true)} />} />
+          <Route path="/home" element={<Home onMenuToggle={() => setSidebarOpen(true)} />} />
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/topic" element={<TopicList />} />
           <Route path="/passage" element={<PassageList />} />
@@ -52,7 +52,7 @@ function App() {
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/task-list" element={<TaskList />} />
           <Route path="/foundational-task/:taskId" element={<FoundationalTask />} />
-          <Route path="/duolingo" element={<Duolingo />} />
+          <Route path="/modes" element={<Modes />} />
           <Route path="/story-translation" element={<StoryTranslation />} />
           <Route path="/history-category" element={<HistoryCategory />} />
         </Route>
