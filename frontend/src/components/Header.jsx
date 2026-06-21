@@ -15,9 +15,9 @@ export default function Header({ primaryTitle, secondaryTitle, onMenuToggle, bra
                     <img
                         src={Logo}
                         alt="logo"
-                        style={{ width: 40, height: 40, objectFit: 'contain', marginLeft: 4 }}
+                        style={{ width: 40, height: 40, objectFit: 'contain', marginLeft: 5 }}
                     />
-                    <span className="mont-boldItalic" style={{ fontSize: '20px', lineHeight: 1.2, letterSpacing: '-0.3px' }}>
+                    <span className="mont-boldItalic" style={{ fontSize: '20px', lineHeight: 1.2, letterSpacing: '-0.3px', marginLeft: 5 }}>
                         <span style={{ color: '#07115D' }}>Lingo</span>
                         <span style={{ color: '#00C6FF' }}>Refresh</span>
                     </span>
@@ -70,7 +70,7 @@ export default function Header({ primaryTitle, secondaryTitle, onMenuToggle, bra
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                 pointerEvents: 'none'
             }}>
-                <span style={{ fontSize: '16px', fontWeight: 500, lineHeight: 1.2 }}>
+                <span style={{ fontSize: '14px', fontWeight: 600, lineHeight: 1.2, textAlign: "center" }}>
                     {primaryTitle}
                 </span>
                 {secondaryTitle && (

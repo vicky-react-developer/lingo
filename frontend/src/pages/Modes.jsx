@@ -7,60 +7,63 @@ const allModes = {
     chat: [
         {
             id: "normal",
-            icon: "bi-chat-dots-fill",
-            title: "Normal Chat",
-            desc: "Talk freely with AI and improve your English conversation skills."
+            icon: "bi-chat-left-text-fill",
+            title: "Free Conversation",
+            desc: "Practice natural English conversations."
         },
         {
             id: "topic",
             icon: "bi-lightbulb-fill",
-            title: "Selected Topic",
-            desc: "Choose a topic and continue conversations with AI around that subject."
+            title: "Topic Conversation",
+            desc: "Speak about a chosen topic."
         }
     ],
+
     duolingo: [
         {
             id: "duolingoChat",
-            icon: "bi-chat-dots-fill",
-            title: "Duolingo Chat",
-            desc: "Talk freely with AI and improve your English conversation skills."
+            icon: "bi-translate",
+            title: "Dual Language Chat",
+            desc: "Speak Tamil, then English."
         },
         {
             id: "duolingoTopic",
-            icon: "bi-lightbulb-fill",
-            title: "Duolingo Topic",
-            desc: "Choose a topic and continue conversations with AI around that subject."
+            icon: "bi-globe-central-south-asia",
+            title: "Dual Language Topic",
+            desc: "Discuss topics in two languages."
         }
     ],
+
     story: [
         {
             id: "passage",
-            icon: "bi-chat-square-text-fill",
+            icon: "bi-patch-question-fill",
             title: "Story Q & A",
-            desc: "Read Tamil stories and answer AI questions in English to improve understanding."
+            desc: "Answer questions from stories."
         },
         {
             id: "story-conversion",
-            icon: "bi-book-half",
-            title: "Story Conversion",
-            desc: "Convert complete Tamil passages into English."
-        },
+            icon: "bi-journal-text",
+            title: "Story Translation",
+            desc: "Translate stories into English."
+        }
     ],
+
     foundationalTasks: [
         {
             id: "foundational-tof",
-            icon: "bi-translate",
-            title: "Foundational Tamil to English",
-            desc: "Translate Tamil sentences into English."
+            icon: "bi-arrow-left-right",
+            title: "Sentence Translation",
+            desc: "Translate Tamil into English."
         },
         {
             id: "foundational-oww",
             icon: "bi-pencil-square",
-            title: "Foundational Own Words",
-            desc: "Create English sentences using given words and improve sentence formation."
-        },
+            title: "Word Practice",
+            desc: "Create sentences using words."
+        }
     ]
-}
+};
 
 export default function Modes({ onMenuToggle }) {
 

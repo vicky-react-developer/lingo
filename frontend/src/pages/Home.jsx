@@ -8,29 +8,33 @@ export default function Home({ onMenuToggle }) {
 
     const modes = [
         {
-            id: "chat",
-            icon: "bi-chat-dots-fill",
-            title: "Chat",
-        },
-        {
             id: "duolingo",
-            icon: "bi-grid-1x2-fill",
-            title: "Duolingo Method",
-        },
-        {
-            id: "story",
-            icon: "bi-book-half",
-            title: "Story",
+            icon: "bi-translate",
+            title: "Dual Language Speaking Practice",
+            desc: "Speak naturally in Tamil first and then express the same idea in English."
         },
         {
             id: "foundationalTasks",
-            icon: "bi-pencil-square",
-            title: "Foundational Tasks",
+            icon: "bi-tools",
+            title: "Functional Words Fluency Practice",
+            desc: "Build fluency by using essential functional words in meaningful contexts."
         },
+        {
+            id: "story",
+            icon: "bi-book",
+            title: "Short Passage Speaking Practice",
+            desc: "Develop confidence and fluency through structured passage speaking activities."
+        },
+        {
+            id: "chat",
+            icon: "bi-chat-left-text-fill",
+            title: "Real-Life Speaking Practice",
+            desc: "Practice English in everyday situations through interactive conversations."
+        }
     ];
 
     const handleNavigation = (mode) => {
-        navigate('/modes', { state: { category: mode.id, categoryTitle: mode.title} })
+        navigate('/modes', { state: { category: mode.id, categoryTitle: mode.title } })
     };
 
     return (
@@ -60,7 +64,7 @@ export default function Home({ onMenuToggle }) {
 
                             <div className="mode-content">
                                 <h5>{mode.title}</h5>
-                                {/* <p>{mode.desc}</p> */}
+                                <p>{mode.desc}</p>
                             </div>
 
                             <div className="mode-arrow">
