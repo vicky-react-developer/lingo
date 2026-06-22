@@ -4,6 +4,7 @@ import { useImmer } from "use-immer";
 import { useNavigate, Link } from "react-router";
 import { validatePhone } from "../helpers/utils";
 import { registerUserApi } from "../services/authService";
+import Footer from "../components/Footer";
 
 const Register = () => {
   const [formData, setFormData] = useImmer({
@@ -226,6 +227,7 @@ const Register = () => {
           </div>
         </form>
       </div>
+      <Footer style={{background: "#030352", color: "#fff"}} />
     </div>
   );
 };

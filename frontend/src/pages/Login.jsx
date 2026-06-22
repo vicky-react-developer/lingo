@@ -4,6 +4,7 @@ import "./Login.css";
 import { useNavigate, Link } from "react-router";
 import { loginUserApi } from "../services/authService";
 import { useAuth } from "../context/AuthContext";
+import Footer from "../components/Footer";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -112,6 +113,8 @@ const Login = () => {
           </span>
         </div>
       </div>
+
+      <Footer style={{background: "#030352", color: "#fff"}} />
     </div>
   );
 };

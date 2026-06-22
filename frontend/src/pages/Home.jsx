@@ -2,6 +2,7 @@ import React from "react";
 import "./Home.css";
 import { useNavigate } from "react-router";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 export default function Home({ onMenuToggle }) {
     const navigate = useNavigate();
@@ -79,6 +80,7 @@ export default function Home({ onMenuToggle }) {
 
             </div>
 
+            <Footer />
         </div>
 
     );

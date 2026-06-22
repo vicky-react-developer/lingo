@@ -2,6 +2,7 @@ import React from "react";
 import "./Home.css";
 import { useNavigate, useLocation } from "react-router";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const allModes = {
     chat: [
@@ -166,6 +167,7 @@ export default function Modes({ onMenuToggle }) {
 
             </div>
 
+            <Footer />
         </div>
 
     );

@@ -9,7 +9,7 @@ export default function Header({ primaryTitle, secondaryTitle, onMenuToggle, bra
         return (
             <div
                 className="d-flex align-items-center bg-white border-bottom"
-                style={{ height: '56px', padding: '0 8px', position: 'relative' }}
+                style={{ height: '70px', padding: '0 8px', position: 'relative' }}
             >
                 <div style={{ zIndex: 1, minWidth: 40, display: 'flex', alignItems: 'center' }}>
                     <img
@@ -49,7 +49,7 @@ export default function Header({ primaryTitle, secondaryTitle, onMenuToggle, bra
     return (
         <div
             className="d-flex align-items-center bg-white border-bottom"
-            style={{ height: '56px', padding: '0 8px', position: 'relative', justifyContent: "space-between" }}
+            style={{ height: '70px', padding: '0 8px', position: 'relative', justifyContent: "space-between" }}
         >
             {/* LEFT — Back button */}
             <div style={{ zIndex: 1, minWidth: 40 }}>
