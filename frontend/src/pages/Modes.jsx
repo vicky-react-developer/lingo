@@ -43,25 +43,25 @@ const allModes = {
             desc: "Answer questions from stories."
         },
         {
-            id: "story-conversion",
+            id: "Translation",
             icon: "bi-journal-text",
             title: "Story Translation",
             desc: "Translate stories into English."
         }
     ],
 
-    foundationalTasks: [
+    functionalTasks: [
         {
-            id: "foundational-tof",
-            icon: "bi-arrow-left-right",
-            title: "Sentence Translation",
-            desc: "Translate Tamil into English."
+            id: "Task",
+            icon: "bi-ui-checks-grid",
+            title: "Functional Words - Task",
+            desc: "Master grammar through structured exercises."
         },
         {
-            id: "foundational-oww",
-            icon: "bi-pencil-square",
-            title: "Word Practice",
-            desc: "Create sentences using words."
+            id: "Practice",
+            icon: "bi-journal-check",
+            title: "Functional Words - Practice",
+            desc: "Reinforce grammar with guided practice."
         }
     ]
 };
@@ -84,16 +84,13 @@ export default function Modes({ onMenuToggle }) {
                 navigate("/passage");
                 break;
 
-            case "story-conversion":
-                navigate("/passage", { state: { type: "story-conversion" } });
+            case "Translation":
+                navigate("/passage", { state: { type: mode } });
                 break;
 
-            case "foundational-tof":
-                navigate("/task-list", { state: { tasktype: "tamil_to_english" } });
-                break;
-
-            case "foundational-oww":
-                navigate("/task-list", { state: { tasktype: "own_words" } });
+            case "Task":
+            case "Practice":
+                navigate("/task-list", { state: { taskCategory: mode } });
                 break;
 
             case "duolingoChat":
@@ -134,7 +131,7 @@ export default function Modes({ onMenuToggle }) {
                 onMenuToggle={onMenuToggle}
             />
 
-            <div className="mode-container">
+            <div className="mode-container" style={{backgroundColor: "#fff"}}>
 
                 <div className="mode-list">
 

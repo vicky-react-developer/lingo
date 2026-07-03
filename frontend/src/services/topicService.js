@@ -3,9 +3,9 @@ import { API_URL } from "../helpers/Constants";
 
 const TOPIC_URL = `${API_URL}topic`;
 
-export const getTopics = async () => {
+export const getTopics = async (mode) => {
     try {
-        const { data } = await axios.get(`${TOPIC_URL}/get-topics`);
+        const { data } = await axios.get(`${TOPIC_URL}/get-topics?mode=${mode}`);
         return data;
     } catch (error) {
         throw new Error(

@@ -21,7 +21,7 @@ function PassageList() {
     const fetchPassages = async () => {
         try {
             setLoading(true);
-            const res = await getPassages(type || "story-QA")
+            const res = await getPassages(type || "Q/A")
             if (!res.success) {
                 return;
             }
@@ -34,7 +34,7 @@ function PassageList() {
     };
 
     const onSelectPassage = (passage) => {
-        if (type === "story-conversion") {
+        if (type === "Translation") {
             navigate("/story-translation", {
                 state: {
                     passageId: passage.id
@@ -60,8 +60,8 @@ function PassageList() {
     return (
         <div>
             <Header
-                primaryTitle={type === "story-conversion" ? "Story Conversion" : "Story Q/A"}
-                secondaryTitle={type === "story-conversion" ? "Read the Tamil passage and translate it into English" : "Read the Tamil passage and answer AI questions"}
+                primaryTitle={type === "Translation" ? "Story Conversion" : "Story Q/A"}
+                secondaryTitle={type === "Translation" ? "Read the Tamil passage and translate it into English" : "Read the Tamil passage and answer AI questions"}
             />
             <div className="passage-container">
                 <div className="passage-list">
@@ -85,7 +85,7 @@ function PassageList() {
 
                                             <h6>{passage.title}</h6>
 
-                                            {(type === "story-conversion" && passage.Attempts?.length > 0) && (
+                                            {(type === "Translation" && passage.Attempts?.length > 0) && (
                                                 <>
                                                     <span className="attempted-badge">
                                                         Attempted

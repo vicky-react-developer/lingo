@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
-import "./FoundationalTask.css";
+import "./FunctionalTask.css";
 import Header from "../components/Header";
 import { useParams, useLocation, useNavigate } from "react-router";
 import MySpinner from "../components/MySpinner";
-import { getTamilSentences, submitTamilTranslation, getWordTasks, submitWordTask } from "../services/foundationalTaskservice";
+import { getFunctionalExercises, submitFunctionalExercise, submitWordTask } from "../services/functionalTaskservice";
 import VoiceRecorder from "../components/VoiceRecorder";
 import Loader from "../components/Loader";
 import useSpeech from "../hooks/useSpeech";
 
-export default function FoundationalTask() {
+export default function FunctionalTask() {
     const { taskId } = useParams();
     const location = useLocation();
     const navigate = useNavigate();
@@ -22,16 +22,10 @@ export default function FoundationalTask() {
     const [submitting, setSubmitting] = useState(false);
     const { speak, stop } = useSpeech();
 
-    const { taskType } = location.state || {}
+    const { taskType, taskTitle } = location.state || {}
 
     useEffect(() => {
-        if (taskType === "tamil_to_english") {
-            fetchTamilSentences();
-        }
-
-        if (taskType === "own_words") {
-            fetchWordTasks();
-        }
+        fetchFunctionalExercises();
 
         return () => stop();
     }, [taskType]);
@@ -48,10 +42,10 @@ export default function FoundationalTask() {
         }
     }, [currentIndex, questions]);
 
-    const fetchTamilSentences = async () => {
+    const fetchFunctionalExercises = async () => {
         try {
             setLoading(true);
-            const res = await getTamilSentences(taskId)
+            const res = await getFunctionalExercises(taskId)
             if (!res.success) {
                 return;
             };
@@ -63,10 +57,11 @@ export default function FoundationalTask() {
                 } else if (currentIndex === null) {
                     currentIndex = index
                 }
+
                 return {
                     id: item.id,
-                    question: item.tamilText,
-                    answer: item.expectedEnglish,
+                    tamilSentence: item.tamilSentence,
+                    englishSentence: item.englishSentence,
                     attempts: item.Attempts
                 }
             });
@@ -80,97 +75,33 @@ export default function FoundationalTask() {
         }
     }
 
-    const fetchWordTasks = async () => {
-        try {
-            setLoading(true);
-            const res = await getWordTasks(taskId)
-            if (!res.success) {
-                return;
-            };
-            let answered = 0;
-            let currentIndex = null;
-            const questions = res.data?.map((item, index) => {
-                if (item.Attempts?.length > 0) {
-                    answered += 1
-                } else if (currentIndex === null) {
-                    currentIndex = index
-                }
-                return {
-                    id: item.id,
-                    question: item.word,
-                    attempts: item.Attempts
-                }
-            });
-            setAnswered(answered);
-            setCurrentIndex(currentIndex);
-            setQuestions(questions);
-        } catch (e) {
-            console.log("fetchWordTasks err:", e)
-        } finally {
-            setLoading(false);
-        }
-    }
-
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (!answer.trim()) return;
-        if (taskType === "tamil_to_english") {
-            handleTamilTranslationSubmit();
-        }
-        if (taskType === "own_words") {
-            handleSubmitWordTask();
+        setSubmitting(true);
+        try {
+            const currentQuestion = questions[currentIndex]
+            const payload = {
+                tamilSentence: currentQuestion.tamilSentence,
+                englishSentence: currentQuestion.englishSentence,
+                userAnswer: answer,
+                exerciseId: currentQuestion.id,
+                taskId,
+                taskType
+            }
+            const res = await submitFunctionalExercise(payload);
+            if (!res.success) {
+                alert(res.message);
+            };
+            setAnswered(prev => prev + 1);
+            injectAttempt(currentQuestion.id, res?.data)
+            speak(res.data?.explanation);
+        } catch (e) {
+            alert("Something went wrong!");
+            console.log("handleTamilTranslationSubmit err:", e)
+        } finally {
+            setSubmitting(false);
         }
     };
-
-    const handleTamilTranslationSubmit = async () => {
-        setSubmitting(true);
-        try {
-            const currentQuestion = questions[currentIndex]
-            const payload = {
-                tamilText: currentQuestion.question,
-                expectedEnglish: currentQuestion.answer,
-                userAnswer: answer,
-                sentenceId: currentQuestion.id,
-                taskId
-            }
-            const res = await submitTamilTranslation(payload);
-            if (!res.success) {
-                alert(res.message);
-            };
-            setAnswered(prev => prev + 1);
-            injectAttempt(currentQuestion.id, res?.data)
-            speak(res.data?.explanation);
-        } catch (e) {
-            alert("Something went wrong!");
-            console.log("handleTamilTranslationSubmit err:", e)
-        } finally {
-            setSubmitting(false);
-        }
-    }
-
-    const handleSubmitWordTask = async () => {
-        setSubmitting(true);
-        try {
-            const currentQuestion = questions[currentIndex]
-            const payload = {
-                word: currentQuestion.question,
-                userAnswer: answer,
-                wordTaskId: currentQuestion.id,
-                taskId
-            }
-            const res = await submitWordTask(payload);
-            if (!res.success) {
-                alert(res.message);
-            };
-            setAnswered(prev => prev + 1);
-            injectAttempt(currentQuestion.id, res?.data)
-            speak(res.data?.explanation);
-        } catch (e) {
-            alert("Something went wrong!");
-            console.log("handleTamilTranslationSubmit err:", e)
-        } finally {
-            setSubmitting(false);
-        }
-    }
 
     const injectAttempt = (questionId, attempt) => {
         if (!questionId) return;
@@ -203,13 +134,12 @@ export default function FoundationalTask() {
 
     const currentQuestion = questions[currentIndex];
     const progress = (answered / questions?.length) * 100;
-    const isLastQuestion = currentIndex === questions?.length - 1
+    const isLastQuestion = currentIndex === questions?.length - 1;
 
     return (
         <div>
             <Header
-                primaryTitle={taskType === "tamil_to_english" ? "Foundational Tamil → English" : taskType === "own_words" ? "Foundational Own Words" : ""}
-                secondaryTitle={taskType === "tamil_to_english" ? "Translate Tamil sentences into English." : taskType === "own_words" ? "Create English sentences using given words and improve sentence formation." : ""}
+                primaryTitle={taskTitle}
             />
             {questions?.length > 0 &&
                 <div className="lesson-page">
@@ -246,11 +176,17 @@ export default function FoundationalTask() {
                     <div className="question-card">
 
                         <span className="task-badge">
-                            {taskType === "tamil_to_english" ? "Translate to English" : taskType === "own_words" ? "Form a Sentence" : ""}
+                            {taskType === "FIB" ? "Translate to English" : taskType === "OSM" ? "Form a Sentence" : ""}
                         </span>
 
+                        {currentQuestion?.tamilSentence &&
+                            <h2>
+                                {currentQuestion?.tamilSentence}
+                            </h2>
+                        }
+
                         <h2>
-                            {currentQuestion?.question}
+                            {currentQuestion?.englishSentence}
                         </h2>
 
                     </div>

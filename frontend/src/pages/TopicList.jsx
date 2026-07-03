@@ -16,12 +16,12 @@ function TopicList() {
 
     useEffect(() => {
         fetchTopics();
-    }, []);
+    }, [type]);
 
     const fetchTopics = async () => {
         try {
             setLoading(true);
-            const res = await getTopics()
+            const res = await getTopics(type === "duolingo" ? "Dual Language" : "Real-life Speaking")
             if (!res.success) {
                 return;
             }
@@ -42,7 +42,6 @@ function TopicList() {
                 },
                 info: {
                     title: topic.title,
-                    description: topic.description,
                 }
             }
         })

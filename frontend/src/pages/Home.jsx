@@ -15,7 +15,7 @@ export default function Home({ onMenuToggle }) {
             desc: "Speak naturally in Tamil first and then express the same idea in English."
         },
         {
-            id: "foundationalTasks",
+            id: "functionalTasks",
             icon: "bi-tools",
             title: "Functional Words Fluency Practice",
             desc: "Build fluency by using essential functional words in meaningful contexts."

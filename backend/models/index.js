@@ -32,9 +32,8 @@ db.Passage = require("./passage.model")(sequelize, DataTypes);
 db.ChatSession = require("./chatSession.model")(sequelize, DataTypes);
 db.Message = require("./message.model")(sequelize, DataTypes);
 db.Correction = require("./correction.model")(sequelize, DataTypes);
-db.FoundationalTask = require("./foundationalTask.model")(sequelize, DataTypes);
-db.TamilSentence = require("./tamilSentence.model")(sequelize, DataTypes);
-db.WordTask = require("./wordtask.model")(sequelize, DataTypes);
+db.FunctionalTask = require("./functionalTask.model")(sequelize, DataTypes);
+db.FunctionalExercise = require("./funactionalExercise.model")(sequelize, DataTypes);
 db.Attempt = require("./attempt.model")(sequelize, DataTypes);
 
 // User ↔ ChatSession
@@ -85,24 +84,6 @@ db.ChatSession.belongsTo(db.Passage, {
   foreignKey: { name: "passageId", allowNull: true },
 });
 
-
-
-db.FoundationalTask.hasMany(db.TamilSentence, {
-    foreignKey: "taskId"
-});
-
-db.TamilSentence.belongsTo(db.FoundationalTask, {
-    foreignKey: "taskId"
-});
-
-db.FoundationalTask.hasMany(db.WordTask, {
-    foreignKey: "taskId"
-});
-
-db.WordTask.belongsTo(db.FoundationalTask, {
-    foreignKey: "taskId"
-});
-
 db.User.hasMany(db.Attempt, {
     foreignKey: "userId"
 });
@@ -111,28 +92,30 @@ db.Attempt.belongsTo(db.User, {
     foreignKey: "userId"
 });
 
-db.FoundationalTask.hasMany(db.Attempt, {
+
+db.FunctionalTask.hasMany(db.FunctionalExercise, {
+    foreignKey: "taskId",
+    onDelete: "CASCADE"
+});
+
+db.FunctionalExercise.belongsTo(db.FunctionalTask, {
     foreignKey: "taskId"
 });
 
-db.Attempt.belongsTo(db.FoundationalTask, {
+db.FunctionalTask.hasMany(db.Attempt, {
     foreignKey: "taskId"
 });
 
-db.TamilSentence.hasMany(db.Attempt, {
-    foreignKey: "sentenceId"
+db.Attempt.belongsTo(db.FunctionalTask, {
+    foreignKey: "taskId"
 });
 
-db.Attempt.belongsTo(db.TamilSentence, {
-    foreignKey: "sentenceId"
+db.FunctionalExercise.hasMany(db.Attempt, {
+    foreignKey: "exerciseId"
 });
 
-db.WordTask.hasMany(db.Attempt, {
-    foreignKey: "wordTaskId"
-});
-
-db.Attempt.belongsTo(db.WordTask, {
-    foreignKey: "wordTaskId"
+db.Attempt.belongsTo(db.FunctionalExercise, {
+    foreignKey: "exerciseId"
 });
 
 db.Passage.hasMany(db.Attempt, {

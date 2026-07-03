@@ -13,10 +13,10 @@ const getPrompt = (mode, payload) => {
       return getTopicPrompt(payload);
     case "passage":
       return getPassagePrompt(payload);
-    case "tamil_to_english":
-      return getTOEPrompt(payload);
-    case "own_words":
-      return getWordTaskPrompt(payload);
+    case "FIB":
+      return getFIBPrompt(payload);
+    case "OSM":
+      return getOSMPrompt(payload);
     case "duolingoChat":
       return getDuolingoChatPrompt(payload);
     case "duolingoTopic":
@@ -75,16 +75,13 @@ const getTopicPrompt = (payload) => {
   console.log("TOpic Chat reply")
 
   const { text, history } = payload;
-  const { title, description } = payload.otherInfo;
+  const { title } = payload.otherInfo;
 
   return `
 You are an English tutor.
 
 Topic:
 ${title}
-
-Description:
-${description}
 
 Conversation History:
 ${history}
@@ -189,16 +186,13 @@ const getDuolingoTopicPrompt = (payload) => {
   console.log("Duo topic reply")
 
   const { text, history } = payload;
-  const { title, description } = payload.otherInfo;
+  const { title } = payload.otherInfo;
 
   return `
 You are a Duolingo-style English tutor helping Tamil-speaking students learn spoken English.
 
 Topic:
 ${title}
-
-Description:
-${description}
 
 Conversation History:
 ${history}
@@ -308,36 +302,40 @@ Return ONLY JSON:
 `;
 };
 
-const getTOEPrompt = (payload) => {
-  console.log("TOE reply")
+const getFIBPrompt = (payload) => {
+  console.log("TOE reply");
 
-  const { tamilText, expectedEnglish, userAnswer } = payload;
+  const { tamilSentence, englishSentence, userAnswer } = payload;
 
   return `
-User translated a Tamil sentence into English.
+You are an English tutor evaluating a Fill in the Blanks exercise.
 
 Tamil Sentence:
-"${tamilText}"
+"${tamilSentence}"
 
-Expected Meaning:
-"${expectedEnglish}"
+English Sentence with Blank:
+"${englishSentence}"
 
-User Answer:
+Student Answer:
 "${userAnswer}"
 
 Rules:
 
-- Compare meaning.
-- Ignore minor wording differences.
-- Check grammar.
-- If correct:
+- The English sentence with blanks is a hint.
+- Infer the correct complete English sentence from the Tamil sentence and the hint.
+- The student must speak the COMPLETE English sentence.
+- Compare the student's answer with the inferred correct sentence.
+- Ignore minor wording differences if the meaning is the same.
+- Check grammar and natural English.
+- If the answer is correct:
   - isCorrect = true
   - correctedText = ""
   - explanation = ""
 - Otherwise:
   - isCorrect = false
-  - provide correctedText
+  - correctedText = the corrected complete English sentence.
   - explanation under 15 words.
+- Reply in English only.
 
 Return ONLY JSON:
 
@@ -349,16 +347,16 @@ Return ONLY JSON:
 `;
 };
 
-const getWordTaskPrompt = (payload) => {
+const getOSMPrompt = (payload) => {
   console.log("Word task reply")
 
-  const { word, userAnswer } = payload;
+  const { englishSentence, userAnswer } = payload;
 
   return `
 You are an English tutor.
 
 Target Word:
-"${word}"
+"${englishSentence}"
 
 Student Sentence:
 "${userAnswer}"
@@ -445,6 +443,13 @@ const generateContent = async (prompt) => {
       parsed = JSON.parse(parsed);
     }
 
+    if (parsed.reply) {
+      parsed.reply = parsed.reply
+        .replace(/<br\s*\/?>/gi, "\n")
+        .replace(/<\/?p>/gi, "")
+        .trim();
+    }
+
     return parsed;
 
   } catch (error) {
@@ -512,15 +517,12 @@ Return ONLY JSON:
   return prompt;
 }
 
-const getTopicInitializationPrompt = (title, description) => {
-  console.log("title", title, description)
-  console.log("Topic initialisation")
+const getTopicInitializationPrompt = (title) => {
 
   const prompt = `
 Start a conversation with a student on this topic:
 
 Topic: "${title}"
-Description: "${description}"
 
 Ask a simple opening question.
 
@@ -568,7 +570,7 @@ Return ONLY JSON:
   return prompt;
 }
 
-const getDuolingoTopicInitializationPrompt = (title, description) => {
+const getDuolingoTopicInitializationPrompt = (title) => {
   console.log("duo topic initialisation")
 
   const prompt = `
@@ -577,28 +579,24 @@ You are a Duolingo-style English tutor helping Tamil-speaking students learn spo
 Topic:
 ${title}
 
-Description:
-${description}
-
 Rules:
 
 - Briefly introduce the topic.
 - Ask one simple opening question.
-- Include English and Tamil versions.
+- Include:
+  1. English
+  2. Tamil
 - Tamil must use Tamil script.
 - Never use Tanglish.
+- Never use HTML tags such as <br>, <br/>, <p>, or any markdown.
+- Separate the English and Tamil sentences using the literal characters "\\n\\n".
 - Keep under 30 words.
-- reply format:
 
-<English question>
+Example reply:
 
-<Tamil question>
+Let's talk about food!
 
-Example:
-
-What do you usually do after work?
-
-வேலை முடிந்த பிறகு நீங்கள் வழக்கமாக என்ன செய்வீர்கள்?
+உணவைப் பற்றி பேசுவோம்! உங்களுக்குப் பிடித்த உணவு எது?
 
 Return ONLY JSON:
 
@@ -640,7 +638,7 @@ async function startAI(payload) {
   let prompt;
   switch (mode) {
     case "topic":
-      prompt = getTopicInitializationPrompt(payload.title, payload.description);
+      prompt = getTopicInitializationPrompt(payload.title);
       break;
     case "passage":
       prompt = getPassageInitializationPrompt(payload.tamilText);
@@ -649,7 +647,7 @@ async function startAI(payload) {
       prompt = getDuolingoChatInitializationPrompt();
       break;
     case "duolingoTopic":
-      prompt = getDuolingoTopicInitializationPrompt(payload.title, payload.description);
+      prompt = getDuolingoTopicInitializationPrompt(payload.title);
       break;
     default:
       prompt = getChatInitializationPrompt();

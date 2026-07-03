@@ -10,9 +10,12 @@ exports.getAllPassages = async (req, res) => {
         const { id: userId } = req.user;
 
         const passages = await Passage.findAll({
-            attributes: ["id", "title", "tamilText"],
+            where: {
+                mode: type
+            },
+            attributes: ["id", "tamilText"],
             order: [["createdAt", "ASC"]],
-            ...(type === "story-conversion" ? {
+            ...(type === "Translation" ? {
                 include: [
                     {
                         model: Attempt,
@@ -56,7 +59,7 @@ exports.getPassageById = async (req, res) => {
             where: {
                 id
             },
-            attributes: ["id", "title", "tamilText"],
+            attributes: ["id", "tamilText"],
             include: [
                 {
                     model: Attempt,

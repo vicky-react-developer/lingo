@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./TaskList.css";
-import { getTasks } from "../services/foundationalTaskservice";
+import { getTasks } from "../services/functionalTaskservice";
 import { useLocation, useNavigate } from "react-router";
 import Header from "../components/Header";
 import MySpinner from "../components/MySpinner";
@@ -12,19 +12,19 @@ export default function TaskList() {
     const [loading, setLoading] = useState(false);
     const [tasks, setTasks] = useState([]);
 
-    const { tasktype } = location.state || {};
+    const { taskCategory } = location.state || {};
 
     useEffect(() => {
-        if (tasktype) {
+        if (taskCategory) {
             fetchTasks();
         }
-    }, [tasktype])
+    }, [taskCategory])
 
 
     const fetchTasks = async () => {
         try {
             setLoading(true);
-            const res = await getTasks(tasktype)
+            const res = await getTasks(taskCategory)
             if (!res.success) {
                 return;
             }
@@ -40,8 +40,7 @@ export default function TaskList() {
 
         <div className="task-page">
             <Header
-                primaryTitle={tasktype === "tamil_to_english" ? "Foundational Tamil → English" : tasktype === "own_words" ? "Foundational Own Words" : ""}
-                secondaryTitle={tasktype === "tamil_to_english" ? "Translate Tamil sentences into English." : tasktype === "own_words" ? "Create English sentences using given words and improve sentence formation." : ""}
+                primaryTitle={taskCategory === "Task" ? "Functional Words - Task" : taskCategory === "Practice" ? "Functional Words - Practice" : ""}
             />
 
             <div className="task-list mt-3">
@@ -49,7 +48,7 @@ export default function TaskList() {
                     <>
                         {tasks.map((task) => {
                             const completed = task.Attempts?.length;
-                            const totalQuestions = tasktype === "tamil_to_english" ? task.TamilSentences?.length : task.WordTasks?.length;
+                            const totalQuestions = task.FunctionalExercises?.length;
                             const progress = (completed / totalQuestions) * 100;
 
                             return (
@@ -97,7 +96,7 @@ export default function TaskList() {
                                         />
                                     </div>
 
-                                    <button className="task-btn" onClick={() => navigate(`/foundational-task/${task.id}`, { state: { taskType: task.type } })}>
+                                    <button className="task-btn" onClick={() => navigate(`/functional-task/${task.id}`, { state: { taskType: task.type, taskTitle: task.title } })}>
 
                                         {completed === 0
                                             ? "Start"

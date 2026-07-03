@@ -19,7 +19,7 @@ import ChatHistory from './pages/ChatHistory';
 import MyProfile from './pages/Myprofile';
 import ChangePassword from './pages/ChangePassword';
 import TaskList from './pages/TaskList';
-import FoundationalTask from './pages/FoundationalTask';
+import FunctionalTask from './pages/FunctionalTask';
 import StoryTranslation from './pages/StoryTranslation';
 import HistoryCategory from './pages/HistoryCategory';
 import Modes from './pages/Modes';
@@ -51,7 +51,7 @@ function App() {
           <Route path="/profile" element={<MyProfile />} />
           <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/task-list" element={<TaskList />} />
-          <Route path="/foundational-task/:taskId" element={<FoundationalTask />} />
+          <Route path="/functional-task/:taskId" element={<FunctionalTask />} />
           <Route path="/modes" element={<Modes />} />
           <Route path="/story-translation" element={<StoryTranslation />} />
           <Route path="/history-category" element={<HistoryCategory />} />

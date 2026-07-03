@@ -5,8 +5,9 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
 
-    description: {
-      type: DataTypes.TEXT
+    mode: {
+      type: DataTypes.ENUM("Real-life Speaking", "Dual Language"),
+      defaultValue: "Real-life Speaking"
     }
   });
 

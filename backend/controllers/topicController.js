@@ -1,16 +1,20 @@
-const {Topic} = require("../models");
+const { Topic } = require("../models");
 
 
 // Get all topics
 exports.getAllTopics = async (req, res) => {
+  const { mode } = req.query;
   try {
 
     const topics = await Topic.findAll({
-      attributes: ["id", "title", "description"],
+      where: {
+        mode
+      },
+      attributes: ["id", "title"],
       order: [["createdAt", "ASC"]]
     });
 
-    res.json({
+    return res.json({
       success: true,
       data: topics
     });
@@ -19,7 +23,7 @@ exports.getAllTopics = async (req, res) => {
 
     console.error("Fetch topics error:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Failed to fetch topics"
     });

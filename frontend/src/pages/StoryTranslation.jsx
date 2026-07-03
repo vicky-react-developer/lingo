@@ -20,7 +20,6 @@ export default function StoryTranslation() {
 
     const { passageId } = location.state || {};
 
-    console.log("passageId", passageId)
     useEffect(() => {
         if (passageId) {
             fetchOnePassage();
@@ -81,10 +80,6 @@ export default function StoryTranslation() {
             <Header primaryTitle="Story Translation" />
             <div className="translation-page">
                 <div className="story-card">
-                    <div className="story-title">
-                        📖 {passage?.title}
-                    </div>
-
                     <div className="story-content">
                         {passage?.tamilText}
                     </div>
