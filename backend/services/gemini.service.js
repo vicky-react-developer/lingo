@@ -46,6 +46,9 @@ Rules:
 - Continue the conversation naturally.
 - Stay consistent with the conversation context.
 - Correct English ONLY when necessary.
+- Ignore capitalization differences completely.
+- Do NOT correct answers only because letters are uppercase or lowercase.
+- Treat "i", "I", "hello", and "Hello" as equivalent unless capitalization changes meaning.
 - If correction is needed:
   - provide correctedText
   - explanation under 15 words.
@@ -93,6 +96,8 @@ Rules:
 
 - Stay strictly within the topic.
 - Correct English ONLY when necessary.
+- Ignore capitalization differences completely.
+- Do NOT suggest corrections only because of uppercase/lowercase.
 - If correction is needed:
   - provide correctedText
   - explanation under 15 words.
@@ -138,6 +143,9 @@ Rules:
 - Understand the intended meaning.
 - Encourage English communication.
 - Correct English ONLY when necessary.
+- Ignore capitalization entirely.
+- Do NOT mark answers wrong because of uppercase or lowercase letters.
+- Evaluate grammar and meaning only.
 - If correction is needed:
   - provide correctedText
   - explanation under 15 words.
@@ -207,6 +215,9 @@ Rules:
 - Understand the intended meaning.
 - Encourage English communication.
 - Correct English ONLY when necessary.
+- Ignore capitalization entirely.
+- Do NOT penalize the student for uppercase/lowercase differences.
+- Evaluate only meaning, grammar and natural English.
 - If correction is needed:
   - provide correctedText
   - explanation under 15 words.
@@ -273,6 +284,8 @@ Rules:
 
 - Check whether the answer matches the passage.
 - Correct English ONLY when necessary.
+- Ignore capitalization differences.
+- Do NOT correct answers solely because of uppercase/lowercase.
 - If correction is needed:
   - provide correctedText
   - explanation under 15 words.
@@ -325,8 +338,11 @@ Rules:
 - Infer the correct complete English sentence from the Tamil sentence and the hint.
 - The student must speak the COMPLETE English sentence.
 - Compare the student's answer with the inferred correct sentence.
+- Comparison must be case-insensitive.
+- Ignore capitalization differences completely.
 - Ignore minor wording differences if the meaning is the same.
 - Check grammar and natural English.
+- Do NOT mark an answer incorrect solely because of uppercase/lowercase letters.
 - If the answer is correct:
   - isCorrect = true
   - correctedText = ""
@@ -364,8 +380,11 @@ Student Sentence:
 Rules:
 
 - Verify the target word is used.
+- Comparison must be case-insensitive.
+- Ignore capitalization differences.
 - Check grammar.
 - Check whether the sentence sounds natural.
+- Do NOT reject answers because of uppercase/lowercase.
 
 - If correct:
   - isCorrect = true
@@ -402,6 +421,8 @@ ${translation}
 Rules:
 
 - Check meaning accuracy.
+- Ignore capitalization differences.
+- Do not deduct marks for uppercase/lowercase.
 - Check grammar.
 - Assign score from 0-100.
 

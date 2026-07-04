@@ -94,7 +94,7 @@ export default function StoryTranslation() {
 
                         <textarea
                             className="translation-input"
-                            rows={10}
+                            rows={6}
                             value={translation}
                             onChange={(e) => setTranslation(e.target.value)}
                             placeholder="Speak your Answer..."

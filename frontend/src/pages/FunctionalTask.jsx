@@ -179,16 +179,17 @@ export default function FunctionalTask() {
                             {taskType === "FIB" ? "Translate to English" : taskType === "OSM" ? "Form a Sentence" : ""}
                         </span>
 
-                        {currentQuestion?.tamilSentence &&
-                            <h2>
-                                {currentQuestion?.tamilSentence}
-                            </h2>
-                        }
+                        <div className="mt-3 task-questions">
+                            {currentQuestion?.tamilSentence &&
+                                <h4>
+                                    {currentQuestion?.tamilSentence}
+                                </h4>
+                            }
 
-                        <h2>
-                            {currentQuestion?.englishSentence}
-                        </h2>
-
+                            <h4>
+                                {currentQuestion?.englishSentence}
+                            </h4>
+                        </div>
                     </div>
 
 

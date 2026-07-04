@@ -11,32 +11,32 @@ export default function HistoryCategory() {
         {
             mode: "normal",
             icon: "bi-chat-dots-fill",
-            title: "Normal Chat",
-            desc: "Previous free conversations"
+            title: "Free Conversation",
+            desc: "Practice natural English conversations."
         },
         {
             mode: "topic",
             icon: "bi-lightbulb-fill",
-            title: "Selected Topic",
-            desc: "Topic-based discussions"
+            title: "Topic Conversation",
+            desc: "Speak about a chosen topic."
         },
         {
             mode: "passage",
             icon: "bi-chat-square-text-fill",
             title: "Story Q & A",
-            desc: "Story question sessions"
+            desc: "Answer questions from stories."
         },
         {
             mode: "duolingoChat",
             icon: "bi-chat-heart-fill",
-            title: "Duolingo Chat",
-            desc: "Tamil assisted chat"
+            title: "Dual Language Chat",
+            desc: "Speak Tamil, then English."
         },
         {
             mode: "duolingoTopic",
             icon: "bi-bullseye",
-            title: "Duolingo Topic",
-            desc: "Tamil assisted topics"
+            title: "Dual Language Topic",
+            desc: "Discuss topics in two languages."
         }
     ];
 
