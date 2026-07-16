@@ -13,6 +13,8 @@ module.exports = (sequelize, DataTypes) => {
     endedAt: {
       type: DataTypes.DATE
     }
+  }, {
+    tableName: "chatsessions"
   });
 
   return ChatSession;

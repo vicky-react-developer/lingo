@@ -13,6 +13,8 @@ module.exports = (sequelize, DataTypes) => {
     explanation: {
       type: DataTypes.TEXT
     }
+  }, {
+    tableName: "corrections"
   });
 
   return Correction;

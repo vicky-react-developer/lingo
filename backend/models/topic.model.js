@@ -9,6 +9,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM("Real-life Speaking", "Dual Language"),
       defaultValue: "Real-life Speaking"
     }
+  }, {
+    tableName: "topics"
   });
 
   return Topic;

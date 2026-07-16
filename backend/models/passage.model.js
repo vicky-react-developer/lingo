@@ -8,6 +8,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.ENUM("Q/A", "Translation"),
       defaultValue: "Q/A"
     }
+  }, {
+    tableName: "passages"
   });
 
   return Passage;

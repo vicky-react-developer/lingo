@@ -12,6 +12,8 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: true
         }
 
+    }, {
+        tableName: "functionalexercises"
     });
 
     return FunctionalExercise;

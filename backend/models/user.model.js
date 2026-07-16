@@ -89,6 +89,8 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: true,
       defaultValue: null,
     },
+  }, {
+    tableName: "users"
   });
 
   return User;

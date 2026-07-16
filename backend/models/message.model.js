@@ -9,6 +9,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       allowNull: false
     }
+  }, {
+    tableName: "messages"
   });
 
   return Message;
