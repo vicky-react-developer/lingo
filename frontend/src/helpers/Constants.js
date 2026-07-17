@@ -12,6 +12,6 @@ export { default as InstructionsImg } from '../assets/images/instructions.png'
 export { default as TamilMic } from '../assets/images/mic_tamil.svg'
 export { default as EnglishMic } from '../assets/images/mic_english.svg'
 
-// export const API_URL = "https://containers-dept-movies-guides.trycloudflare.com/api/";
+export const API_URL = "https://lingorefresh.in/api/";
 
-export const API_URL = "http://localhost:5163/api/";
+// export const API_URL = "http://localhost:5163/api/";
