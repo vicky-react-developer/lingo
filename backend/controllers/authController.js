@@ -79,6 +79,8 @@ const loginUser = async (req, res) => {
   try {
     const { userName, password } = req.body;
 
+    console.log("userName", userName, password)
+
     if (!userName || !password) {
       return res.status(400).json({ success: false, message: "Please fill all the fields." });
     }

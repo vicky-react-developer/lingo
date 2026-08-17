@@ -5,6 +5,7 @@ import { AuthProvider } from './context/AuthContext';
 import { ProtectedRoute, PublicOnlyRoute } from './routes/ProtectedRoute';
 
 import Login from './pages/Login';
+import AdminLogin from './pages/AdminLogin';
 import SplashScreen from './pages/SplashScreen';
 import ForgotPassword from './pages/ForgotPassword';
 import Register from './pages/Register';
@@ -32,6 +33,8 @@ function App() {
       <Routes>
         {/* Always public */}
         <Route path="/" element={<SplashScreen />} />
+        <Route path="/admin" element={<AdminLogin />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
 
         {/* Public-only: logged-in users are redirected to /home */}
         <Route element={<PublicOnlyRoute />}>
