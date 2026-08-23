@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Outlet } from "react-router-dom";
-import Header from "./Header";
-import Sidebar from "./Sidebar";
-import "./admin-layout.css";
+import { Outlet } from "react-router";
+import AdminSidebar from "./AdminSidebar";
+import AdminHeader from "./AdminHeader";
+import "./AdminLayout.css";
 
 /**
  * AdminLayout
@@ -20,10 +20,10 @@ export default function AdminLayout() {
 
   return (
     <div className="admin-layout">
-      <Header onToggleSidebar={() => setSidebarOpen((v) => !v)} />
+      <AdminHeader onToggleSidebar={() => setSidebarOpen((v) => !v)} />
 
       <div className="admin-body">
-        <Sidebar open={sidebarOpen} />
+        <AdminSidebar open={sidebarOpen} />
 
         <main className="admin-content">
           <Outlet />

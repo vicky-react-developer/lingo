@@ -1,6 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
-import { Grid3x3Gap } from "react-bootstrap-icons";
+import { NavLink } from "react-router";
 
 // Sidebar navigation items. `to` maps to a route rendered via <Outlet /> in AdminLayout.
 const NAV_ITEMS = [
@@ -17,7 +16,7 @@ const NAV_ITEMS = [
   { label: "Imposition Report", to: "/imposition-report" },
 ];
 
-export default function Sidebar({ open = true, welcomeText = "Welcome Superadmin" }) {
+export default function AdminSidebar({ open = true, welcomeText = "Welcome Superadmin" }) {
   return (
     <aside className={`sidebar bg-dark ${open ? "" : "sidebar-collapsed"}`}>
       <div className="sidebar-welcome px-3 pt-3 pb-2 text-uppercase small text-secondary">
@@ -33,7 +32,7 @@ export default function Sidebar({ open = true, welcomeText = "Welcome Superadmin
                 (isActive ? " active" : "")
               }
             >
-              <Grid3x3Gap size={14} />
+              <i className="bi bi-grid" />
               <span>{item.label}</span>
             </NavLink>
           </li>

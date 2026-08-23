@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { loginUserApi } from "../services/authService";
-import { useAuth } from "../context/AuthContext";
+import { loginUserApi } from "../../services/authService";
+import { useAuth } from "../../context/AuthContext";
 import "./AdminLogin.css";
 
 const AdminLogin = () => {
@@ -28,7 +28,7 @@ const AdminLogin = () => {
       const response = await loginUserApi(formData);
       if (response?.success) {
         login(response.token, response.data);
-        navigate("/home");
+        navigate("/admin");
         return;
       }
       setError(response?.message || "Unable to sign in. Please try again.");

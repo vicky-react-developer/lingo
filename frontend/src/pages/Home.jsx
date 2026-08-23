@@ -3,9 +3,11 @@ import "./Home.css";
 import { useNavigate } from "react-router";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { useOutletContext } from "react-router";
 
-export default function Home({ onMenuToggle }) {
+export default function Home() {
     const navigate = useNavigate();
+    const { setSidebarOpen } = useOutletContext();
 
     const modes = [
         {
@@ -44,7 +46,7 @@ export default function Home({ onMenuToggle }) {
 
             <Header
                 brandTitle
-                onMenuToggle={onMenuToggle}
+                onMenuToggle={setSidebarOpen}
             />
 
             <div className="mode-container">

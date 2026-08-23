@@ -1,5 +1,4 @@
 import React from "react";
-import { List, PersonCircle } from "react-bootstrap-icons";
 
 /**
  * Top navbar: brand + sidebar toggle on the left, account menu on the right.
@@ -13,7 +12,7 @@ export default function Header({ brand = "Spoken English-I", onToggleSidebar }) 
           onClick={onToggleSidebar}
           aria-label="Toggle sidebar"
         >
-          <List size={22} />
+          <i className="bi bi-list" />
         </button>
         <span className="navbar-brand mb-0 fw-semibold">{brand}</span>
       </div>
@@ -25,7 +24,7 @@ export default function Header({ brand = "Spoken English-I", onToggleSidebar }) 
           data-bs-toggle="dropdown"
           aria-expanded="false"
         >
-          <PersonCircle size={22} />
+          <i className="bi bi-person" />
         </button>
         <ul className="dropdown-menu dropdown-menu-end">
           <li><a className="dropdown-item" href="#profile">Profile</a></li>
