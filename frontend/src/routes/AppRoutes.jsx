@@ -26,13 +26,12 @@ import Modes from '../pages/Modes';
 
 import AdminLogin from '../pages/admin/AdminLogin';
 import Users from '../pages/admin/Users';
+import Students from '../pages/admin/Students';
 
 import UserLayout from '../layouts/UserLayout';
 import AdminLayout from '../layouts/Adminlayout';
 
 export default function AppRoutes() {
-    const [sidebarOpen, setSidebarOpen] = useState(false);
-
     return (
         <>
             <Routes>
@@ -41,11 +40,12 @@ export default function AppRoutes() {
                 <Route path="/admin/login" element={<AdminLogin />} />
 
                 <Route element={<PublicRoutes />}>
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
-                    <Route path="/reset-password" element={<Resetpassword />} />
-                    <Route path="/forgot-password" element={<ForgotPassword />} />
-
+                    <Route element={<UserLayout />} >
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/register" element={<Register />} />
+                        <Route path="/reset-password" element={<Resetpassword />} />
+                        <Route path="/forgot-password" element={<ForgotPassword />} />
+                    </Route>
                 </Route>
 
                 <Route element={<ProtectedRoutes />}>
@@ -68,6 +68,7 @@ export default function AppRoutes() {
                 <Route element={<AdminProtectedRoutes />}>
                     <Route path="/admin" element={<AdminLayout />}>
                         <Route index element={<Users />} />
+                        <Route path="students" element={<Students />} />
                     </Route>
                 </Route>
 

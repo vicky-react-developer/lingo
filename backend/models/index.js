@@ -35,6 +35,7 @@ db.Correction = require("./correction.model")(sequelize, DataTypes);
 db.FunctionalTask = require("./functionalTask.model")(sequelize, DataTypes);
 db.FunctionalExercise = require("./funactionalExercise.model")(sequelize, DataTypes);
 db.Attempt = require("./attempt.model")(sequelize, DataTypes);
+db.StudentFaculty = require("./studentFaculty.model")(sequelize, DataTypes);
 
 // User ↔ ChatSession
 db.User.hasMany(db.ChatSession, {
@@ -85,45 +86,65 @@ db.ChatSession.belongsTo(db.Passage, {
 });
 
 db.User.hasMany(db.Attempt, {
-    foreignKey: "userId"
+  foreignKey: "userId"
 });
 
 db.Attempt.belongsTo(db.User, {
-    foreignKey: "userId"
+  foreignKey: "userId"
 });
 
 
 db.FunctionalTask.hasMany(db.FunctionalExercise, {
-    foreignKey: "taskId",
-    onDelete: "CASCADE"
+  foreignKey: "taskId",
+  onDelete: "CASCADE"
 });
 
 db.FunctionalExercise.belongsTo(db.FunctionalTask, {
-    foreignKey: "taskId"
+  foreignKey: "taskId"
 });
 
 db.FunctionalTask.hasMany(db.Attempt, {
-    foreignKey: "taskId"
+  foreignKey: "taskId"
 });
 
 db.Attempt.belongsTo(db.FunctionalTask, {
-    foreignKey: "taskId"
+  foreignKey: "taskId"
 });
 
 db.FunctionalExercise.hasMany(db.Attempt, {
-    foreignKey: "exerciseId"
+  foreignKey: "exerciseId"
 });
 
 db.Attempt.belongsTo(db.FunctionalExercise, {
-    foreignKey: "exerciseId"
+  foreignKey: "exerciseId"
 });
 
 db.Passage.hasMany(db.Attempt, {
-    foreignKey: "passageId"
+  foreignKey: "passageId"
 });
 
 db.Attempt.belongsTo(db.Passage, {
-    foreignKey: "passageId"
+  foreignKey: "passageId"
+});
+
+db.User.hasOne(db.StudentFaculty, {
+  foreignKey: "studentId",
+  as: "facultyAssignment",
+});
+
+db.StudentFaculty.belongsTo(db.User, {
+  foreignKey: "studentId",
+  as: "student",
+});
+
+db.User.hasMany(db.StudentFaculty, {
+  foreignKey: "facultyId",
+  as: "assignedStudents",
+});
+
+db.StudentFaculty.belongsTo(db.User, {
+  foreignKey: "facultyId",
+  as: "faculty",
 });
 
 

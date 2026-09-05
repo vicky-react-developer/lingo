@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./PassageList.css";
+import { BookOpen, ChevronRight } from "lucide-react";
 import { getPassages } from "../services/passageService";
 import { useNavigate, useLocation } from "react-router";
 import Header from "../components/Header";
@@ -63,35 +63,35 @@ function PassageList() {
                 primaryTitle={type === "Translation" ? "Story Conversion" : "Story Q/A"}
                 secondaryTitle={type === "Translation" ? "Read the Tamil passage and translate it into English" : "Read the Tamil passage and answer AI questions"}
             />
-            <div className="passage-container">
-                <div className="passage-list">
+            <div className="mx-auto p-5 min-h-screen bg-[#f7f9fc]">
+                <div className="flex flex-col gap-3.5">
                     {passages.length > 0 ?
                         <>
                             {passages.map((passage) => (
 
                                 <div
                                     key={passage.id}
-                                    className="passage-card"
+                                    className="flex items-center bg-white p-4 rounded-2xl shadow-[0_6px_16px_rgba(0,0,0,0.06)] cursor-pointer transition-transform duration-200 ease-out active:scale-[0.97]"
                                     onClick={() => onSelectPassage(passage)}
                                 >
 
-                                    <div className="passage-icon">
-                                        📖
+                                    <div className="flex items-center justify-center bg-[#00CCFF] text-white rounded-xl mr-3.5 p-2.5">
+                                        <BookOpen size={20} />
                                     </div>
 
-                                    <div className="passage-content">
+                                    <div>
 
-                                        <div className="passage-title-row">
+                                        <div className="flex items-center gap-1.5 flex-wrap">
 
-                                            <h6>{passage.title}</h6>
+                                            <h6 className="m-0 font-semibold">{passage.title}</h6>
 
                                             {(type === "Translation" && passage.Attempts?.length > 0) && (
                                                 <>
-                                                    <span className="attempted-badge">
+                                                    <span className="bg-[#e8f8ee] text-[#198754] text-[10px] font-semibold px-2 py-[3px] rounded-full">
                                                         Attempted
                                                     </span>
 
-                                                    <span className="score-badge">
+                                                    <span className="bg-[#eef7ff] text-[#0d6efd] text-[10px] font-bold px-2 py-[3px] rounded-full">
                                                         {passage.Attempts[0]?.score}%
                                                     </span>
                                                 </>
@@ -99,14 +99,14 @@ function PassageList() {
 
                                         </div>
 
-                                        <p className="passage-preview">
+                                        <p className="text-xs text-[#6c757d] mt-[3px] mb-0">
                                             {passage.tamilText?.slice(0, 80)}...
                                         </p>
 
                                     </div>
 
-                                    <div className="passage-arrow">
-                                        ›
+                                    <div className="ml-auto text-[#adb5bd]">
+                                        <ChevronRight size={22} />
                                     </div>
 
                                 </div>

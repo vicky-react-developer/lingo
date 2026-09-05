@@ -1,9 +1,15 @@
 import React from "react";
-import "./Home.css";
-import { useNavigate } from "react-router";
+import { useNavigate, useOutletContext } from "react-router";
+import {
+    Languages,
+    Wrench,
+    BookOpen,
+    MessageSquareText,
+} from "lucide-react";
+
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { useOutletContext } from "react-router";
+import ModeList from "../components/ModeList";
 
 export default function Home() {
     const navigate = useNavigate();
@@ -12,78 +18,53 @@ export default function Home() {
     const modes = [
         {
             id: "duolingo",
-            icon: "bi-translate",
+            icon: Languages,
             title: "Dual Language Speaking Practice",
             desc: "Speak naturally in Tamil first and then express the same idea in English."
         },
         {
             id: "functionalTasks",
-            icon: "bi-tools",
+            icon: Wrench,
             title: "Functional Words Fluency Practice",
             desc: "Build fluency by using essential functional words in meaningful contexts."
         },
         {
             id: "story",
-            icon: "bi-book",
+            icon: BookOpen,
             title: "Short Passage Speaking Practice",
             desc: "Develop confidence and fluency through structured passage speaking activities."
         },
         {
             id: "chat",
-            icon: "bi-chat-left-text-fill",
+            icon: MessageSquareText,
             title: "Real-Life Speaking Practice",
             desc: "Practice English in everyday situations through interactive conversations."
         }
     ];
 
     const handleNavigation = (mode) => {
-        navigate('/modes', { state: { category: mode.id, categoryTitle: mode.title } })
+        navigate("/modes", {
+            state: {
+                category: mode.id,
+                categoryTitle: mode.title
+            }
+        });
     };
 
     return (
-
-        <div className="mode-page">
-
+        <div className="h-screen">
             <Header
                 brandTitle
                 onMenuToggle={setSidebarOpen}
             />
 
-            <div className="mode-container">
-
-                <div className="mode-list">
-
-                    {modes.map((mode) => (
-
-                        <div
-                            key={mode.id}
-                            className="mode-card"
-                            onClick={() => handleNavigation(mode)}
-                        >
-
-                            <div className="mode-icon">
-                                <i className={`bi ${mode.icon}`}></i>
-                            </div>
-
-                            <div className="mode-content">
-                                <h5>{mode.title}</h5>
-                                <p>{mode.desc}</p>
-                            </div>
-
-                            <div className="mode-arrow">
-                                <i className="bi bi-chevron-right"></i>
-                            </div>
-
-                        </div>
-
-                    ))}
-
-                </div>
-
-            </div>
+            <ModeList
+                modes={modes}
+                onSelect={handleNavigation}
+                background="bg-[#00CCFF]"
+            />
 
             <Footer />
         </div>
-
     );
 }

@@ -1,12 +1,16 @@
 import React, { useState } from "react";
-import "./Register.css";
 import { useImmer } from "use-immer";
 import { useNavigate, Link } from "react-router";
 import { validatePhone } from "../helpers/utils";
 import { registerUserApi } from "../services/authService";
 import Footer from "../components/Footer";
+import Field from "../components/Field";
+import SelectField from "../components/SelectField";
+import Button from "../components/Button";
 
 const Register = () => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useImmer({
     name: {
       label: "Name",
@@ -23,9 +27,9 @@ const Register = () => {
       value: "",
       type: "select",
       options: [
-        { label: "Male",   value: "Male"   },
+        { label: "Male", value: "Male" },
         { label: "Female", value: "Female" },
-        { label: "Other",  value: "Other"  },
+        { label: "Other", value: "Other" },
       ],
     },
     role: {
@@ -83,20 +87,16 @@ const Register = () => {
     },
   });
 
-  const [error,   setError]   = useState("");
+  const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const navigate = useNavigate();
-
-  // ── Handlers ────────────────────────────────────────────────────────────────
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((draft) => {
       draft[name].value = value;
     });
-    if (error)   setError("");
+    if (error) setError("");
     if (success) setSuccess("");
   };
 
@@ -153,52 +153,47 @@ const Register = () => {
   // ── Render ──────────────────────────────────────────────────────────────────
 
   return (
-    <div className="registration-wrapper d-flex justify-content-center align-items-center">
-      <div className="registration-card shadow">
-        <h2 className="form-title mont-semiBold">Registration</h2>
+    <div className="min-h-screen flex justify-center items-center bg-[rgb(8,18,78)] py-4 px-2">
+      <div className="w-full max-w-[420px] bg-white rounded-lg p-8 shadow-lg">
+        <h2 className="relative inline-block text-3xl font-extrabold text-black mb-6 pb-2">
+          Registration
+          <span className="absolute left-0 bottom-0 h-[3px] w-[30px] rounded-[5px] bg-gradient-to-br from-[#71b7e6] to-[#9b59b6]" />
+        </h2>
 
-        <form className="reg-form" onSubmit={handleSubmit}>
-          <div className="scrollable-content">
+        <form onSubmit={handleSubmit}>
+          <div className="max-h-[300px] overflow-y-scroll px-[5px] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {Object.keys(formData).map((key) => {
               const field = formData[key];
 
               switch (field.type) {
                 case "select":
                   return (
-                    <React.Fragment key={key}>
-                      <label className="form-label">{field.label}</label>
-                      <select
-                        className="form-select form-input mb-4"
-                        value={field.value}
-                        name={key}
-                        onChange={handleChange}
-                      >
-                        <option value="">Select...</option>
-                        {field.options?.map((item) => (
-                          <option key={item.value} value={item.value}>
-                            {item.label}
-                          </option>
-                        ))}
-                      </select>
-                    </React.Fragment>
+                    <SelectField
+                      key={key}
+                      variant="outline"
+                      label={field.label}
+                      name={key}
+                      value={field.value}
+                      onChange={handleChange}
+                      options={field.options}
+                    />
                   );
 
                 default:
                   return (
-                    <React.Fragment key={key}>
-                      <label className="form-label">{field.label}</label>
-                      <input
-                        type={field.type}
-                        className="form-control form-input mb-3"
-                        placeholder={field.label}
-                        value={field.value}
-                        name={key}
-                        onChange={handleChange}
-                        {...(key === "age" && {
-                          max: new Date().toISOString().split("T")[0],
-                        })}
-                      />
-                    </React.Fragment>
+                    <Field
+                      key={key}
+                      variant="outline"
+                      label={field.label}
+                      type={field.type}
+                      placeholder={field.label}
+                      name={key}
+                      value={field.value}
+                      onChange={handleChange}
+                      {...(key === "age" && {
+                        max: new Date().toISOString().split("T")[0],
+                      })}
+                    />
                   );
               }
             })}
@@ -206,28 +201,24 @@ const Register = () => {
 
           <div className="my-4">
             {error && (
-              <p className="text-danger text-center fs-12">{error}</p>
+              <p className="text-red-600 text-center text-xs">{error}</p>
             )}
             {success && (
-              <p className="text-success text-center fs-12">{success}</p>
+              <p className="text-green-600 text-center text-xs">{success}</p>
             )}
 
-            <button
-              className="btn-register w-100"
-              type="submit"
-              disabled={loading}
-            >
+            <Button type="submit" variant="dark" disabled={loading} loading={loading}>
               {loading ? "Registering..." : "Register"}
-            </button>
+            </Button>
 
-            <div className="text-center mt-3 mont-medium fs-11">
-              <span className="account-text text-black">Already have an account? </span>
-              <Link className="signup-link" to="/login">Sign in</Link>
+            <div className="text-center mt-3 font-medium text-[13px]">
+              <span className="text-black">Already have an account? </span>
+              <Link className="text-[#07115D] font-semibold underline" to="/login">Sign in</Link>
             </div>
           </div>
         </form>
       </div>
-      <Footer style={{background: "#030352", color: "#fff"}} />
+      <Footer style={{ background: "#030352", color: "#fff" }} />
     </div>
   );
 };

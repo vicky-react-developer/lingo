@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
-import "./FunctionalTask.css";
+import { ArrowLeft, ArrowRight, CheckCircle2, XCircle } from "lucide-react";
 import Header from "../components/Header";
 import { useParams, useLocation, useNavigate } from "react-router";
-import MySpinner from "../components/MySpinner";
-import { getFunctionalExercises, submitFunctionalExercise, submitWordTask } from "../services/functionalTaskservice";
+import { getFunctionalExercises, submitFunctionalExercise } from "../services/functionalTaskservice";
 import VoiceRecorder from "../components/VoiceRecorder";
 import Loader from "../components/Loader";
 import useSpeech from "../hooks/useSpeech";
@@ -142,63 +141,69 @@ export default function FunctionalTask() {
                 primaryTitle={taskTitle}
             />
             {questions?.length > 0 &&
-                <div className="lesson-page">
-                    <div className="lesson-header">
+                <div className="min-h-screen bg-[#f6f8fb] p-5 relative">
+                    <div className="flex items-center gap-3 mb-[30px]">
 
                         {currentIndex !== 0 &&
-                            <button className="back-btn" onClick={handlePrevious}>
-                                <i className="bi bi-arrow-left"></i>
+                            <button
+                                className="border-none bg-white w-[42px] h-[42px] rounded-xl shadow-[0_2px_10px_rgba(0,0,0,0.08)] flex items-center justify-center shrink-0"
+                                onClick={handlePrevious}
+                            >
+                                <ArrowLeft size={18} />
                             </button>
                         }
 
-                        <div className="progress">
+                        <div className="flex-1 h-2.5 bg-[#e8edf3] rounded-full overflow-hidden">
 
                             <div
-                                className="progress-bar"
+                                className="h-full bg-[#00ccff] rounded-full"
                                 style={{ width: `${progress}%` }}
                             />
 
                         </div>
 
-                        <span className="question-count">
+                        <span className="text-[13px] font-semibold text-[#666] shrink-0">
                             {answered} / {questions?.length}
                         </span>
 
                         {!isLastQuestion &&
-                            <button className="back-btn" onClick={handleNext}>
-                                <i className="bi bi-arrow-right"></i>
+                            <button
+                                className="border-none bg-white w-[42px] h-[42px] rounded-xl shadow-[0_2px_10px_rgba(0,0,0,0.08)] flex items-center justify-center shrink-0"
+                                onClick={handleNext}
+                            >
+                                <ArrowRight size={18} />
                             </button>
                         }
 
                     </div>
 
 
-                    <div className="question-card">
+                    <div className="bg-white rounded-[24px] p-[25px] shadow-[0_6px_20px_rgba(0,0,0,0.05)] mb-[25px]">
 
-                        <span className="task-badge">
+                        <span className="bg-[#e9f9ff] text-[#00a5cf] px-3 py-1.5 rounded-full text-xs font-semibold">
                             {taskType === "FIB" ? "Translate to English" : taskType === "OSM" ? "Form a Sentence" : ""}
                         </span>
 
-                        <div className="mt-3 task-questions">
+                        <div className="mt-3">
                             {currentQuestion?.tamilSentence &&
-                                <h4>
+                                <h4 className="mt-[18px] text-[28px] leading-[1.5] text-[#222]">
                                     {currentQuestion?.tamilSentence}
                                 </h4>
                             }
 
-                            <h4>
+                            <h4 className="mt-[18px] text-[28px] leading-[1.5] text-[#222]">
                                 {currentQuestion?.englishSentence}
                             </h4>
                         </div>
                     </div>
 
 
-                    <div className="answer-section">
+                    <div className="relative">
 
                         <textarea
                             value={answer}
                             onChange={(e) => setAnswer(e.target.value)}
-                            className="answer-box"
+                            className="w-full min-h-[150px] border-none outline-none rounded-[20px] p-[18px] text-base bg-white shadow-[0_6px_20px_rgba(0,0,0,0.05)] resize-none disabled:opacity-70"
                             placeholder="Speak your Answer..."
                             disabled={result}
                         />
@@ -206,7 +211,7 @@ export default function FunctionalTask() {
                     </div>
 
                     {!result &&
-                        <div className="d-flex justify-content-center mt-3">
+                        <div className="flex justify-center mt-3">
                             <VoiceRecorder
                                 onText={setAnswer}
                             />
@@ -215,7 +220,7 @@ export default function FunctionalTask() {
 
                     {!result &&
                         <button
-                            className="submit-btn"
+                            className="mt-[25px] w-full h-[55px] border-none rounded-2xl bg-[#00ccff] text-white text-base font-semibold flex items-center justify-center gap-2 disabled:opacity-70"
                             onClick={handleSubmit}
                             disabled={submitting}
                         >
@@ -228,34 +233,34 @@ export default function FunctionalTask() {
 
 
                     {result && (
-                        <div className="result-sheet">
+                        <div className="fixed left-0 right-0 bottom-0 bg-white rounded-t-[24px] p-[25px] shadow-[0_-10px_30px_rgba(0,0,0,0.1)] animate-[slideUp_0.25s_ease]">
 
-                            <div className="sheet-handle"></div>
+                            <div className="w-[50px] h-[5px] bg-[#ddd] rounded-full mx-auto mb-5"></div>
 
-                            <div className="result-status">
+                            <div className={`flex items-center gap-2.5 text-lg font-bold mb-5 ${result?.isCorrect ? "text-[#00a76f]" : "text-[#dc3545]"}`}>
 
-                                <i className={`${result?.isCorrect ? "bi bi-check-circle text-success" : "bi bi-x-circle-fill text-danger"}`}></i>
+                                {result?.isCorrect ? <CheckCircle2 size={22} /> : <XCircle size={22} />}
 
-                                <span className={`${result?.isCorrect ? "text-success" : "text-danger"}`}>{result?.isCorrect ? "Congradulations!" : "Needs Improvement"}</span>
+                                <span>{result?.isCorrect ? "Congradulations!" : "Needs Improvement"}</span>
 
                             </div>
 
-                            <div className="result-block">
+                            <div className="mb-[18px]">
 
-                                <label>Your Answer</label>
+                                <label className="block text-[13px] font-semibold text-[#888] mb-[5px]">Your Answer</label>
 
-                                <p>
+                                <p className="m-0 text-[15px]">
                                     {result?.userAnswer}
                                 </p>
 
                             </div>
 
                             {result?.correctedAnswer &&
-                                <div className="result-block">
+                                <div className="mb-[18px]">
 
-                                    <label>Correct Answer</label>
+                                    <label className="block text-[13px] font-semibold text-[#888] mb-[5px]">Correct Answer</label>
 
-                                    <p className="correct-answer">
+                                    <p className="m-0 text-[15px] text-[#00a76f] font-semibold">
                                         {result?.correctedAnswer}
                                     </p>
 
@@ -263,11 +268,11 @@ export default function FunctionalTask() {
                             }
 
                             {result?.explanation &&
-                                <div className="result-block">
+                                <div className="mb-[18px]">
 
-                                    <label>Explanation</label>
+                                    <label className="block text-[13px] font-semibold text-[#888] mb-[5px]">Explanation</label>
 
-                                    <p>
+                                    <p className="m-0 text-[15px]">
                                         {result?.explanation}
                                     </p>
 
@@ -275,7 +280,7 @@ export default function FunctionalTask() {
                             }
 
                             <button
-                                className="next-btn"
+                                className="w-full h-[55px] border-none rounded-2xl bg-[#00cc66] text-white text-base font-semibold"
                                 onClick={handleNext}
                             >
                                 {isLastQuestion ? "Finish" : "Continue"}

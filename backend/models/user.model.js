@@ -1,94 +1,101 @@
 module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define("User", {
-    // Common fields
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
+  const User = sequelize.define(
+    "User",
+    {
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
 
-    role: {
-      type: DataTypes.ENUM("Admin", "Student", "Faculty"),
-      allowNull: false,
-      defaultValue: "Student",
-    },
+      role: {
+        type: DataTypes.ENUM("Admin", "Student", "Faculty"),
+        allowNull: false,
+        defaultValue: "Student",
+      },
 
-    userName: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
+      userName: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+      },
 
-    passwordHash: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
+      passwordHash: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
 
-    // Student / Faculty only
-    fatherName: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
+      isActive: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
+      },
 
-    gender: {
-      type: DataTypes.ENUM("Male", "Female", "Other"),
-      allowNull: true,
-    },
+      fatherName: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
 
-    dateOfBirth: {
-      type: DataTypes.DATEONLY,
-      allowNull: true,
-    },
+      gender: {
+        type: DataTypes.ENUM("Male", "Female", "Other"),
+        allowNull: true,
+      },
 
-    qualification: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
+      dateOfBirth: {
+        type: DataTypes.DATEONLY,
+        allowNull: true,
+      },
 
-    organisation: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
+      qualification: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
 
-    address: {
-      type: DataTypes.TEXT,
-      allowNull: true,
-    },
+      organisation: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
 
-    place: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
+      address: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
 
-    phoneNumber: {
-      type: DataTypes.STRING(15),
-      allowNull: true,
-      unique: true,
-      validate: {
-        is: /^[0-9]{10,15}$/
-      }
-    },
+      place: {
+        type: DataTypes.STRING,
+        allowNull: true,
+      },
 
-    tokenHash: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      defaultValue: null,
-    },
+      phoneNumber: {
+        type: DataTypes.STRING(15),
+        allowNull: true,
+        unique: true,
+        validate: {
+          is: /^[0-9]{10,15}$/,
+        },
+      },
 
-    resetTokenHash: {
-      type: DataTypes.STRING,
-      allowNull: true,
-      defaultValue: null,
-    },
+      tokenHash: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: null,
+      },
 
-    resetTokenExpiresAt: {
-      type: DataTypes.DATE,
-      allowNull: true,
-      defaultValue: null,
-    },
+      resetTokenHash: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        defaultValue: null,
+      },
 
-  }, {
-    tableName: "users"
-  });
+      resetTokenExpiresAt: {
+        type: DataTypes.DATE,
+        allowNull: true,
+        defaultValue: null,
+      },
+    },
+    {
+      tableName: "users",
+    }
+  );
 
   return User;
 };

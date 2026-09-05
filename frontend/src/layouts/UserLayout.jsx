@@ -7,13 +7,13 @@ export default function UserLayout() {
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
     return (
-        <>
+        <div className="user-layout">
             <Sidebar
                 isOpen={sidebarOpen}
                 onClose={() => setSidebarOpen(false)}
             />
 
             <Outlet context={{ setSidebarOpen }} />
-        </>
+        </div>
     );
 }

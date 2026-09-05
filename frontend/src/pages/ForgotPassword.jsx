@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { ManSittingImg, LeftLeaf, RightLeaf, Logo } from "../helpers/Constants";
-import "./ForgotPassword.css";
 import { useNavigate, Link } from "react-router";
 import { validatePhone } from "../helpers/utils";
 import { forgotPasswordApi } from "../services/authService";
+import AuthUiTemplate from "../components/AuthUITemplate";
+import Field from "../components/Field";
+import Button from "../components/Button";
 
 export default function ForgotPassword() {
   const [formData, setFormData] = useState({
@@ -55,81 +56,48 @@ export default function ForgotPassword() {
   };
 
   return (
-    <div className="login-wrapper">
-      <div className="text-center mt-4">
-        <img src={Logo} alt="logo" className="logo-icon" />
-        <h1 className="brand-title mont-boldItalic">
-          <span className="brand-lingo">Lingo</span><span className="brand-refresh">Refresh</span>
-        </h1>
-        <p className="brand-subtitle mont-italic fs-14">Refresh your spoken english</p>
+    <AuthUiTemplate>
+      <div className="-mt-[50px]">
+        <Field
+          type="text"
+          label="User Name"
+          name="userName"
+          value={formData.userName}
+          onChange={handleChange}
+        />
+
+        <Field
+          type="number"
+          label="Mobile"
+          name="mobile"
+          value={formData.mobile}
+          onChange={handleChange}
+        />
+
+        <Field
+          type="date"
+          label="Date of Birth"
+          name="dob"
+          value={formData.dob}
+          onChange={handleChange}
+          max={new Date().toISOString().split("T")[0]}
+        />
+
+        {error && <p className="text-red-500 text-center text-[12px]">{error}</p>}
+
+        <Button
+          onClick={handleSubmit}
+          disabled={loading}
+          loading={loading}
+        >
+          Verify Identity
+        </Button>
       </div>
 
-
-      <div className="bottom-card">
-        <div className="position-relative illustration-box">
-          <img src={LeftLeaf} alt="illustration" className="left-leaf" />
-          <div className="text-center">
-            <img src={ManSittingImg} alt="illustration" className="illustration-img" />
-          </div>
-          <img src={RightLeaf} alt="illustration" className="right-leaf" />
-        </div>
-
-        <div className="login-form">
-          <div>
-            <label htmlFor="userName" className="input-label mont-semiBold">Username</label>
-            <input
-              type="text"
-              id="userName"
-              className="form-control login-input mb-3 mont-medium"
-              placeholder="Username"
-              name="userName"
-              value={formData.userName}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div>
-            <label htmlFor="mobile" className="input-label mont-semiBold">Mobile</label>
-            <input
-              type="number"
-              id="mobile"
-              className="form-control login-input mb-3 mont-medium"
-              placeholder="Mobile"
-              name="mobile"
-              value={formData.mobile}
-              onChange={handleChange}
-            />
-          </div>
-
-          <div>
-            <label htmlFor="dob" className="input-label mont-semiBold">Date of Birth</label>
-            <input
-              type="date"
-              id="dob"
-              className="form-control login-input mb-3 mont-medium"
-              name="dob"
-              value={formData.dob}
-              onChange={handleChange}
-              max={new Date().toISOString().split("T")[0]}
-            />
-          </div>
-
-          {error && <p className="text-danger text-center fs-12">{error}</p>}
-
-          <button
-            className="btn-login mont-semiBold fs-16 w-100 my-3"
-            onClick={handleSubmit}
-            disabled={loading}
-          >
-            {loading ? "Verifying..." : "Verify Identity"}
-          </button>
-        </div>
-
-          <div className="text-center pb-4 mont-medium fs-11 mt-3">
-            <span className="account-text">Remember your password? </span>
-            <Link className="signup-link" to="/login">Sign in</Link>
-          </div>
+      <div className="text-center pb-4 text-[11px] mt-3">
+        <span className="text-[#fff]">Remember your password? </span>
+        <Link className="underline !text-[#00C6FF]" to="/login">Sign in</Link>
       </div>
-    </div>
+    </AuthUiTemplate>
   );
 }

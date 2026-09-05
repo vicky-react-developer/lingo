@@ -1,20 +1,31 @@
 import React from "react";
-import "./Home.css";
 import { useNavigate, useLocation } from "react-router";
+import {
+    MessageSquareText,
+    Lightbulb,
+    Languages,
+    Globe2,
+    CircleHelp,
+    BookOpenText,
+    ListChecks,
+    ClipboardCheck,
+} from "lucide-react";
+
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import ModeList from "../components/ModeList";
 
 const allModes = {
     chat: [
         {
             id: "normal",
-            icon: "bi-chat-left-text-fill",
+            icon: MessageSquareText,
             title: "Free Conversation",
             desc: "Practice natural English conversations."
         },
         {
             id: "topic",
-            icon: "bi-lightbulb-fill",
+            icon: Lightbulb,
             title: "Topic Conversation",
             desc: "Speak about a chosen topic."
         }
@@ -23,13 +34,13 @@ const allModes = {
     duolingo: [
         {
             id: "duolingoChat",
-            icon: "bi-translate",
+            icon: Languages,
             title: "Dual Language Chat",
             desc: "Speak Tamil, then English."
         },
         {
             id: "duolingoTopic",
-            icon: "bi-globe-central-south-asia",
+            icon: Globe2,
             title: "Dual Language Topic",
             desc: "Discuss topics in two languages."
         }
@@ -38,13 +49,13 @@ const allModes = {
     story: [
         {
             id: "passage",
-            icon: "bi-patch-question-fill",
+            icon: CircleHelp,
             title: "Story Q & A",
             desc: "Answer questions from stories."
         },
         {
             id: "Translation",
-            icon: "bi-journal-text",
+            icon: BookOpenText,
             title: "Story Translation",
             desc: "Translate stories into English."
         }
@@ -53,13 +64,13 @@ const allModes = {
     functionalTasks: [
         {
             id: "Task",
-            icon: "bi-ui-checks-grid",
+            icon: ListChecks,
             title: "Functional Words - Task",
             desc: "Master grammar through structured exercises."
         },
         {
             id: "Practice",
-            icon: "bi-journal-check",
+            icon: ClipboardCheck,
             title: "Functional Words - Practice",
             desc: "Reinforce grammar with guided practice."
         }
@@ -67,14 +78,12 @@ const allModes = {
 };
 
 export default function Modes({ onMenuToggle }) {
-
     const navigate = useNavigate();
     const location = useLocation();
 
     const { category, categoryTitle } = location.state || {};
 
     const handleNavigation = (mode) => {
-
         switch (mode) {
             case "topic":
                 navigate("/topic");
@@ -90,7 +99,9 @@ export default function Modes({ onMenuToggle }) {
 
             case "Task":
             case "Practice":
-                navigate("/task-list", { state: { taskCategory: mode } });
+                navigate("/task-list", {
+                    state: { taskCategory: mode }
+                });
                 break;
 
             case "duolingoChat":
@@ -104,7 +115,9 @@ export default function Modes({ onMenuToggle }) {
                 break;
 
             case "duolingoTopic":
-                navigate("/topic", { state: { type: "duolingo" } });
+                navigate("/topic", {
+                    state: { type: "duolingo" }
+                });
                 break;
 
             default:
@@ -115,57 +128,26 @@ export default function Modes({ onMenuToggle }) {
                         }
                     }
                 });
-
         }
     };
 
     const modes = allModes[category];
 
     return (
-
-        <div className="mode-page">
-
+        <div>
             <Header
                 primaryTitle={categoryTitle}
                 secondaryTitle="Select a learning mode"
                 onMenuToggle={onMenuToggle}
             />
 
-            <div className="mode-container" style={{backgroundColor: "#fff"}}>
-
-                <div className="mode-list">
-
-                    {modes.map((mode) => (
-
-                        <div
-                            key={mode.id}
-                            className="mode-card"
-                            onClick={() => handleNavigation(mode.id)}
-                        >
-
-                            <div className="mode-icon">
-                                <i className={`bi ${mode.icon}`}></i>
-                            </div>
-
-                            <div className="mode-content">
-                                <h5>{mode.title}</h5>
-                                <p>{mode.desc}</p>
-                            </div>
-
-                            <div className="mode-arrow">
-                                <i className="bi bi-chevron-right"></i>
-                            </div>
-
-                        </div>
-
-                    ))}
-
-                </div>
-
-            </div>
+            <ModeList
+                modes={modes}
+                onSelect={(mode) => handleNavigation(mode.id)}
+                background="bg-white"
+            />
 
             <Footer />
         </div>
-
     );
 }

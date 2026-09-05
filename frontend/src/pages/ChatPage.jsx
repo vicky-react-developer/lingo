@@ -1,7 +1,6 @@
-import "./ChatPage.css";
-
 import { getAllMessages, initiateConversation, saveMessage } from "../services/messageService";
 import { useEffect, useRef, useState } from "react";
+import { Send } from "lucide-react";
 
 import ChatWindow from "../components/ChatWindow";
 import ContextBanner from "../components/ContextBanner";
@@ -186,7 +185,7 @@ export default function ChatPage() {
 
   return (
 
-    <div className="chat-page">
+    <div className="h-screen mx-auto flex flex-col bg-[#f4f4f7]">
 
       {/* Header */}
       <Header primaryTitle="Chat" />
@@ -195,16 +194,16 @@ export default function ChatPage() {
       <ContextBanner mode={sessionPayload?.mode} info={info} />
 
       {/* Chat Area */}
-      <div className="chat-body">
+      <div className="flex-1 overflow-y-auto px-[15px] py-5">
         <ChatWindow messages={messages} isTyping={isTyping} />
         <div ref={chatEndRef}></div>
       </div>
 
       {/* Input */}
-      <div className="chat-input-container">
+      <div className="flex items-center gap-2 p-2.5 bg-white border-t border-[#eee]">
 
         <textarea
-          className="chat-input"
+          className="flex-1 resize-none border border-[#ddd] rounded-[10px] p-2.5 text-xs outline-none min-h-[70px] max-h-[120px]"
           placeholder="Speak..."
           value={text}
           onChange={(e) => setText(e.target.value)}
@@ -215,23 +214,21 @@ export default function ChatPage() {
         {isDuolingo && (
           <VoiceRecorder
             language="ta-IN"
-            icon="bi-translate"
             onText={handleVoice}
           />
         )}
 
         <VoiceRecorder
           language="en-US"
-          icon="bi-mic-fill"
           onText={handleVoice}
         />
 
         <button
-          className="send-button"
+          className="w-[42px] h-[42px] shrink-0 rounded-full border-none flex items-center justify-center text-white bg-[#00CCFF] disabled:opacity-50"
           onClick={handleSubmit}
           disabled={!text.trim()}
         >
-          <i className="bi bi-send-fill"></i>
+          <Send size={16} />
         </button>
 
       </div>

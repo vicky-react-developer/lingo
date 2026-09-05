@@ -1,3 +1,4 @@
+import { Bot } from "lucide-react";
 import CorrectionBox from "./CorrectionBox";
 
 export default function MessageBubble({ message }) {
@@ -11,26 +12,26 @@ export default function MessageBubble({ message }) {
       )}
       {
         !isUser ?
-          <div className="ai-message-card">
-            <div className="ai-header">
-              <div className="ai-avatar">
-                <i className="bi bi-robot"></i>
+          <div className="bg-[#ececf4] p-[15px] rounded-xl max-w-[90%]">
+            <div className="flex items-center mb-2">
+              <div className="w-[26px] h-[26px] bg-[#6c63ff] text-white rounded-full flex items-center justify-center mr-2">
+                <Bot size={14} />
               </div>
 
-              <div className="ai-name">
+              <div className="font-semibold text-[13px] text-[#666]">
                 NILA AI Teacher
               </div>
 
             </div>
 
-            <div className="ai-text">
+            <div className="text-[15px] leading-[1.4] whitespace-pre-wrap">
               {message.text}
             </div>
 
           </div>
 
           :
-          <div className="user-message">
+          <div className="bg-[#6c63ff] text-white px-3.5 py-2.5 rounded-2xl max-w-[70%] ml-auto whitespace-pre-wrap">
             {message.text}
           </div>
       }

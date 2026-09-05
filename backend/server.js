@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 require("dotenv").config();
 const db = require("./models");
+const errorHandler = require("./middleware/errorHandler");
 
 const registerRoutes = require("./routes");
 
@@ -15,11 +16,13 @@ app.use(cors({
 
 app.use(bodyParser.json());
 
-app.get("/", (req, res) => res.send("Hi"));
+app.get("/", (req, res) => res.send("Welcome to Lingo Refresh"));
 
 db.connectDB();
 
 registerRoutes(app);
+
+app.use(errorHandler);
 
 app.listen(process.env.PORT, () =>
   console.log(`Server listening on port ${process.env.PORT}`)

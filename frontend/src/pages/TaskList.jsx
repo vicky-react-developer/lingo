@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./TaskList.css";
+import { CheckCircle2, BookOpen } from "lucide-react";
 import { getTasks } from "../services/functionalTaskservice";
 import { useLocation, useNavigate } from "react-router";
 import Header from "../components/Header";
@@ -38,69 +38,62 @@ export default function TaskList() {
 
     return (
 
-        <div className="task-page">
+        <div className="min-h-screen bg-[#f6f8fb]">
             <Header
                 primaryTitle={taskCategory === "Task" ? "Functional Words - Task" : taskCategory === "Practice" ? "Functional Words - Practice" : ""}
             />
 
-            <div className="task-list mt-3">
+            <div className="flex flex-col gap-4 p-5 mt-3">
                 {tasks.length > 0 ?
                     <>
                         {tasks.map((task) => {
                             const completed = task.Attempts?.length;
                             const totalQuestions = task.FunctionalExercises?.length;
                             const progress = (completed / totalQuestions) * 100;
+                            const isCompleted = completed === totalQuestions;
 
                             return (
 
                                 <div
                                     key={task.id}
-                                    className="task-card"
+                                    className="bg-white rounded-[20px] p-[18px] shadow-[0_6px_20px_rgba(0,0,0,0.05)]"
                                 >
 
-                                    <div className="task-top">
+                                    <div className="flex justify-between items-center">
 
                                         <div>
 
-                                            <h5>{task.title}</h5>
+                                            <h5 className="m-0 font-bold text-base">{task.title}</h5>
 
-                                            <span>
+                                            <span className="text-[13px] text-[#6c757d]">
                                                 {completed}/{totalQuestions} Completed
                                             </span>
 
                                         </div>
 
-                                        {completed === totalQuestions ? (
-
-                                            <div className="task-status completed">
-                                                <i className="bi bi-check-circle-fill"></i>
-                                            </div>
-
-                                        ) : (
-
-                                            <div className="task-status">
-                                                <i className="bi bi-book-fill"></i>
-                                            </div>
-
-                                        )}
+                                        <div className={`w-[45px] h-[45px] rounded-xl flex items-center justify-center ${
+                                            isCompleted ? "bg-[#e8fff2] text-[#00b26f]" : "bg-[#eaf9ff] text-[#00ccff]"
+                                        }`}>
+                                            {isCompleted ? <CheckCircle2 size={20} /> : <BookOpen size={20} />}
+                                        </div>
 
                                     </div>
 
-                                    <div className="progress task-progress">
-
+                                    <div className="mt-[15px] h-2 rounded-full bg-[#edf1f5] overflow-hidden">
                                         <div
-                                            className="progress-bar"
-                                            style={{
-                                                width: `${progress}%`
-                                            }}
+                                            className="h-full bg-[#00ccff]"
+                                            style={{ width: `${progress}%` }}
                                         />
                                     </div>
 
-                                    <button className="task-btn" onClick={() => navigate(`/functional-task/${task.id}`, { state: { taskType: task.type, taskTitle: task.title } })}>
+                                    <button
+                                        className="w-full mt-4 h-12 rounded-2xl bg-[#00ccff] text-white font-semibold text-[15px]"
+                                        onClick={() => navigate(`/functional-task/${task.id}`, { state: { taskType: task.type, taskTitle: task.title } })}
+                                    >
 
                                         {completed === 0
                                             ? "Start"
-                                            : completed === totalQuestions
+                                            : isCompleted
                                                 ? "Review"
                                                 : "Continue"}
 

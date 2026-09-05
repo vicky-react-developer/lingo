@@ -32,7 +32,7 @@ exports.updateUserProfile = async (req, res) => {
 
         for (let key in payload) {
             if (!payload[key]) {
-                return res.status(400).json({ success: false, message: "Please fill al the field!" });
+                return res.status(400).json({ success: false, message: "Please fill all the field!" });
             }
         }
 

@@ -1,7 +1,5 @@
 body {
   font-family: "Montserrat", sans-serif !important;
-  max-width: 768px;
-  margin: 0 auto !important;
 }
 
 .mont-regular {
@@ -94,4 +92,25 @@ p {
   color: #6c757d;
   background: #fff;
   border-top: 1px solid #eee;
+}
+
+.user-layout {
+  max-width: 768px;
+  margin: 0 auto !important;
+}
+
+.table th {
+    white-space: nowrap;
+    font-size: 13px;
+    font-weight: 600;
+    color: #495057;
+}
+
+.table td {
+    font-size: 14px;
+    vertical-align: middle;
+}
+
+.table tbody tr:hover {
+    background-color: #f8f9fa;
 }

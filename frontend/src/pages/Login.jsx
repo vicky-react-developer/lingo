@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { ManSittingImg, LeftLeaf, RightLeaf, GMail, Facebook, Logo } from "../helpers/Constants";
-import "./Login.css";
 import { useNavigate, Link } from "react-router";
 import { loginUserApi } from "../services/authService";
 import { useAuth } from "../context/AuthContext";
 import Footer from "../components/Footer";
+import Field from "../components/Field";
+import Button from "../components/Button";
+import AuthUiTemplate from "../components/AuthUITemplate";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -53,69 +54,57 @@ const Login = () => {
   };
 
   return (
-    <div className="login-wrapper">
-      <div className="text-center mt-4">
-        <img src={Logo} alt="logo" className="logo-icon" />
-        <h1 className="brand-title mont-boldItalic">
-          <span className="brand-lingo">Lingo</span><span className="brand-refresh">Refresh</span>
-        </h1>
-        <p className="brand-subtitle mont-italic fs-14">Refresh your spoken english</p>
-      </div>
-
-
-      <div className="bottom-card">
-        <div className="position-relative illustration-box">
-          <img src={LeftLeaf} alt="illustration" className="left-leaf" />
-          <div className="text-center">
-            <img src={ManSittingImg} alt="illustration" className="illustration-img" />
-          </div>
-          <img src={RightLeaf} alt="illustration" className="right-leaf" />
-        </div>
-
-        <div className="login-form">
-          <label className="input-label mont-semiBold">Username</label>
-          <input
+    <>
+      <AuthUiTemplate>
+        <div className="-mt-[50px]">
+          <Field
             type="text"
-            className="form-control login-input mb-3 mont-medium"
-            placeholder="Username"
             name="userName"
+            label="User Name"
             value={formData.userName}
             onChange={handleChange}
           />
-          <label className="input-label mont-semiBold">Password</label>
-          <input
+
+          <Field
             type="password"
-            className="form-control login-input mb-4 mont-medium"
-            placeholder="Password"
+            label="Password"
             name="password"
             value={formData.password}
             onChange={handleChange}
           />
+
           {error && (
-            <p className="text-danger text-center fs-12">{error}</p>
+            <p className="text-red-500 text-center text-xs mb-2">{error}</p>
           )}
-          <button
-            className="btn-login mont-semiBold fs-16 w-100 mb-3"
+
+          <Button
             onClick={handleSubmit}
             disabled={loading}
+            loading={loading}
           >
-            {loading ? "Signing in..." : "Sign in"}
-          </button>
+            Sign in
+          </Button>
         </div>
 
         <div className="text-center mt-3">
-          <span className="account-text mont-medium fs-11">Don't have an account? </span>
-          <Link className="signup-link fs-11" to="/register">Sign up</Link>
+          <span className="text-white text-[11px] font-medium">
+            Don't have an account?{" "}
+          </span>
+          <Link className="!text-[#00CCFF] text-[11px] font-medium underline" to="/register">
+            Sign up
+          </Link>
         </div>
         <div className="text-center mt-1 pb-4">
-          <span className="forgot-link mont-regular fs-11 clickable" onClick={() => navigate("/forgot-password")}>
+          <Link
+            className="!text-[#00CCFF] text-[11px] underline cursor-pointer"
+            to="/forgot-password"
+          >
             Forgot Password
-          </span>
+          </Link>
         </div>
-      </div>
-
-      <Footer style={{background: "#030352", color: "#fff"}} />
-    </div>
+      </AuthUiTemplate>
+      <Footer backgroundColor="bg-[#030352]" textColor="text-white" />
+    </>
   );
 };
 

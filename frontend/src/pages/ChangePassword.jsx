@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { Lock, Eye, EyeOff, ShieldAlert, ShieldCheck, CheckCircle2, AlertCircle } from "lucide-react";
 import { changeUserPassword } from "../services/userService";
-import "./ChangePassword.css";
 import Header from "../components/Header";
+import Field from "../components/Field";
+import Button from "../components/Button";
 
 export default function ChangePassword() {
     const [form, setForm] = useState({
@@ -93,73 +95,75 @@ export default function ChangePassword() {
     const strength = getStrength(form.newPassword);
 
     return (
-        <div className="cp-page">
+        <div className="min-h-screen bg-[#F4F7FB] pb-10">
             {/* Header */}
             <Header primaryTitle="Change Password" />
 
-            <div className="cp-container">
+            <div className="max-w-[480px] mx-auto px-4 py-6">
 
                 {/* Info banner */}
-                <div className="cp-info-banner">
-                    <i className="bi bi-shield-lock cp-info-icon"></i>
-                    <div className="cp-info-text">
+                <div className="bg-[#E6F1FB] rounded-xl px-4 py-3 mb-5 flex gap-2.5 items-start">
+                    <ShieldAlert size={18} className="text-[#185FA5] mt-0.5 shrink-0" />
+                    <div className="text-[13px] text-[#185FA5] leading-relaxed">
                         For your security, choose a strong password that you don't use elsewhere.
                     </div>
                 </div>
 
                 {/* Alerts */}
                 {success && (
-                    <div className="alert alert-success">
-                        <i className="bi bi-check-circle-fill"></i> {success}
+                    <div className="rounded-[10px] px-3.5 py-2.5 text-[13px] mb-3.5 flex items-center gap-2 bg-[#E8F5E9] border border-[#A5D6A7] text-[#2E7D32]">
+                        <CheckCircle2 size={16} /> {success}
                     </div>
                 )}
                 {error && (
-                    <div className="alert alert-error">
-                        <i className="bi bi-exclamation-circle-fill"></i> {error}
+                    <div className="rounded-[10px] px-3.5 py-2.5 text-[13px] mb-3.5 flex items-center gap-2 bg-[#FFEBEE] border border-[#EF9A9A] text-[#C62828]">
+                        <AlertCircle size={16} /> {error}
                     </div>
                 )}
 
                 {/* Card */}
-                <div className="cp-card">
+                <div className="bg-white rounded-2xl px-5 py-6 shadow-[0_1px_6px_rgba(0,0,0,0.07)]">
                     {fields.map((field) => (
-                        <div key={field.name} className="cp-field-row">
-                            <label className="cp-field-label">{field.label}</label>
-
-                            <div className="cp-input-wrap">
-                                <span className="cp-input-icon">
-                                    <i className="bi bi-lock"></i>
-                                </span>
-                                <input
-                                    type={showPasswords[field.name] ? "text" : "password"}
+                        <div key={field.name} className="mb-4">
+                            <div className="relative">
+                                <Field
+                                    variant="soft"
+                                    label={field.label}
                                     name={field.name}
+                                    type={showPasswords[field.name] ? "text" : "password"}
                                     value={form[field.name]}
                                     onChange={handleChange}
-                                    placeholder="••••••••"
-                                    className="cp-input"
+                                    classNames="pl-10 pr-10"
                                 />
+
+                                <Lock
+                                    size={16}
+                                    className="absolute left-3 top-[50px] -translate-y-1/2 text-[#185FA5]"
+                                />
+
                                 <button
                                     type="button"
                                     onClick={() => toggleVisibility(field.name)}
-                                    className="cp-toggle-btn"
+                                    className="absolute right-3 top-[50px] -translate-y-1/2 text-[#aaa] hover:text-[#185FA5] transition-colors"
                                 >
-                                    <i className={`bi ${showPasswords[field.name] ? "bi-eye-slash" : "bi-eye"}`}></i>
+                                    {showPasswords[field.name] ? <EyeOff size={16} /> : <Eye size={16} />}
                                 </button>
                             </div>
 
                             {field.hint && (
-                                <div className="cp-field-hint">{field.hint}</div>
+                                <div className="text-[11px] text-[#aaa] mt-1 pl-0.5">{field.hint}</div>
                             )}
 
                             {/* Password strength bar — only for newPassword */}
                             {field.name === "newPassword" && strength && (
-                                <div className="cp-strength">
-                                    <div className="cp-strength-track">
+                                <div className="mt-2">
+                                    <div className="h-1 bg-[#EDF2F7] rounded-full overflow-hidden">
                                         <div
-                                            className="cp-strength-bar"
+                                            className="h-full rounded-full transition-all duration-300"
                                             style={{ width: strength.width, background: strength.color }}
                                         />
                                     </div>
-                                    <div className="cp-strength-label" style={{ color: strength.color }}>
+                                    <div className="text-[11px] font-semibold mt-0.5" style={{ color: strength.color }}>
                                         {strength.label}
                                     </div>
                                 </div>
@@ -167,20 +171,18 @@ export default function ChangePassword() {
                         </div>
                     ))}
 
-                    <button
+                    <Button
+                        variant="primary"
                         onClick={handleSubmit}
                         disabled={loading}
-                        className={`cp-submit-btn${loading ? " cp-submit-btn--loading" : ""}`}
+                        loading={loading}
                     >
-                        {loading ? (
+                        {loading ? "Updating..." : (
                             <>
-                                <span className="spinner-border spinner-border-sm" role="status"></span>
-                                Updating...
+                                <ShieldCheck size={16} /> Update Password
                             </>
-                        ) : (
-                            <><i className="bi bi-shield-check"></i> Update Password</>
                         )}
-                    </button>
+                    </Button>
                 </div>
             </div>
         </div>

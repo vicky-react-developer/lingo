@@ -1,6 +1,6 @@
-const jwt    = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
-const db     = require("../models");
+const db = require("../models");
 
 const User = db.User;
 
@@ -17,10 +17,8 @@ const protect = async (req, res, next) => {
 
     const token = authHeader.split(" ")[1];
 
-    // 1. Verify signature & expiry
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // 2. Check the token hash exists in the DB (validates active session)
     const user = await User.findOne({
       where: { id: decoded.id, tokenHash: sha256(token) },
     });
@@ -29,7 +27,7 @@ const protect = async (req, res, next) => {
       return res.status(401).json({ success: false, message: "Session expired or logged out. Please log in again." });
     }
 
-    req.user = user; // attach user to request for downstream controllers
+    req.user = user;
     next();
   } catch (error) {
     if (error.name === "JsonWebTokenError" || error.name === "TokenExpiredError") {
@@ -40,4 +38,22 @@ const protect = async (req, res, next) => {
   }
 };
 
-module.exports = { protect };
+const authorize = (...allowedRoles) => {
+  return (req, res, next) => {
+    if (!req.user) {
+      return res.status(401).json({
+        message: "Authentication required",
+      });
+    }
+
+    if (!allowedRoles.includes(req.user.role)) {
+      return res.status(403).json({
+        message: "Access denied",
+      });
+    }
+
+    next();
+  };
+};
+
+module.exports = { protect, authorize };

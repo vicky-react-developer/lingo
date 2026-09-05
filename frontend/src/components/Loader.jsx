@@ -1,5 +1,7 @@
-export default function Loader({ loading }) {
+import { Loader } from "lucide-react";
+
+export default function MyLoader({ size = 24 }) {
     return (
-        <span class="ms-2 spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+        <Loader size={size} className="animate-spin inline ml-2" />
     )
 }

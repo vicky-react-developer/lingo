@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./TopicList.css";
+import { MessageCircle, ChevronRight } from "lucide-react";
 import { getTopics } from "../services/topicService";
 import { useNavigate, useLocation } from "react-router";
 import Header from "../components/Header";
@@ -53,33 +53,33 @@ function TopicList() {
                 primaryTitle="Choose a Topic"
                 secondaryTitle="Start a conversation with AI"
             />
-            <div className="topic-container">
+            <div className="mx-auto p-5 min-h-screen bg-[#f7f9fc]">
 
-                <div className="topic-list">
+                <div className="flex flex-col gap-3.5">
                     {topics?.length > 0 ?
                         <>
                             {
                                 topics.map(topic => (
                                     <div
                                         key={topic.id}
-                                        className="topic-card"
+                                        className="flex items-center bg-white p-[15px] rounded-2xl shadow-[0_5px_14px_rgba(0,0,0,0.06)] cursor-pointer transition-transform duration-200 ease-out active:scale-[0.97]"
                                         onClick={() => onSelectTopic(topic)}
                                     >
 
-                                        <div className="topic-icon">
-                                            💬
+                                        <div className="flex items-center justify-center bg-[#00CCFF] text-white rounded-xl mr-3.5 p-2.5">
+                                            <MessageCircle size={18} />
                                         </div>
 
-                                        <div className="topic-content">
+                                        <div>
 
-                                            <h6>{topic.title}</h6>
+                                            <h6 className="m-0 font-semibold">{topic.title}</h6>
 
-                                            <p>{topic.description}</p>
+                                            <p className="m-0 text-xs text-[#6c757d]">{topic.description}</p>
 
                                         </div>
 
-                                        <div className="topic-arrow">
-                                            ›
+                                        <div className="ml-auto text-[#adb5bd]">
+                                            <ChevronRight size={20} />
                                         </div>
 
                                     </div>
@@ -93,7 +93,7 @@ function TopicList() {
                 </div>
 
             </div>
-        </div >
+        </div>
 
     );
 }

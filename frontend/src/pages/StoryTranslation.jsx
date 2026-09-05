@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { getOnePassage, submitPassageTranslation } from "../services/passageService";
 import { useLocation, useNavigate } from "react-router";
 import Header from "../components/Header";
-import "./StoryTranslation.css";
 import VoiceRecorder from "../components/VoiceRecorder";
 import Loader from "../components/Loader";
 import useSpeech from "../hooks/useSpeech";
@@ -78,36 +77,36 @@ export default function StoryTranslation() {
     return (
         <div>
             <Header primaryTitle="Story Translation" />
-            <div className="translation-page">
-                <div className="story-card">
-                    <div className="story-content">
+            <div className="bg-[#f7f9fc] min-h-screen p-5">
+                <div className="bg-white rounded-2xl p-[18px] mb-5 shadow-[0_4px_12px_rgba(0,0,0,0.06)]">
+                    <div className="text-[15px] leading-[1.8] text-[#444] max-h-[160px] overflow-y-auto">
                         {passage?.tamilText}
                     </div>
                 </div>
 
                 {!result &&
-                    <div className="translation-section">
+                    <div>
 
-                        <label>
+                        <label className="font-semibold mb-2.5 block">
                             Translate the story into English
                         </label>
 
                         <textarea
-                            className="translation-input"
+                            className="w-full border border-gray-300 rounded-2xl p-3.5 text-[15px] resize-none outline-none"
                             rows={6}
                             value={translation}
                             onChange={(e) => setTranslation(e.target.value)}
                             placeholder="Speak your Answer..."
                         />
 
-                        <div className="d-flex justify-content-center mt-3">
+                        <div className="flex justify-center mt-3">
                             <VoiceRecorder
                                 onText={handleVoice}
                             />
                         </div>
 
                         <button
-                            className="submit-btn"
+                            className="w-full mt-4 rounded-2xl p-3.5 bg-[#00CCFF] text-white font-semibold flex items-center justify-center gap-2 disabled:opacity-70"
                             onClick={handleSubmit}
                             disabled={submitting}
                         >
@@ -122,10 +121,10 @@ export default function StoryTranslation() {
 
 
                 {result && (
-                    <div className="result-section">
+                    <div>
 
-                        <div className="score-card">
-                            <h1>{result.score}%</h1>
+                        <div className="bg-white rounded-2xl p-6 text-center mt-5 shadow-[0_4px_12px_rgba(0,0,0,0.06)]">
+                            <h1 className="m-0 text-[#00CCFF] text-[42px]">{result.score}%</h1>
                             <span>
                                 {result.score >= 90
                                     ? "Excellent"
@@ -137,18 +136,18 @@ export default function StoryTranslation() {
 
                         {!result.isCorrect && (
                             <>
-                                <div className="feedback-card">
-                                    <h6>Your Answer</h6>
+                                <div className="bg-white rounded-2xl p-4 mt-3 shadow-[0_4px_12px_rgba(0,0,0,0.06)]">
+                                    <h6 className="font-semibold">Your Answer</h6>
                                     <p>{result.userAnswer}</p>
                                 </div>
 
-                                <div className="feedback-card">
-                                    <h6>Corrected Translation</h6>
+                                <div className="bg-white rounded-2xl p-4 mt-3 shadow-[0_4px_12px_rgba(0,0,0,0.06)]">
+                                    <h6 className="font-semibold">Corrected Translation</h6>
                                     <p>{result.correctedAnswer}</p>
                                 </div>
 
-                                <div className="feedback-card">
-                                    <h6>Explanation</h6>
+                                <div className="bg-white rounded-2xl p-4 mt-3 shadow-[0_4px_12px_rgba(0,0,0,0.06)]">
+                                    <h6 className="font-semibold">Explanation</h6>
                                     <p>{result.explanation}</p>
                                 </div>
                             </>
