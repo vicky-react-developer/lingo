@@ -10,7 +10,7 @@ const NAV_ITEMS = [
   { label: "Task Report NU", to: "/task-report-nu", icon: ClipboardList },
   { label: "Task Report UP", to: "/task-report-up", icon: ClipboardCheck },
   { label: "Student Details", to: "/students", icon: Users },
-  { label: "Faculty Details", to: "/faculty-details", icon: GraduationCap },
+  { label: "Faculty Details", to: "/faculties", icon: GraduationCap },
   { label: "Student Report", to: "/student-report", icon: FileBarChart2 },
   { label: "Task Details", to: "/task-details", icon: ListChecks },
   { label: "Task Enable", to: "/task-enable", icon: ToggleRight },

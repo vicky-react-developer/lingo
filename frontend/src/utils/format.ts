@@ -1,3 +1,11 @@
+import type { Options } from "../types/common";
+
+interface SelectOptions<T> {
+  data: T[];
+  label: keyof T;
+  value: keyof T;
+}
+
 export function ageFromDob(dob: string): number {
   const d = new Date(dob);
   const now = new Date();
@@ -18,4 +26,8 @@ export function initials(name: string): string {
     .map((s) => s[0])
     .join("")
     .toUpperCase();
+}
+
+export function formatSelectOptions<T>({ data, label, value }: SelectOptions<T>): Options[] {
+  return data.map(item => ({ label: String(item[label]), value: String(item[value]) }))
 }

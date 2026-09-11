@@ -3,3 +3,13 @@ export interface PaginationResponse<T> {
     data: T[],
     total: number
 }
+
+export interface DataResponse<T> {
+    success: true;
+    data: T[],
+}
+
+export interface Options {
+    label: string;
+    value: string;
+}

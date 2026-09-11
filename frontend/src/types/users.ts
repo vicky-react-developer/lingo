@@ -1,3 +1,7 @@
+export interface FacultyAssignment {
+  facultyId: number
+}
+
 export interface User {
   id: number;
   name: string;
@@ -14,6 +18,7 @@ export interface User {
   createdAt: string;
   updatedAt: string;
   isActive: boolean;
+  facultyAssignment?: FacultyAssignment | null;
 }
 
 export interface UpdateUserStatusPayload {
@@ -21,4 +26,16 @@ export interface UpdateUserStatusPayload {
   payload: {
     isActive: boolean
   }
+}
+
+export interface AssignFacultyPayload {
+  studentId: number,
+  payload: {
+    facultyId: number
+  }
+}
+
+export interface FacultyOptions {
+  id: number;
+  name: string
 }

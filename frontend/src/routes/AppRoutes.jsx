@@ -27,6 +27,7 @@ import Modes from '../pages/Modes';
 import AdminLogin from '../pages/admin/AdminLogin';
 import Users from '../pages/admin/Users';
 import Students from '../pages/admin/Students';
+import Faculties from '../pages/admin/Faculties';
 
 import UserLayout from '../layouts/UserLayout';
 import AdminLayout from '../layouts/Adminlayout';
@@ -69,6 +70,7 @@ export default function AppRoutes() {
                     <Route path="/admin" element={<AdminLayout />}>
                         <Route index element={<Users />} />
                         <Route path="students" element={<Students />} />
+                        <Route path="faculties" element={<Faculties />} />
                     </Route>
                 </Route>
 

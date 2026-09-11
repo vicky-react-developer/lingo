@@ -4,7 +4,7 @@ import type { Column, SortOrder } from "../types/table";
 interface TableProps<T> {
   columns: Column<T>[];
   data: T[];
-  getRowKey: (row: T) => string | number;
+  getRowKey: (row: T) => number;
   sortBy?: string;
   sortOrder?: SortOrder;
   onSort?: (key: string) => void;
@@ -65,7 +65,7 @@ export default function Table<T>({
           ) : (
             data.map((row, i) => (
               <tr
-                key={getRowKey(row)}
+                key={getRowKey(row) ?? i}
                 className={`border-b border-stone-100 last:border-b-0 transition-colors hover:bg-teal-50/40 ${
                   i % 2 === 1 ? "bg-stone-50/50" : "bg-white"
                 }`}

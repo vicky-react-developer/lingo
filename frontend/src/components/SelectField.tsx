@@ -1,4 +1,19 @@
-export default function SelectField({ label, value, onChange, name, options = [], classNames, variant = "filled", ...props }) {
+import React from "react";
+import type { Options } from "../types/common";
+
+interface SelectFieldProps {
+    label?: string;
+    value: string;
+    onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+    name: string;
+    options: Options[];
+    classNames?: string;
+    variant: "filled" | "outline" | "soft";
+    emptyOptionLabel?: string;
+    disableOptionLabel?: boolean
+}
+
+export default function SelectField({ label, value, onChange, name, options, classNames, variant = "filled", emptyOptionLabel, disableOptionLabel, ...props }: SelectFieldProps) {
     const variants = {
         // default style — matches Field's filled variant, used across existing pages
         filled: {
@@ -18,7 +33,6 @@ export default function SelectField({ label, value, onChange, name, options = []
     };
 
     const v = variants[variant] || variants.filled;
-    const emptyOptionLabel = variant === "outline" || variant === "soft" ? label : "Select...";
 
     return (
         <div className="mb-3">
@@ -32,7 +46,9 @@ export default function SelectField({ label, value, onChange, name, options = []
                 onChange={onChange}
                 {...props}
             >
-                <option value="">{emptyOptionLabel}</option>
+                {emptyOptionLabel &&
+                    <option value="" disabled>{emptyOptionLabel}</option>
+                }
                 {options.map((item) => (
                     <option key={item.value} value={item.value}>
                         {item.label}

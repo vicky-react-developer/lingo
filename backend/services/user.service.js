@@ -1,24 +1,23 @@
 const { User } = require("../models");
 
 const updateUserStatus = async (id, isActive) => {
-    const student = await User.findOne({
+    const user = await User.findOne({
         where: {
-            id,
-            role: "Student",
+            id
         },
     });
 
-    if (!student) {
-        const error = new Error("Student not found");
+    if (!user) {
+        const error = new Error("User not found");
         error.statusCode = 404;
         throw error;
     }
 
-    student.isActive = isActive;
+    user.isActive = isActive;
 
-    await student.save();
+    await user.save();
 
-    return student;
+    return user;
 };
 
 module.exports = {
