@@ -1,12 +1,27 @@
-import { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 import { getOneUser } from '../services/userService';
 import { userLogout, logoutUserApi } from '../services/authService';
+import type { User } from '../types/users';
+import { getUser } from '../utils/auth';
 
-const AuthContext = createContext(null);
+interface AuthContextProps {
+  token: string | null;
+  user: User | null;
+  isLoggedIn: boolean;
+  login: (newToken: string, userData?: null) => void;
+  logout: () => Promise<void>;
+  fetchUser: () => Promise<void>;
+}
 
-export function AuthProvider({ children }) {
+const AuthContext = createContext<AuthContextProps | null>(null);
+
+interface AuthProviderProps {
+  children: React.ReactNode
+}
+
+export function AuthProvider({ children }: AuthProviderProps) {
   const [token, setToken] = useState(() => localStorage.getItem('token'));
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(getUser());
 
   useEffect(() => {
     if (token) {
@@ -27,7 +42,7 @@ export function AuthProvider({ children }) {
 
   const isLoggedIn = !!token;
 
-  const login = (newToken, userData = null) => {
+  const login = (newToken: string, userData = null) => {
     localStorage.setItem('token', newToken);
     setToken(newToken);
     if (userData) {
@@ -43,8 +58,8 @@ export function AuthProvider({ children }) {
       console.log("API logout error:", e);
     } finally {
       userLogout();         // clears localStorage
-    setToken(null);
-    setUser(null);
+      setToken(null);
+      setUser(null);
     }
   };
 

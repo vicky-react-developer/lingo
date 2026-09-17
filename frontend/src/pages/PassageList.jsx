@@ -3,7 +3,7 @@ import { BookOpen, ChevronRight } from "lucide-react";
 import { getPassages } from "../services/passageService";
 import { useNavigate, useLocation } from "react-router";
 import Header from "../components/Header";
-import MySpinner from "../components/MySpinner";
+import DataState from "../components/DataState";
 
 function PassageList() {
     const location = useLocation();
@@ -114,7 +114,7 @@ function PassageList() {
                             ))}
                         </>
                         :
-                        <MySpinner loading={loading} />
+                        <DataState loading={loading} />
                     }
                 </div>
 

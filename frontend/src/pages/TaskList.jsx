@@ -3,7 +3,7 @@ import { CheckCircle2, BookOpen } from "lucide-react";
 import { getTasks } from "../services/functionalTaskservice";
 import { useLocation, useNavigate } from "react-router";
 import Header from "../components/Header";
-import MySpinner from "../components/MySpinner";
+import DataState from "../components/DataState";
 
 export default function TaskList() {
     const location = useLocation();
@@ -106,7 +106,7 @@ export default function TaskList() {
                         })}
                     </>
                     :
-                    <MySpinner loading={loading} />
+                    <DataState loading={loading} />
                 }
             </div>
 

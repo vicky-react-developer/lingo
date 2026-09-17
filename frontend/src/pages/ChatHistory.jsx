@@ -3,7 +3,7 @@ import { Lightbulb, BookText, Circle } from "lucide-react";
 import Header from "../components/Header";
 import { getSessions } from "../services/sessionService";
 import { useNavigate, useLocation } from "react-router";
-import MySpinner from "../components/MySpinner";
+import DataState from "../components/DataState";
 
 export default function ChatHistory() {
     const location = useLocation();
@@ -120,7 +120,7 @@ export default function ChatHistory() {
                             ))}
                         </>
                         :
-                        <MySpinner loading={loading} />
+                        <DataState loading={loading} />
                     }
                 </div>
             </div>

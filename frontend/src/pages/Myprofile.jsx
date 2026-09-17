@@ -240,7 +240,7 @@ export default function MyProfile() {
                                                 options={field.options.map(opt => ({ label: opt, value: opt }))}
                                                 classNames="pl-10"
                                             />
-                                            <Icon size={15} className="absolute left-3 top-[51px] -translate-y-1/2 text-[#185FA5] pointer-events-none" />
+                                            <Icon size={15} className="absolute left-3 top-[47px] -translate-y-1/2 text-[#185FA5] pointer-events-none" />
                                         </div>
                                     ) : (
                                         <div>
@@ -260,7 +260,7 @@ export default function MyProfile() {
                                 <div>
                                     <label className="block text-[11px] font-semibold uppercase tracking-[0.5px] text-[#888] mb-[5px]">Address</label>
                                     <div className="relative">
-                                        <Home size={15} className="absolute left-3 top-[15px] text-[#185FA5]" />
+                                        <Home size={15} className="absolute left-3 top-[14px] text-[#185FA5]" />
                                         <textarea
                                             name="address"
                                             value={form.address}
@@ -285,18 +285,18 @@ export default function MyProfile() {
                     {editing && (
                         <div className="flex gap-2.5 mt-2">
                             <button
-                                className="flex-1 h-12 rounded-[10px] bg-[#F4F7FB] text-[#555] border border-[#ddd] font-medium text-sm hover:bg-[#e8ecf1] disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
+                                className="h-12 w-50 rounded-[10px] bg-[#F4F7FB] text-[#555] border border-[#ddd] font-medium text-sm hover:bg-[#e8ecf1] disabled:opacity-60 disabled:cursor-not-allowed transition-colors"
                                 onClick={handleCancel}
                                 disabled={loading}
                             >
                                 Cancel
                             </button>
-                            <div className="flex-[2]">
+                            <div className="w-50">
                                 <Button
                                     onClick={handleSave}
                                     disabled={loading}
                                     loading={loading}
-                                    classNames="my-0"
+                                    classNames="!my-0"
                                 >
                                     {loading ? "Saving..." : (
                                         <>

@@ -3,14 +3,14 @@ import { MessageCircle, ChevronRight } from "lucide-react";
 import { getTopics } from "../services/topicService";
 import { useNavigate, useLocation } from "react-router";
 import Header from "../components/Header";
-import MySpinner from "../components/MySpinner";
+import DataState from "../components/DataState";
 
 function TopicList() {
     const navigate = useNavigate();
     const location = useLocation();
 
     const [topics, setTopics] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const { type } = location.state || {};
 
@@ -88,7 +88,7 @@ function TopicList() {
                             }
                         </>
                         :
-                        <MySpinner loading={loading} />
+                        <DataState loading={loading} />
                     }
                 </div>
 
