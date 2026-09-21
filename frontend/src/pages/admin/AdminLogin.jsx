@@ -102,8 +102,8 @@ const AdminLogin = () => {
         </div>
       </section>
 
-      <footer className="flex-none h-20 grid place-items-center bg-[#f7f7f7] text-base">
-        Copyright © <a href="https://praistma.com" target="_blank" rel="noreferrer" className="text-[#06f]">Praistma Technologies</a> 2021
+      <footer className="flex justify-center p-2 bg-[#f7f7f7] text-base">
+        Copyright © <a href="https://praistma.com" target="_blank" rel="noreferrer" className="text-[#06f] inline">Praistma Technologies</a> 2021
       </footer>
     </main>
   );

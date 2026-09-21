@@ -7,17 +7,17 @@ import {
 
 // Sidebar navigation items. `to` maps to a route rendered via <Outlet /> in AdminLayout.
 const NAV_ITEMS = [
-  { label: "Task Report NU", to: "/task-report-nu", icon: ClipboardList },
-  { label: "Task Report UP", to: "/task-report-up", icon: ClipboardCheck },
+  // { label: "Task Report NU", to: "/task-report-nu", icon: ClipboardList },
+  // { label: "Task Report UP", to: "/task-report-up", icon: ClipboardCheck },
   { label: "Student Details", to: "/students", icon: Users },
   { label: "Faculty Details", to: "/faculties", icon: GraduationCap },
-  { label: "Student Report", to: "/student-report", icon: FileBarChart2 },
-  { label: "Task Details", to: "/task-details", icon: ListChecks },
-  { label: "Task Enable", to: "/task-enable", icon: ToggleRight },
-  { label: "Addional Task Report", to: "/addional-task-report", icon: FilePlus2 },
-  { label: "Test Report", to: "/test-report", icon: FileCheck2 },
-  { label: "Imposition", to: "/imposition", icon: AlertTriangle },
-  { label: "Imposition Report", to: "/imposition-report", icon: FileWarning },
+  // { label: "Student Report", to: "/student-report", icon: FileBarChart2 },
+  // { label: "Task Details", to: "/task-details", icon: ListChecks },
+  // { label: "Task Enable", to: "/task-enable", icon: ToggleRight },
+  // { label: "Addional Task Report", to: "/addional-task-report", icon: FilePlus2 },
+  // { label: "Test Report", to: "/test-report", icon: FileCheck2 },
+  // { label: "Imposition", to: "/imposition", icon: AlertTriangle },
+  // { label: "Imposition Report", to: "/imposition-report", icon: FileWarning },
 ];
 
 export default function AdminSidebar({ open = true, welcomeText = "Welcome Superadmin" }) {

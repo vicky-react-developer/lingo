@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Menu, User, ChevronDown, LogOut, UserCircle, GraduationCap } from "lucide-react";
-
+import { useAuth } from "../context/AuthContext";
 /**
  * Top navbar: brand + sidebar toggle on the left, account menu on the right.
  */
 export default function Header({ brand = "Spoken English-I", onToggleSidebar }) {
+  const auth = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
 
@@ -17,6 +18,16 @@ export default function Header({ brand = "Spoken English-I", onToggleSidebar }) 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const handleLogout = async () => {
+    try {
+      await auth.logout();
+      navigate("/login");
+      onClose();
+    } catch (e) {
+      console.error("Logout error:", e);
+    }
+  };
 
   return (
     <nav className="flex items-center justify-between h-14 shrink-0 px-4 bg-[#0f172a] border-b border-white/10">
@@ -61,12 +72,12 @@ export default function Header({ brand = "Spoken English-I", onToggleSidebar }) 
               </a>
             </li>
             <li>
-              <a
-                href="#logout"
-                className="flex items-center gap-2.5 px-3.5 py-2 text-sm text-red-600 hover:bg-red-50"
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-2.5 px-3.5 py-2 text-sm text-red-600 hover:bg-red-50 w-100"
               >
                 <LogOut size={16} /> Logout
-              </a>
+              </button>
             </li>
           </ul>
         )}

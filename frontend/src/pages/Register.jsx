@@ -24,7 +24,7 @@ const Register = () => {
     },
     gender: {
       label: "Gender",
-      value: "",
+      value: "Male",
       type: "select",
       options: [
         { label: "Male", value: "Male" },
@@ -134,14 +134,12 @@ const Register = () => {
       const response = await registerUserApi(payload);
       setSuccess(response.message || "Registration successful! Redirecting to login...");
 
-      // Reset form fields
       setFormData((draft) => {
         Object.keys(draft).forEach((key) => {
           draft[key].value = "";
         });
       });
 
-      // Navigate to login after a short delay so user sees the success message
       setTimeout(() => navigate("/login"), 1800);
     } catch (err) {
       setError(err.message || "Something went wrong. Please try again.");

@@ -9,11 +9,11 @@ module.exports = {
       defaultValue: false,
     });
 
-    // await queryInterface.changeColumn("users", "role", {
-    //   type: Sequelize.ENUM("Admin", "Student", "Faculty"),
-    //   allowNull: false,
-    //   defaultValue: "Student",
-    // });
+    await queryInterface.changeColumn("users", "role", {
+      type: Sequelize.ENUM("Admin", "Student", "Faculty"),
+      allowNull: false,
+      defaultValue: "Student",
+    });
   },
 
   async down(queryInterface, Sequelize) {

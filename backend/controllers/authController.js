@@ -79,8 +79,6 @@ const loginUser = async (req, res) => {
   try {
     const { userName, password } = req.body;
 
-    console.log("userName", userName, password)
-
     if (!userName || !password) {
       return res.status(400).json({ success: false, message: "Please fill all the fields." });
     }
@@ -88,6 +86,10 @@ const loginUser = async (req, res) => {
     const user = await User.findOne({ where: { userName } });
     if (!user) {
       return res.status(400).json({ success: false, message: "Invalid username or password." });
+    }
+
+    if (!user.isActive) {
+      return res.status(400).json({ success: false, message: "Your account is not active! Please contact the administrator." });
     }
 
     const isMatch = await bcrypt.compare(password, user.passwordHash);
@@ -117,11 +119,8 @@ const loginUser = async (req, res) => {
 };
 
 
-// ── LOGOUT ────────────────────────────────────────────────────────────────────
-// Clears the stored tokenHash so the JWT is invalidated server-side.
 const logoutUser = async (req, res) => {
   try {
-    // req.user is set by the auth middleware (see middleware/auth.js)
     await User.update({ tokenHash: null }, { where: { id: req.user.id } });
     return res.status(200).json({ success: true, message: "Logged out successfully." });
   } catch (error) {
@@ -130,8 +129,6 @@ const logoutUser = async (req, res) => {
   }
 };
 
-
-// ── FORGOT PASSWORD ───────────────────────────────────────────────────────────
 const forgotPassword = async (req, res) => {
   try {
     const { userName, mobile, dob } = req.body;
