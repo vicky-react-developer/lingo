@@ -4,14 +4,11 @@ import SelectField from "../../components/SelectField";
 import { ageFromDob } from "../../utils/format";
 import type { User } from "../../types/users";
 import type { Column } from "../../types/table";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getStudents, assignFaculty } from "../../services/admin/studentService";
-import { updateUserStatus } from "../../services/admin/userService";
-import type { DataResponse } from "../../types/common";
-import { getFacultyOptions } from "../../services/admin/facultyService";
 import { formatSelectOptions } from "../../utils/format";
-import type { FacultyOptions } from "../../types/users";
 import DataTable from "../../components/DataTable";
+import { useFetchStudentsQuery, useAssignFacultyMutation } from "../../state/api/students.api";
+import { useFetchFacultiesOptionsQuery } from "../../state/api/faculties.api";
+import { useActivateUserMutation } from "../../state/api/users.api";
 
 const ACTIVE_OPTIONS = [
   { value: "true", label: "Active" },
@@ -19,37 +16,22 @@ const ACTIVE_OPTIONS = [
 ];
 
 export default function StudentDirectory() {
-  const queryClient = useQueryClient();
-  const { data: facultiesData } = useQuery<DataResponse<FacultyOptions>>({
-    queryFn: () => getFacultyOptions(),
-    queryKey: ["faculties"],
-  });
-
-  const { mutate } = useMutation({
-    mutationFn: updateUserStatus,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["users"] })
-    }
-  });
-
-  const { mutate: assignFacultyMutate } = useMutation({
-    mutationFn: assignFaculty,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["users"] })
-    }
-  });
+  const { data: facultiesData } = useFetchFacultiesOptionsQuery();
+  const [activateUser] = useActivateUserMutation();
+  const [assignFaculty] = useAssignFacultyMutation();
 
   const handleFacultyChange = async (studentId: number, facultyId: string) => {
-    assignFacultyMutate({ studentId, payload: { facultyId: Number(facultyId) } });
+    assignFaculty({ studentId, payload: { facultyId: Number(facultyId) } });
   };
 
   const handleActiveChange = async (userId: number, activeValue: string) => {
-    mutate({ userId, payload: { isActive: activeValue === "true" } });
+    activateUser({ userId, payload: { isActive: activeValue === "true", role: "Students" } });
   };
 
   const facultyOptions = useMemo(() => {
     return formatSelectOptions({ data: facultiesData?.data ?? [], label: "name", value: "id" })
-  }, [facultiesData])
+  }, [facultiesData]);
+
 
   const columns: Column<User>[] = [
     {
@@ -116,9 +98,9 @@ export default function StudentDirectory() {
           value={String(r.facultyAssignment?.facultyId) ?? ""}
           options={facultyOptions}
           onChange={(e) => handleFacultyChange(r.id, e.target.value)}
-          emptyOptionLabel="Assign faculty" 
+          emptyOptionLabel="Assign faculty"
           disableOptionLabel={Boolean(r.facultyAssignment?.facultyId)}
-          />
+        />
       ),
     },
     {
@@ -140,8 +122,7 @@ export default function StudentDirectory() {
     <DataTable<User>
       title="Students"
       columns={columns}
-      queryFn={getStudents}
-      queryKeys={["users"]}
+      queryHook={useFetchStudentsQuery}
       getRowKey={(student) => student.id}
     />
   );

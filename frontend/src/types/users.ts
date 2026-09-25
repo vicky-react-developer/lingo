@@ -21,10 +21,13 @@ export interface User {
   facultyAssignment?: FacultyAssignment | null;
 }
 
+export type Role = "Admin" | "Faculty" | "Student";
+
 export interface UpdateUserStatusPayload {
   userId: number,
   payload: {
-    isActive: boolean
+    isActive: boolean,
+    role: Omit<Role, "Admin">
   }
 }
 

@@ -1,12 +1,17 @@
 export interface PaginationResponse<T> {
-    success: true;
+    success: boolean;
     data: T[],
     total: number
 }
 
 export interface DataResponse<T> {
-    success: true;
+    success: boolean;
     data: T[],
+}
+
+export interface MessageResponse {
+    success: true;
+    message: string;
 }
 
 export interface Options {

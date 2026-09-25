@@ -1,13 +1,12 @@
 import DataTable from "../../components/DataTable";
-import { getFaculties } from "../../services/admin/facultyService";
 import type { User } from "../../types/users";
 import type { Column } from "../../types/table";
 import { Avatar } from "../../components/StudentBadges";
 import { ageFromDob } from "../../utils/format";
 import { GenderMark } from "../../components/StudentBadges";
 import SelectField from "../../components/SelectField";
-import { useQueryClient, useMutation } from "@tanstack/react-query";
-import { updateUserStatus } from "../../services/admin/userService";
+import { useFetchFacultiesQuery } from "../../state/api/faculties.api";
+import { useActivateUserMutation } from "../../state/api/users.api";
 
 const ACTIVE_OPTIONS = [
     { value: "true", label: "Active" },
@@ -15,16 +14,10 @@ const ACTIVE_OPTIONS = [
 ];
 
 export default function Faculties() {
-    const queryClient = useQueryClient();
-    const { mutate } = useMutation({
-        mutationFn: updateUserStatus,
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["faculties"] })
-        }
-    })
+    const [activateUser] = useActivateUserMutation();
 
     const handleActiveChange = async (userId: number, activeValue: string) => {
-        mutate({ userId, payload: { isActive: activeValue === "true" } });
+        activateUser({ userId, payload: { isActive: activeValue === "true", role: "Faculty" } });
     };
 
     const columns: Column<User>[] = [
@@ -101,8 +94,7 @@ export default function Faculties() {
         <DataTable<User>
             title="Faculties"
             columns={columns}
-            queryFn={getFaculties}
-            queryKeys={["faculties"]}
+            queryHook={useFetchFacultiesQuery}
             getRowKey={(faculty) => faculty.id}
         />
     )
