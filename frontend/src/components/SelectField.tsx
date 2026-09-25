@@ -47,7 +47,7 @@ export default function SelectField({ label, value, onChange, name, options, cla
                 {...props}
             >
                 {emptyOptionLabel &&
-                    <option value="" disabled>{emptyOptionLabel}</option>
+                    <option value="" disabled={disableOptionLabel || false}>{emptyOptionLabel}</option>
                 }
                 {options.map((item) => (
                     <option key={item.value} value={item.value}>
