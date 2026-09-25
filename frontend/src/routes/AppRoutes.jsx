@@ -67,7 +67,6 @@ export default function AppRoutes() {
 
                 <Route element={<AdminProtectedRoutes />}>
                     <Route path="/admin" element={<AdminLayout />}>
-                        {/* <Route index element={<Users />} /> */}
                         <Route index element={<Students />} />
                         <Route path="faculties" element={<Faculties />} />
                     </Route>

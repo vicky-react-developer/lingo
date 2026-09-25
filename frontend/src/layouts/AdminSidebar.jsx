@@ -9,7 +9,7 @@ import {
 const NAV_ITEMS = [
   // { label: "Task Report NU", to: "/task-report-nu", icon: ClipboardList },
   // { label: "Task Report UP", to: "/task-report-up", icon: ClipboardCheck },
-  { label: "Student Details", to: "/students", icon: Users },
+  { label: "Student Details", to: "/", icon: Users },
   { label: "Faculty Details", to: "/faculties", icon: GraduationCap },
   // { label: "Student Report", to: "/student-report", icon: FileBarChart2 },
   // { label: "Task Details", to: "/task-details", icon: ListChecks },
@@ -39,6 +39,7 @@ export default function AdminSidebar({ open = true, welcomeText = "Welcome Super
               <li key={item.to}>
                 <NavLink
                   to={`/admin/${item.to}`}
+                  end={item.to === "/"}
                   className={({ isActive }) =>
                     `flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm border-l-2 transition-colors ${
                       isActive
