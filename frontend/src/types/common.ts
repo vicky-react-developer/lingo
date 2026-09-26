@@ -1,3 +1,5 @@
+import type { LucideIcon } from "lucide-react";
+
 export interface PaginationResponse<T> {
     success: boolean;
     data: T[],
@@ -17,4 +19,11 @@ export interface MessageResponse {
 export interface Options {
     label: string;
     value: string;
+}
+
+export interface Mode {
+    id: string;
+    icon: LucideIcon;
+    title: string;
+    desc: string;
 }

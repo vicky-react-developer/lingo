@@ -3,7 +3,14 @@ import { useNavigate } from "react-router";
 import { Menu, ChevronLeft } from "lucide-react";
 import { Logo } from "../helpers/Constants";
 
-export default function Header({ primaryTitle, secondaryTitle, onMenuToggle, brandTitle }) {
+interface HeaderProps {
+    primaryTitle: string;
+    secondaryTitle: String;
+    onMenuToggle: () => void;
+    brandTitle: string
+}
+
+export default function Header({ primaryTitle, secondaryTitle, onMenuToggle, brandTitle }: HeaderProps) {
     const navigate = useNavigate();
 
     return (

@@ -4,7 +4,7 @@ import { Send } from "lucide-react";
 
 import ChatWindow from "../components/ChatWindow";
 import ContextBanner from "../components/ContextBanner";
-import Header from "../components/Header";
+import Header from "../layouts/Header";
 import VoiceRecorder from "../components/VoiceRecorder";
 import { createSession } from "../services/sessionService";
 import { useLocation } from 'react-router';

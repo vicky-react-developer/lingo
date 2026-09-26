@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Lightbulb, BookText, Circle } from "lucide-react";
-import Header from "../components/Header";
+import Header from "../layouts/Header";
 import { getSessions } from "../services/sessionService";
 import { useNavigate, useLocation } from "react-router";
 import DataState from "../components/DataState";

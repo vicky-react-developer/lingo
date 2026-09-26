@@ -5,7 +5,7 @@ import {
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
 import { updateUserProfile } from "../services/userService";
-import Header from "../components/Header";
+import Header from "../layouts/Header";
 import Field from "../components/Field";
 import SelectField from "../components/SelectField";
 import Button from "../components/Button";

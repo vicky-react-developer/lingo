@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Lock, Eye, EyeOff, ShieldAlert, ShieldCheck, CheckCircle2, AlertCircle } from "lucide-react";
 import { changeUserPassword } from "../services/userService";
-import Header from "../components/Header";
+import Header from "../layouts/Header";
 import Field from "../components/Field";
 import Button from "../components/Button";
 

@@ -1,4 +1,12 @@
-export default function ModeList({ modes, onSelect, background }) {
+import type { Mode } from "../types/common";
+
+interface ModeListProps {
+  modes: Mode[]
+  onSelect: (mode: Mode) => void;
+  background: string
+}
+
+export default function ModeList({ modes, onSelect, background }: ModeListProps) {
   return (
     <div className={`mx-auto p-3 ${background} h-full`}>
       <div className="flex flex-col gap-3">

@@ -1,5 +1,5 @@
 import React from "react";
-import Header from "../components/Header";
+import Header from "../layouts/Header";
 import { useNavigate } from "react-router";
 import {
     MessageCircle,

@@ -1,6 +1,7 @@
 import { XCircle, CheckCircle2 } from "lucide-react";
+import type { Correction } from "../types/chat";
 
-export default function CorrectionBox({ correction }) {
+export default function CorrectionBox({ correction }: {correction: Correction}) {
 
   if (!correction) return null;
 

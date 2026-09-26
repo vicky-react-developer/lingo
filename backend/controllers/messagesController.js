@@ -100,28 +100,30 @@ exports.getAllMessages = async (req, res) => {
             },
             include: [
                 {
-                    model: Correction
+                    model: Correction,
+                    attributes: ["wrongText", "correctedText", "explanation"]
                 }
             ],
-            order: [["id", "ASC"]]
+            order: [["id", "ASC"]],
+            attributes: ["sender", "text"]
         });
 
-        messages = messages.map((item) => {
-            const itemJSON = item.toJSON();
-            const payload = {
-                sender: itemJSON.sender,
-                text: itemJSON.text,
-            }
-            if (itemJSON.Correction) {
-                const { wrongText, correctedText, explanation } = itemJSON.Correction;
-                payload.correction = {
-                    wrongText,
-                    correctedText,
-                    explanation
-                }
-            }
-            return payload;
-        })
+        // messages = messages.map((item) => {
+        //     const itemJSON = item.toJSON();
+        //     const payload = {
+        //         sender: itemJSON.sender,
+        //         text: itemJSON.text,
+        //     }
+        //     if (itemJSON.Correction) {
+        //         const { wrongText, correctedText, explanation } = itemJSON.Correction;
+        //         payload.correction = {
+        //             wrongText,
+        //             correctedText,
+        //             explanation
+        //         }
+        //     }
+        //     return payload;
+        // })
 
         return res.json({ success: true, data: messages });
 

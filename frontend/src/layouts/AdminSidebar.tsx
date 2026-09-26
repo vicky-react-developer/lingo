@@ -9,7 +9,7 @@ import {
 const NAV_ITEMS = [
   // { label: "Task Report NU", to: "/task-report-nu", icon: ClipboardList },
   // { label: "Task Report UP", to: "/task-report-up", icon: ClipboardCheck },
-  { label: "Student Details", to: "/", icon: Users },
+  { label: "Student Details", to: "", icon: Users },
   { label: "Faculty Details", to: "/faculties", icon: GraduationCap },
   // { label: "Student Report", to: "/student-report", icon: FileBarChart2 },
   // { label: "Task Details", to: "/task-details", icon: ListChecks },
@@ -20,16 +20,19 @@ const NAV_ITEMS = [
   // { label: "Imposition Report", to: "/imposition-report", icon: FileWarning },
 ];
 
-export default function AdminSidebar({ open = true, welcomeText = "Welcome Superadmin" }) {
+interface AdminSidebarProps {
+  open: boolean;
+}
+
+export default function AdminSidebar({ open = true }: AdminSidebarProps) {
   return (
     <aside
-      className={`bg-[#0f172a] shrink-0 overflow-y-auto overflow-x-hidden transition-all duration-200 ease-out ${
-        open ? "w-[220px] opacity-100" : "w-0 opacity-0"
-      }`}
+      className={`bg-[#0f172a] shrink-0 overflow-y-auto overflow-x-hidden transition-all duration-200 ease-out ${open ? "w-[220px] opacity-100" : "w-0 opacity-0"
+        }`}
     >
       <div className="w-[220px]">
         <div className="px-4 pt-4 pb-2 text-[11px] font-semibold uppercase tracking-wider text-white/40">
-          {welcomeText}
+          Welcome Superadmin
         </div>
 
         <ul className="flex flex-col gap-0.5 px-2">
@@ -39,12 +42,11 @@ export default function AdminSidebar({ open = true, welcomeText = "Welcome Super
               <li key={item.to}>
                 <NavLink
                   to={`/admin/${item.to}`}
-                  end={item.to === "/"}
+                  end={item.to === ""}
                   className={({ isActive }) =>
-                    `flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm border-l-2 transition-colors ${
-                      isActive
-                        ? "bg-indigo-500/10 text-white border-indigo-500"
-                        : "text-white/60 border-transparent hover:text-white hover:bg-white/5"
+                    `flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm border-l-2 transition-colors ${isActive
+                      ? "bg-indigo-500/10 text-white border-indigo-500"
+                      : "text-white/60 border-transparent hover:text-white hover:bg-white/5"
                     }`
                   }
                 >

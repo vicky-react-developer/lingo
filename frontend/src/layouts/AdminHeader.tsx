@@ -1,17 +1,24 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Menu, User, ChevronDown, LogOut, UserCircle, GraduationCap } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
-/**
- * Top navbar: brand + sidebar toggle on the left, account menu on the right.
- */
-export default function Header({ brand = "Spoken English-I", onToggleSidebar }) {
+
+interface AdminHeaderProps {
+  onToggleSidebar: () => void
+}
+
+export default function AdminHeader({ onToggleSidebar }: AdminHeaderProps) {
+  const menuRef = useRef<HTMLDivElement | null>(null);
+
   const auth = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
-  const menuRef = useRef(null);
 
   useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (
+        menuRef.current &&
+        e.target instanceof Node &&
+        !menuRef.current.contains(e.target)
+      ) {
         setMenuOpen(false);
       }
     };
@@ -22,8 +29,6 @@ export default function Header({ brand = "Spoken English-I", onToggleSidebar }) 
   const handleLogout = async () => {
     try {
       await auth.logout();
-      navigate("/login");
-      onClose();
     } catch (e) {
       console.error("Logout error:", e);
     }
@@ -44,7 +49,7 @@ export default function Header({ brand = "Spoken English-I", onToggleSidebar }) 
           <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-indigo-500/20 text-indigo-400">
             <GraduationCap size={16} />
           </div>
-          <span className="text-white font-semibold text-sm">{brand}</span>
+          <span className="text-white font-semibold text-sm">Spoken English-I</span>
         </div>
       </div>
 

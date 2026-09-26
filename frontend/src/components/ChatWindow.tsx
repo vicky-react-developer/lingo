@@ -1,6 +1,12 @@
 import MessageBubble from "./MessageBubble";
+import type { MessageStructure } from "../types/chat";
 
-export default function ChatWindow({ messages, isTyping }) {
+interface ChatWindowProps {
+  messages: MessageStructure[]
+  isTyping: boolean;
+}
+
+export default function ChatWindow({ messages, isTyping }: ChatWindowProps) {
   return (
     <div>
       {messages.map((msg, index) => (

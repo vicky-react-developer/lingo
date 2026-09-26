@@ -1,7 +1,6 @@
-export const validatePhone = (num) => {
+export const validatePhone = (num: string) => {
     const cleaned = num.replace(/[\s()-]/g, '');
 
-    // Remove +91 if present
     const normalized = cleaned.startsWith("+91")
         ? cleaned.slice(3)
         : cleaned;

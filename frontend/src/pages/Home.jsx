@@ -7,8 +7,8 @@ import {
     MessageSquareText,
 } from "lucide-react";
 
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import Header from "../layouts/Header";
+import Footer from "../layouts/Footer";
 import ModeList from "../components/ModeList";
 
 export default function Home() {

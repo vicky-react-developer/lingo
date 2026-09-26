@@ -1,6 +1,16 @@
+import type { ButtonHTMLAttributes } from "react";
 import Loader from "./Loader";
 
-export default function Button({ children, onClick, disabled, loading, type, classNames, variant = "filled" }) {
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+    children: React.ReactNode;
+    onClick: () => void,
+    disabled: boolean;
+    loading: boolean;
+    classNames: string;
+    variant: "filled" | "dark"
+}
+
+export default function Button({ children, onClick, disabled, loading, type, classNames, variant = "filled" }: ButtonProps) {
     const variants = {
         // default style — used across existing pages, unchanged
         filled: "h-12 rounded-lg bg-[#00C6FF] font-semibold text-base",

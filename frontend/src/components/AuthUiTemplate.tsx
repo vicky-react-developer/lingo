@@ -1,6 +1,7 @@
+import type React from "react";
 import { ManSittingImg, LeftLeaf, RightLeaf, Logo } from "../helpers/Constants";
 
-export default function AuthUiTemplate({children}) {
+export default function AuthUiTemplate({children}: {children: React.ReactNode}) {
     return (
         <div className="w-full min-h-screen bg-white overflow-x-hidden font-['Montserrat']">
             {/* Header */}

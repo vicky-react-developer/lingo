@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { CheckCircle2, BookOpen } from "lucide-react";
 import { getTasks } from "../services/functionalTaskservice";
 import { useLocation, useNavigate } from "react-router";
-import Header from "../components/Header";
+import Header from "../layouts/Header";
 import DataState from "../components/DataState";
 
 export default function TaskList() {

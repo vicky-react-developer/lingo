@@ -1,7 +1,12 @@
 import useVoiceInput from "../hooks/useVoiceInput";
 import { TamilMic, EnglishMic } from "../helpers/Constants";
 
-export default function VoiceRecorder({ onText, language }) {
+interface VoiceRecorderProps {
+  onText: (text: string) => void;
+  language: string;
+}
+
+export default function VoiceRecorder({ onText, language }: VoiceRecorderProps) {
 
   const { listening, startListening } = useVoiceInput(onText, language);
 

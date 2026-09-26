@@ -1,24 +1,31 @@
 import { useNavigate, useLocation } from "react-router";
 import { Home, MessageSquare, UserCircle, KeyRound, LogOut } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
+import type { Sidemenu, NavButton } from "../types/sidebar";
 
-const navItems = [
+const navItems: Sidemenu[] = [
     { path: "/home", icon: Home, label: "Home" },
     { path: "/history-category", icon: MessageSquare, label: "Chat History" },
 ];
 
-const accountItems = [
+const accountItems: Sidemenu[] = [
     { path: "/profile", icon: UserCircle, label: "My Profile" },
     { path: "/change-password", icon: KeyRound, label: "Change Password" },
 ];
 
-export default function Sidebar({ isOpen, onClose }) {
+interface SidebarProps {
+    isOpen: boolean;
+    onClose: () => void;
+}
+
+
+export default function Sidebar({ isOpen, onClose }: SidebarProps) {
     const navigate = useNavigate();
     const location = useLocation();
     const auth = useAuth();
     const user = auth?.user;
 
-    const go = (path) => { navigate(path); onClose(); };
+    const go = (path: string) => { navigate(path); onClose(); };
 
     const handleLogout = async () => {
         try {
@@ -30,18 +37,17 @@ export default function Sidebar({ isOpen, onClose }) {
         }
     };
 
-    const NavButton = ({ path, icon: Icon, label, danger, onClick }) => {
+    const NavButton = ({ path, icon: Icon, label, danger, onClick }: NavButton) => {
         const active = location.pathname === path;
         return (
             <button
-                onClick={onClick || (() => go(path))}
-                className={`w-full flex items-center gap-3 px-3 py-2 text-sm text-left ${
-                    danger
-                        ? "text-[#D9363E]"
-                        : active
-                            ? "bg-[#E6F1FB] text-[#185FA5] font-medium"
-                            : "text-[#333] font-normal"
-                }`}
+                onClick={onClick || (() => go(path!))}
+                className={`w-full flex items-center gap-3 px-3 py-2 text-sm text-left ${danger
+                    ? "text-[#D9363E]"
+                    : active
+                        ? "bg-[#E6F1FB] text-[#185FA5] font-medium"
+                        : "text-[#333] font-normal"
+                    }`}
             >
                 <Icon size={16} className="w-5 text-center" />
                 {label}
@@ -58,9 +64,8 @@ export default function Sidebar({ isOpen, onClose }) {
                 />
             )}
             <div
-                className={`fixed top-0 right-0 bottom-0 w-[260px] bg-white border-l border-black/10 z-50 flex flex-col transition-transform duration-300 ease-out ${
-                    isOpen ? "translate-x-0" : "translate-x-full"
-                }`}
+                className={`fixed top-0 right-0 bottom-0 w-[260px] bg-white border-l border-black/10 z-50 flex flex-col transition-transform duration-300 ease-out ${isOpen ? "translate-x-0" : "translate-x-full"
+                    }`}
             >
                 {/* User Header */}
                 <div className="p-3 border-b border-slate-300">

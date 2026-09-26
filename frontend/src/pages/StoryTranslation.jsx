@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getOnePassage, submitPassageTranslation } from "../services/passageService";
 import { useLocation, useNavigate } from "react-router";
-import Header from "../components/Header";
+import Header from "../layouts/Header";
 import VoiceRecorder from "../components/VoiceRecorder";
 import Loader from "../components/Loader";
 import useSpeech from "../hooks/useSpeech";

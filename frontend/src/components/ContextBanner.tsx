@@ -1,7 +1,13 @@
 import { useState } from "react";
 import { Pin, BookOpen, ChevronUp, ChevronDown } from "lucide-react";
+import type { ChatMode, ChatExtraInfo } from "../types/chat";
 
-export default function ContextBanner({ mode, info }) {
+interface ContextBannerProps {
+  mode: Omit<ChatMode, "normal" | "duolingoChat">;
+  info: ChatExtraInfo
+}
+
+export default function ContextBanner({ mode, info }: ContextBannerProps) {
   const [expanded, setExpanded] = useState(false);
 
   if (mode === "topic" || mode === "duolingoTopic") {

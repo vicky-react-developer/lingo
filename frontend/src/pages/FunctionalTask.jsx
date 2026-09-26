@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { ArrowLeft, ArrowRight, CheckCircle2, XCircle } from "lucide-react";
-import Header from "../components/Header";
+import Header from "../layouts/Header";
 import { useParams, useLocation, useNavigate } from "react-router";
 import { getFunctionalExercises, submitFunctionalExercise } from "../services/functionalTaskservice";
 import VoiceRecorder from "../components/VoiceRecorder";

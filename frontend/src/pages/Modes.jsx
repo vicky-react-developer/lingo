@@ -11,8 +11,8 @@ import {
     ClipboardCheck,
 } from "lucide-react";
 
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import Header from "../layouts/Header";
+import Footer from "../layouts/Footer";
 import ModeList from "../components/ModeList";
 
 const allModes = {
@@ -77,7 +77,7 @@ const allModes = {
     ]
 };
 
-export default function Modes({ onMenuToggle }) {
+export default function Modes() {
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -138,7 +138,6 @@ export default function Modes({ onMenuToggle }) {
             <Header
                 primaryTitle={categoryTitle}
                 secondaryTitle="Select a learning mode"
-                onMenuToggle={onMenuToggle}
             />
 
             <ModeList

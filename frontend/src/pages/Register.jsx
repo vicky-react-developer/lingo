@@ -3,7 +3,7 @@ import { useImmer } from "use-immer";
 import { useNavigate, Link } from "react-router";
 import { validatePhone } from "../helpers/utils";
 import { registerUserApi } from "../services/authService";
-import Footer from "../components/Footer";
+import Footer from "../layouts/Footer";
 import Field from "../components/Field";
 import SelectField from "../components/SelectField";
 import Button from "../components/Button";

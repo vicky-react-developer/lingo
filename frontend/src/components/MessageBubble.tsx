@@ -1,14 +1,15 @@
 import { Bot } from "lucide-react";
 import CorrectionBox from "./CorrectionBox";
+import type { MessageStructure } from "../types/chat";
 
-export default function MessageBubble({ message }) {
+export default function MessageBubble({ message }: {message: MessageStructure}) {
 
   const isUser = message.sender === "user";
 
   return (
     <>
-      {!isUser && message.correction && (
-        <CorrectionBox correction={message.correction} />
+      {(!isUser && message.Correction) && (
+        <CorrectionBox correction={message.Correction} />
       )}
       {
         !isUser ?

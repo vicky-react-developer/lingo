@@ -1,6 +1,6 @@
 export default function useSpeech() {
 
-  const speak = (text, callback) => {
+  const speak = (text: string, callback: () => void) => {
 
     speechSynthesis.cancel(); // stop any existing speech
 
@@ -23,7 +23,7 @@ export default function useSpeech() {
     speechSynthesis.speak(utterance);
   };
 
-  const speakTamil = (text) => {
+  const speakTamil = (text: string) => {
     speechSynthesis.cancel(); // stop any existing speech
 
     const utterance = new SpeechSynthesisUtterance(text);

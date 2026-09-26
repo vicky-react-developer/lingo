@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router";
 import { loginUserApi } from "../services/authService";
 import { useAuth } from "../context/AuthContext";
-import Footer from "../components/Footer";
+import Footer from "../layouts/Footer";
 import Field from "../components/Field";
 import Button from "../components/Button";
 import AuthUiTemplate from "../components/AuthUITemplate";

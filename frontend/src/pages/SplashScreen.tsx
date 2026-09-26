@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Logo } from "../helpers/Constants";
 import { useNavigate } from "react-router";
 

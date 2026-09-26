@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function useVoiceInput(onResult, language) {
+export default function useVoiceInput(onResult: (text: string) => void, language: string) {
 
   const [listening, setListening] = useState(false);
 
@@ -25,12 +25,12 @@ export default function useVoiceInput(onResult, language) {
       setListening(true);
     };
 
-    recognition.onresult = (event) => {
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
       const text = event.results[0][0].transcript;
       onResult(text);
     };
 
-    recognition.onerror = (event) => {
+    recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
       console.log("Speech error:", event.error);
     };
 
