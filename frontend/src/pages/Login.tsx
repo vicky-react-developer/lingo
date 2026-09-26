@@ -5,10 +5,11 @@ import { useAuth } from "../context/AuthContext";
 import Footer from "../layouts/Footer";
 import Field from "../components/Field";
 import Button from "../components/Button";
-import AuthUiTemplate from "../components/AuthUITemplate";
+import AuthUiTemplate from "../components/AuthUiTemplate";
+import type { LoginState } from "../types/auth";
 
 const Login = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<LoginState>({
     userName: "",
     password: ""
   });
@@ -18,18 +19,16 @@ const Login = () => {
   const navigate = useNavigate();
   const { login } = useAuth();
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
     if (error) setError("");
   };
 
   const validate = () => {
-    for (const key in formData) {
-      if (!formData[key]) {
-        setError("Please fill all the fields");
-        return false;
-      }
+    if (Object.values(formData).some(value => !value)) {
+      setError("Please fill all the fields");
+      return false;
     }
     return true;
   };

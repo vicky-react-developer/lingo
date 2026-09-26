@@ -3,10 +3,10 @@ import React from "react";
 interface FieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
     label: string;
     value: string;
-    onChange: (e: React.ChangeEvent) => void;
+    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
     name: string;
-    classNames: string;
-    variant: "filled" | "outline" | "soft"
+    classNames?: string;
+    variant?: "filled" | "outline" | "soft"
 }
 
 export default function Field({ label, value, onChange, name, type, classNames, variant = "filled", ...props }: FieldProps) {

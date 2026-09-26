@@ -4,10 +4,10 @@ import Loader from "./Loader";
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     children: React.ReactNode;
     onClick: () => void,
-    disabled: boolean;
+    disabled?: boolean;
     loading: boolean;
-    classNames: string;
-    variant: "filled" | "dark"
+    classNames?: string;
+    variant?: "filled" | "dark"
 }
 
 export default function Button({ children, onClick, disabled, loading, type, classNames, variant = "filled" }: ButtonProps) {
@@ -27,7 +27,7 @@ export default function Button({ children, onClick, disabled, loading, type, cla
             type={type}
             className={`w-full text-white my-3 flex items-center justify-center gap-2 disabled:opacity-70 ${v} ${classNames || ""}`}
             onClick={onClick}
-            disabled={disabled}
+            disabled={disabled || loading}
         >
             {children}
             {loading && <Loader />}
