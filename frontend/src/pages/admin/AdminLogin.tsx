@@ -1,30 +1,30 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
-import { loginUserApi } from "../../services/authService";
 import { useAuth } from "../../context/AuthContext";
+import { useLoginUserMutation } from "../../state/api/auth.api";
+import { handleApiError } from "../../services/apiService";
 
 const AdminLogin = () => {
+  const navigate = useNavigate();
+  const [loginUser, { isLoading: loading }] = useLoginUserMutation();
+
   const [formData, setFormData] = useState({ userName: "", password: "" });
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
   const { login } = useAuth();
 
-  const handleChange = ({ target: { name, value } }) => {
+  const handleChange = ({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) => {
     setFormData((current) => ({ ...current, [name]: value }));
     if (error) setError("");
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!formData.userName.trim() || !formData.password) {
       setError("Please enter your user name and password.");
       return;
     }
-
-    setLoading(true);
     try {
-      const response = await loginUserApi(formData);
+      const response = await loginUser(formData).unwrap();
       if (response?.success) {
         login(response.token, response.data);
         navigate("/admin");
@@ -32,9 +32,7 @@ const AdminLogin = () => {
       }
       setError(response?.message || "Unable to sign in. Please try again.");
     } catch (err) {
-      setError(err.message || "Unable to sign in. Please try again.");
-    } finally {
-      setLoading(false);
+      setError(handleApiError(err));
     }
   };
 

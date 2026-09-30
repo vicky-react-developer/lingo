@@ -1,20 +1,22 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router";
-import { loginUserApi } from "../services/authService";
 import { useAuth } from "../context/AuthContext";
 import Footer from "../layouts/Footer";
 import Field from "../components/Field";
 import Button from "../components/Button";
 import AuthUiTemplate from "../components/AuthUiTemplate";
-import type { LoginState } from "../types/auth";
+import type { LoginPayload } from "../types/auth";
+import { useLoginUserMutation } from "../state/api/auth.api";
+import { handleApiError } from "../services/apiService";
 
 const Login = () => {
-  const [formData, setFormData] = useState<LoginState>({
+  const [loginUser, { isLoading: loading }] = useLoginUserMutation();
+
+  const [formData, setFormData] = useState<LoginPayload>({
     userName: "",
     password: ""
   });
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
   const { login } = useAuth();
@@ -36,19 +38,16 @@ const Login = () => {
   const handleSubmit = async () => {
     if (!validate()) return;
 
-    setLoading(true);
     setError("");
 
     try {
-      const response = await loginUserApi(formData);
-      if (response?.success) {
+      const response = await loginUser(formData).unwrap();
+      if (response.success) {
         login(response.token, response.data);
         navigate("/home");
       }
     } catch (err) {
-      setError(err.message || "Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
+      setError(handleApiError(err));
     }
   };
 

@@ -1,25 +1,27 @@
 import React, { useState } from "react";
 import { useNavigate, useLocation, Link } from "react-router";
-import { resetPasswordApi } from "../services/authService";
-import AuthUiTemplate from "../components/AuthUITemplate";
+import AuthUiTemplate from "../components/AuthUiTemplate";
 import Field from "../components/Field";
 import Button from "../components/Button";
+import type { ResetPasswordFormData } from "../types/auth";
+import { useResetPasswordMutation } from "../state/api/auth.api";
+import { handleApiError } from "../services/apiService";
 
 export default function ResetPassword() {
-  const [formData, setFormData] = useState({
+  const [resetPassword, {isLoading: loading}] = useResetPasswordMutation();
+  const [formData, setFormData] = useState<ResetPasswordFormData>({
     password: "",
     confirmPassword: "",
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
 
   const resetToken = location.state?.resetToken;
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
     if (error) setError("");
@@ -48,18 +50,15 @@ export default function ResetPassword() {
   const handleSubmit = async () => {
     if (!validate()) return;
 
-    setLoading(true);
     setError("");
 
     try {
-      await resetPasswordApi({ resetToken, newPassword: formData.password });
+      await resetPassword({ resetToken, newPassword: formData.password }).unwrap();
       setSuccess("Password updated successfully!");
       setTimeout(() => navigate("/login"), 1800);
     } catch (err) {
-      setError(err.message || "Reset failed. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+      setError(handleApiError(err));
+    } 
   };
 
   return (

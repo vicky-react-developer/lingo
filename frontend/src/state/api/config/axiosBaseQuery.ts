@@ -1,6 +1,7 @@
 import type { BaseQueryFn } from "@reduxjs/toolkit/query";
 import { AxiosError, type AxiosRequestConfig } from "axios";
 import axiosInstance from "./axiosInstance";
+import type { ApiErrorResponse } from "../../../types/common";
 
 interface FetchQueryArgs {
     baseURL: AxiosRequestConfig["baseURL"];
@@ -27,10 +28,12 @@ export const axiosBaseQuery = (): BaseQueryFn<FetchQueryArgs, unknown, unknown> 
                 data: response.data
             }
         } catch (axiosError) {
-            const error = axiosError as AxiosError;
+            const error = axiosError as AxiosError<ApiErrorResponse>;
             return {
-                status: error.status,
-                data: error.response?.data || error.message
+                error: {
+                    status: error.status,
+                    data: error.response?.data || error.message,
+                }
             }
         }
     } 

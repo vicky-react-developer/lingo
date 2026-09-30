@@ -32,7 +32,6 @@ exports.assignFaculty = async (req, res, next) => {
     return res.status(200).json({
       success: true,
       message: "Faculty assigned successfully",
-      data: assignment,
     });
   } catch (error) {
     next(error);

@@ -14,8 +14,9 @@ import {
 import Header from "../layouts/Header";
 import Footer from "../layouts/Footer";
 import ModeList from "../components/ModeList";
+import type { ParentModes } from "../types/common";
 
-const allModes = {
+const allModes: ParentModes = {
     chat: [
         {
             id: "normal",
@@ -83,7 +84,7 @@ export default function Modes() {
 
     const { category, categoryTitle } = location.state || {};
 
-    const handleNavigation = (mode) => {
+    const handleNavigation = (mode: string) => {
         switch (mode) {
             case "topic":
                 navigate("/topic");
@@ -131,7 +132,7 @@ export default function Modes() {
         }
     };
 
-    const modes = allModes[category];
+    const modes = allModes[category as keyof ParentModes];
 
     return (
         <div>

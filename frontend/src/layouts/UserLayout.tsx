@@ -7,7 +7,7 @@ export default function UserLayout() {
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
     return (
-        <div className="user-layout">
+        <div className="user-layout h-screen">
             <Sidebar
                 isOpen={sidebarOpen}
                 onClose={() => setSidebarOpen(false)}

@@ -1,17 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, type ChangeEvent } from "react";
 import { useImmer } from "use-immer";
 import { useNavigate, Link } from "react-router";
 import { validatePhone } from "../helpers/utils";
-import { registerUserApi } from "../services/authService";
 import Footer from "../layouts/Footer";
 import Field from "../components/Field";
 import SelectField from "../components/SelectField";
 import Button from "../components/Button";
+import type { RegisterFormData, RegisterPayload } from "../types/auth";
+import { useRegisterUserMutation } from "../state/api/auth.api";
+import { handleApiError } from "../services/apiService";
 
 const Register = () => {
   const navigate = useNavigate();
 
-  const [formData, setFormData] = useImmer({
+  const [registerUser, { isLoading: loading }] = useRegisterUserMutation();
+
+  const [formData, setFormData] = useImmer<RegisterFormData>({
     name: {
       label: "Name",
       value: "",
@@ -34,7 +38,7 @@ const Register = () => {
     },
     role: {
       label: "Role",
-      value: "",
+      value: "Student",
       type: "select",
       options: [
         { label: "Student", value: "Student" },
@@ -70,7 +74,7 @@ const Register = () => {
       label: "Phone Number",
       value: "",
       type: "number",
-      validation: (phone) => {
+      validation: (phone: string) => {
         if (!validatePhone(phone)) return "Enter a valid phone number";
         return null;
       },
@@ -89,62 +93,68 @@ const Register = () => {
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((draft) => {
-      draft[name].value = value;
+      draft[name as keyof RegisterFormData].value = value;
     });
     if (error) setError("");
     if (success) setSuccess("");
   };
 
   const validate = () => {
-    for (const key in formData) {
-      if (!formData[key].value) {
-        setError(`Please enter the ${formData[key].label}`);
+    let key: keyof RegisterFormData;
+
+    for (key in formData) {
+      const field = formData[key];
+
+      if (!field.value) {
+        setError(`Please enter the ${field.label}`);
         return false;
       }
-      if (
-        formData[key].validation &&
-        formData[key].validation(formData[key].value)
-      ) {
-        setError(formData[key].validation(formData[key].value));
-        return false;
+
+      if (field.validation) {
+        const validationError = field.validation(field.value);
+
+        if (validationError) {
+          setError(validationError);
+          return false;
+        }
       }
     }
+
     return true;
   };
 
-  const handleSubmit = async (e) => {
+
+  const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!validate()) return;
+    if (!validate()) return; 4
 
-    const payload = Object.keys(formData).reduce((acc, key) => {
-      acc[key] = formData[key].value;
-      return acc;
-    }, {});
+    const payload = Object.fromEntries(
+      Object.entries(formData).map(([key, field]) => [
+        key,
+        field.value,
+      ])
+    ) as RegisterPayload;
 
-    setLoading(true);
     setError("");
     setSuccess("");
 
     try {
-      const response = await registerUserApi(payload);
+      const response = await registerUser(payload).unwrap();
       setSuccess(response.message || "Registration successful! Redirecting to login...");
 
       setFormData((draft) => {
         Object.keys(draft).forEach((key) => {
-          draft[key].value = "";
+          draft[key as keyof RegisterFormData].value = "";
         });
       });
 
       setTimeout(() => navigate("/login"), 1800);
     } catch (err) {
-      setError(err.message || "Something went wrong. Please try again.");
-    } finally {
-      setLoading(false);
+      setError(handleApiError(err));
     }
   };
 
@@ -161,7 +171,7 @@ const Register = () => {
         <form onSubmit={handleSubmit}>
           <div className="max-h-[300px] overflow-y-scroll px-[5px] [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {Object.keys(formData).map((key) => {
-              const field = formData[key];
+              const field = formData[key as keyof RegisterFormData];
 
               switch (field.type) {
                 case "select":
@@ -173,7 +183,7 @@ const Register = () => {
                       name={key}
                       value={field.value}
                       onChange={handleChange}
-                      options={field.options}
+                      options={field.options!}
                     />
                   );
 
@@ -216,7 +226,7 @@ const Register = () => {
           </div>
         </form>
       </div>
-      <Footer style={{ background: "#030352", color: "#fff" }} />
+      <Footer backgroundColor="bg-[#030352]" textColor="text-white" />
     </div>
   );
 };

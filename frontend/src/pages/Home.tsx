@@ -10,10 +10,12 @@ import {
 import Header from "../layouts/Header";
 import Footer from "../layouts/Footer";
 import ModeList from "../components/ModeList";
+import type { Mode } from "../types/common";
+import type { OutletContext } from "../types/common";
 
 export default function Home() {
     const navigate = useNavigate();
-    const { setSidebarOpen } = useOutletContext();
+    const { setSidebarOpen } = useOutletContext<OutletContext>();
 
     const modes = [
         {
@@ -42,7 +44,7 @@ export default function Home() {
         }
     ];
 
-    const handleNavigation = (mode) => {
+    const handleNavigation = (mode: Mode) => {
         navigate("/modes", {
             state: {
                 category: mode.id,

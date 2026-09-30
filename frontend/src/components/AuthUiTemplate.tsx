@@ -3,7 +3,7 @@ import { ManSittingImg, LeftLeaf, RightLeaf, Logo } from "../helpers/Constants";
 
 export default function AuthUiTemplate({children}: {children: React.ReactNode}) {
     return (
-        <div className="w-full min-h-screen bg-white overflow-x-hidden font-['Montserrat']">
+        <div className="w-full h-full bg-white overflow-x-hidden font-['Montserrat']">
             {/* Header */}
             <div className="text-center pt-4">
                 <img src={Logo} alt="logo" className="w-[88px] h-[88px] block mx-auto mb-2" />
@@ -15,7 +15,7 @@ export default function AuthUiTemplate({children}: {children: React.ReactNode}) 
             </div>
 
             {/* Bottom card */}
-            <div className="bg-[#030352] mt-[105px] px-5 pb-[50px] rounded-t-[170px]">
+            <div className="bg-[#030352] mt-[105px] px-5 pb-[50px] rounded-t-[170px] h-full">
                 {/* Illustration */}
                 <div className="relative -top-[85px]">
                     <div>

@@ -2,7 +2,7 @@ import type { FetchDataParams } from '../../types/table';
 import type { PaginationResponse, DataResponse } from '../../types/common';
 import type { FacultyOptions } from '../../types/users';
 import type { User } from '../../types/users';
-import { API } from './apiConfig';
+import { API } from './config/apiConfig';
 import { api } from './api';
 
 export const facultiesApi = api.injectEndpoints({

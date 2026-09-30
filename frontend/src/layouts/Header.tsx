@@ -1,13 +1,13 @@
-import React from "react";
 import { useNavigate } from "react-router";
 import { Menu, ChevronLeft } from "lucide-react";
 import { Logo } from "../helpers/Constants";
+import type { Dispatch, SetStateAction } from "react";
 
 interface HeaderProps {
-    primaryTitle: string;
-    secondaryTitle: String;
-    onMenuToggle: () => void;
-    brandTitle: string
+    primaryTitle?: string;
+    secondaryTitle?: String;
+    onMenuToggle?: Dispatch<SetStateAction<boolean>>;
+    brandTitle?: boolean
 }
 
 export default function Header({ primaryTitle, secondaryTitle, onMenuToggle, brandTitle }: HeaderProps) {
@@ -54,7 +54,7 @@ export default function Header({ primaryTitle, secondaryTitle, onMenuToggle, bra
             {/* RIGHT */}
             <div className="min-w-10 flex justify-end z-10">
                 {brandTitle && (
-                    <button onClick={onMenuToggle} className="p-2" aria-label="Toggle menu">
+                    <button onClick={() => onMenuToggle?.(true)} className="p-2" aria-label="Toggle menu">
                         <Menu size={22} className="text-[#185FA5]" />
                     </button>
                 )}

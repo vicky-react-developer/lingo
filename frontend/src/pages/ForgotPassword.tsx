@@ -1,23 +1,25 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router";
 import { validatePhone } from "../helpers/utils";
-import { forgotPasswordApi } from "../services/authService";
-import AuthUiTemplate from "../components/AuthUITemplate";
+import AuthUiTemplate from "../components/AuthUiTemplate";
 import Field from "../components/Field";
 import Button from "../components/Button";
+import type { ForgotPasswordPayload } from "../types/auth";
+import { useForgotPasswordMutation } from "../state/api/auth.api";
+import { handleApiError } from "../services/apiService";
 
 export default function ForgotPassword() {
-  const [formData, setFormData] = useState({
+  const [forgotPassword, { isLoading: loading }] = useForgotPasswordMutation();
+  const [formData, setFormData] = useState<ForgotPasswordPayload>({
     userName: "",
     mobile: "",
     dob: "",
   });
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
     if (error) setError("");
@@ -25,7 +27,7 @@ export default function ForgotPassword() {
 
   const validate = () => {
     for (const key in formData) {
-      if (!formData[key]) {
+      if (!formData[key as keyof ForgotPasswordPayload]) {
         setError("Please fill all the fields");
         return false;
       }
@@ -40,18 +42,13 @@ export default function ForgotPassword() {
   const handleSubmit = async () => {
     if (!validate()) return;
 
-    setLoading(true);
     setError("");
 
     try {
-      // Server verifies identity and returns a short-lived reset token
-      const response = await forgotPasswordApi(formData);
-      // Pass the token to ResetPassword via navigation state (never in the URL)
+      const response = await forgotPassword(formData).unwrap();
       navigate("/reset-password", { state: { resetToken: response.resetToken } });
     } catch (err) {
-      setError(err.message || "Verification failed. Please try again.");
-    } finally {
-      setLoading(false);
+      setError(handleApiError(err));
     }
   };
 

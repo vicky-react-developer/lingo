@@ -22,6 +22,9 @@ export interface User {
 }
 
 export type Role = "Admin" | "Faculty" | "Student";
+export type NonAdminRole = Exclude<Role, "Admin">;
+
+export type Gender = "Male" | "Female" | "Other";
 
 export interface UpdateUserStatusPayload {
   userId: number,

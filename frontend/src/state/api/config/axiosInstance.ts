@@ -1,5 +1,5 @@
 import axios from "axios";
-import { userLogout } from "../../services/authService";
+import { userLogout } from "../../../services/authService";
 
 const axiosInstance = axios.create({ timeout: 10000});
 

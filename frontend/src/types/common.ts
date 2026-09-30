@@ -12,8 +12,18 @@ export interface DataResponse<T> {
 }
 
 export interface MessageResponse {
-    success: true;
+    success: boolean;
     message: string;
+}
+
+export interface ApiErrorResponse {
+    success: false;
+    message: string;
+}
+
+export interface RTKQueryError {
+    status: number;
+    data: string | ApiErrorResponse;
 }
 
 export interface Options {
@@ -27,3 +37,20 @@ export interface Mode {
     title: string;
     desc: string;
 }
+
+export type OutletContext = {
+    setSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export interface ParentModes {
+    chat: Mode[];
+    duolingo: Mode[];
+    story: Mode[];
+    functionalTasks: Mode[]
+}
+
+// export type MenuCategory = "duolingo" | "functionalTasks" | "story" | "chat";
+
+// export interface HomeMode extends Mode {
+//     id: MenuCategory;
+// }

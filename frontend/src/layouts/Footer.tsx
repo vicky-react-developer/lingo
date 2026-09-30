@@ -1,6 +1,6 @@
 interface FooterProps {
-  backgroundColor: string;
-  textColor: string;
+  backgroundColor?: string;
+  textColor?: string;
 }
 
 export default function Footer({ backgroundColor, textColor }: FooterProps) {

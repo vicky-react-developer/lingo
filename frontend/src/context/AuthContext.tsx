@@ -1,14 +1,15 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { getOneUser } from '../services/userService';
-import { userLogout, logoutUserApi } from '../services/authService';
+import { userLogout } from '../services/authService';
 import type { User } from '../types/users';
 import { getUser } from '../utils/auth';
+import { useLogoutUserMutation } from '../state/api/auth.api';
 
 interface AuthContextProps {
   token: string | null;
   user: User | null;
   isLoggedIn: boolean;
-  login: (newToken: string, userData?: null) => void;
+  login: (newToken: string, userData: User) => void;
   logout: () => Promise<void>;
   fetchUser: () => Promise<void>;
 }
@@ -20,6 +21,8 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
+  const [logoutUser] = useLogoutUserMutation();
+
   const [token, setToken] = useState(() => localStorage.getItem('token'));
   const [user, setUser] = useState<User | null>(getUser());
 
@@ -42,7 +45,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const isLoggedIn = !!token;
 
-  const login = (newToken: string, userData = null) => {
+  const login = (newToken: string, userData: User) => {
     localStorage.setItem('token', newToken);
     setToken(newToken);
     if (userData) {
@@ -53,7 +56,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const logout = async () => {
     try {
-      await logoutUserApi();
+      await logoutUser();
     } catch (e) {
       console.log("API logout error:", e);
     } finally {

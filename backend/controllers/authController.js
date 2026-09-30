@@ -85,7 +85,7 @@ const loginUser = async (req, res) => {
 
     const user = await User.findOne({ where: { userName } });
     if (!user) {
-      return res.status(400).json({ success: false, message: "Invalid username or password." });
+      return res.status(500).json({ success: false, message: "Invalid username or password." });
     }
 
     if (!user.isActive) {
@@ -155,7 +155,7 @@ const forgotPassword = async (req, res) => {
 
     await user.update({ resetTokenHash, resetTokenExpiresAt });
 
-    return res.status(200).json({ success: true, resetToken });
+    return res.status(200).json({ success: true, message: "Reset Token created successfully", resetToken });
   } catch (error) {
     console.error("Forgot password error:", error);
     return res.status(500).json({ success: false, message: "Internal server error." });

@@ -13,3 +13,4 @@ export interface NavButton {
     danger?: boolean; 
     onClick?: () => void
 }
+

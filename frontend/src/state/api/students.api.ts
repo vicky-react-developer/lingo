@@ -1,7 +1,7 @@
 import type { FetchDataParams } from '../../types/table';
-import type { PaginationResponse } from '../../types/common';
+import type { PaginationResponse, MessageResponse } from '../../types/common';
 import type { User, AssignFacultyPayload } from '../../types/users';
-import { API } from './apiConfig';
+import { API } from './config/apiConfig';
 import { api } from './api';
 
 export const studentsApi = api.injectEndpoints({
@@ -15,7 +15,7 @@ export const studentsApi = api.injectEndpoints({
             }),
             providesTags: ["Students"]
         }),
-        assignFaculty: builder.mutation<PaginationResponse<User>, AssignFacultyPayload>({
+        assignFaculty: builder.mutation<MessageResponse, AssignFacultyPayload>({
             query: ({ studentId, payload }) => ({
                 baseURL: API.admin,
                 url: `students/${studentId}/assign-faculty`,

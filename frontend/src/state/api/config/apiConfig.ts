@@ -1,4 +1,4 @@
-import { API_URL } from "../../helpers/Constants";
+import { API_URL } from "../../../helpers/Constants";
 
 export const API = {
     base: API_URL,

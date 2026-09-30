@@ -3,7 +3,7 @@ import Loader from "./Loader";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     children: React.ReactNode;
-    onClick: () => void,
+    onClick?: () => void,
     disabled?: boolean;
     loading: boolean;
     classNames?: string;
