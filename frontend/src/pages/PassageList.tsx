@@ -1,39 +1,20 @@
-import React, { useEffect, useState } from "react";
 import { BookOpen, ChevronRight } from "lucide-react";
-import { getPassages } from "../services/passageService";
 import { useNavigate, useLocation } from "react-router";
 import Header from "../layouts/Header";
 import DataState from "../components/DataState";
+import { useFetchPassagesQuery } from "../state/api/passage.api";
+import type { Passage } from "../types/passage";
 
 function PassageList() {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const [passages, setPassages] = useState([]);
-    const [loading, setLoading] = useState(true);
-
     const { type } = location?.state || {};
 
-    useEffect(() => {
-        fetchPassages();
-    }, [type]);
+    const { data, isLoading: loading } = useFetchPassagesQuery(type || "Q/A");
+    const passages = data?.data || [];
 
-    const fetchPassages = async () => {
-        try {
-            setLoading(true);
-            const res = await getPassages(type || "Q/A")
-            if (!res.success) {
-                return;
-            }
-            setPassages(res.data);
-        } catch (e) {
-            console.log("fetchPassages error", e)
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const onSelectPassage = (passage) => {
+    const onSelectPassage = (passage: Passage) => {
         if (type === "Translation") {
             navigate("/story-translation", {
                 state: {
@@ -48,7 +29,6 @@ function PassageList() {
                         passageId: passage.id,
                     },
                     info: {
-                        title: passage.title,
                         tamilText: passage.tamilText,
                     }
                 }
@@ -82,8 +62,6 @@ function PassageList() {
                                     <div>
 
                                         <div className="flex items-center gap-1.5 flex-wrap">
-
-                                            <h6 className="m-0 font-semibold">{passage.title}</h6>
 
                                             {(type === "Translation" && passage.Attempts?.length > 0) && (
                                                 <>

@@ -8,8 +8,11 @@ export const sessionApi = api.injectEndpoints({
         fetchsessions: builder.query<DataResponse<SessionResponse[]>, string>({
             query: (mode) => ({
                 baseURL: API.base,
-                url: `session/get-sessions/${mode}`,
-                method: "GET"
+                url: `session/get-sessions`,
+                method: "GET",
+                params: {
+                    mode
+                }
             })
         }),
         createSession: builder.mutation<DataResponse<{sessionId: number}>, SessionPayload>({

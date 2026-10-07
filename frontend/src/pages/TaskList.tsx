@@ -1,40 +1,17 @@
-import React, { useState, useEffect } from "react";
 import { CheckCircle2, BookOpen } from "lucide-react";
-import { getTasks } from "../services/functionalTaskservice";
 import { useLocation, useNavigate } from "react-router";
 import Header from "../layouts/Header";
 import DataState from "../components/DataState";
+import { useFetchTasksQuery } from "../state/api/functionalTask.api";
 
 export default function TaskList() {
     const location = useLocation();
     const navigate = useNavigate();
-
-    const [loading, setLoading] = useState(false);
-    const [tasks, setTasks] = useState([]);
-
     const { taskCategory } = location.state || {};
 
-    useEffect(() => {
-        if (taskCategory) {
-            fetchTasks();
-        }
-    }, [taskCategory])
+    const { data, isLoading: loading} = useFetchTasksQuery(taskCategory);
+    const tasks = data?.data || [];
 
-
-    const fetchTasks = async () => {
-        try {
-            setLoading(true);
-            const res = await getTasks(taskCategory)
-            if (!res.success) {
-                return;
-            }
-            setTasks(res.data);
-        } catch (e) {
-            console.log("fetchTasks err:", e)
-        } finally {
-            setLoading(false);
-        }
-    }
 
     return (
 
@@ -47,8 +24,8 @@ export default function TaskList() {
                 {tasks.length > 0 ?
                     <>
                         {tasks.map((task) => {
-                            const completed = task.Attempts?.length;
-                            const totalQuestions = task.FunctionalExercises?.length;
+                            const completed = task.completed;
+                            const totalQuestions = task.totalQuestions;
                             const progress = (completed / totalQuestions) * 100;
                             const isCompleted = completed === totalQuestions;
 
@@ -71,9 +48,8 @@ export default function TaskList() {
 
                                         </div>
 
-                                        <div className={`w-[45px] h-[45px] rounded-xl flex items-center justify-center ${
-                                            isCompleted ? "bg-[#e8fff2] text-[#00b26f]" : "bg-[#eaf9ff] text-[#00ccff]"
-                                        }`}>
+                                        <div className={`w-[45px] h-[45px] rounded-xl flex items-center justify-center ${isCompleted ? "bg-[#e8fff2] text-[#00b26f]" : "bg-[#eaf9ff] text-[#00ccff]"
+                                            }`}>
                                             {isCompleted ? <CheckCircle2 size={20} /> : <BookOpen size={20} />}
                                         </div>
 

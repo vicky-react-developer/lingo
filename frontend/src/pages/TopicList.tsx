@@ -1,39 +1,21 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { MessageCircle, ChevronRight } from "lucide-react";
-import { getTopics } from "../services/topicService";
 import { useNavigate, useLocation } from "react-router";
 import Header from "../layouts/Header";
 import DataState from "../components/DataState";
+import type { Topic } from "../types/topic";
+import { useFetchTopicsQuery } from "../state/api/topic.api";
 
 function TopicList() {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const [topics, setTopics] = useState([]);
-    const [loading, setLoading] = useState(false);
-
     const { type } = location.state || {};
 
-    useEffect(() => {
-        fetchTopics();
-    }, [type]);
+    const { data, isLoading: loading } = useFetchTopicsQuery(type === "duolingo" ? "Dual Language" : "Real-life Speaking");
+    const topics = data?.data || [];
 
-    const fetchTopics = async () => {
-        try {
-            setLoading(true);
-            const res = await getTopics(type === "duolingo" ? "Dual Language" : "Real-life Speaking")
-            if (!res.success) {
-                return;
-            }
-            setTopics(res.data);
-        } catch (e) {
-            console.log("fetchTopics error", e)
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const onSelectTopic = (topic) => {
+    const onSelectTopic = (topic: Topic) => {
         navigate("/chat", {
             state: {
                 sessionPayload: {
@@ -71,10 +53,7 @@ function TopicList() {
                                         </div>
 
                                         <div>
-
                                             <h6 className="m-0 font-semibold">{topic.title}</h6>
-
-                                            <p className="m-0 text-xs text-[#6c757d]">{topic.description}</p>
 
                                         </div>
 

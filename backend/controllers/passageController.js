@@ -6,22 +6,23 @@ const { askAI, getPrompt } = require("../services/gemini.service");
 exports.getAllPassages = async (req, res) => {
 
     try {
-        const { type } = req.query;
+        const { mode } = req.query;
         const { id: userId } = req.user;
 
         const passages = await Passage.findAll({
             where: {
-                mode: type
+                mode
             },
             attributes: ["id", "tamilText"],
             order: [["createdAt", "ASC"]],
-            ...(type === "Translation" ? {
+            ...(mode === "Translation" ? {
                 include: [
                     {
                         model: Attempt,
                         where: {
                             userId
                         },
+                        attributes: ["id", "score"],
                         required: false
                     }
                 ]

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { getOnePassage, submitPassageTranslation } from "../services/passageService";
-import { useLocation, useNavigate } from "react-router";
+import { useLocation } from "react-router";
 import Header from "../layouts/Header";
 import VoiceRecorder from "../components/VoiceRecorder";
 import Loader from "../components/Loader";
@@ -8,7 +8,6 @@ import useSpeech from "../hooks/useSpeech";
 
 export default function StoryTranslation() {
     const location = useLocation();
-    const navigate = useNavigate();
 
     const [translation, setTranslation] = useState("");
     const [passage, setPassage] = useState(null);

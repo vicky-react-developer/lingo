@@ -1,64 +1,41 @@
-import { useEffect, useState } from "react";
 import { Lightbulb, BookText, Circle } from "lucide-react";
 import Header from "../layouts/Header";
-import { getSessions } from "../services/sessionService";
 import { useNavigate, useLocation } from "react-router";
 import DataState from "../components/DataState";
+import type { ChatExtraInfo } from "../types/chat";
+import { useFetchsessionsQuery } from "../state/api/session.api";
+import type { SessionResponse } from "../types/chat";
 
 export default function ChatHistory() {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const [sessions, setSessions] = useState([]);
-    const [loading, setLoading] = useState(false);
-
     const { mode, modeTitle } = location.state || {}
 
-    useEffect(() => {
-        if (mode) {
-            fetchSessions();
-        }
-    }, [mode]);
+    const { data, isLoading: loading } = useFetchsessionsQuery(mode);
+    const sessions = data?.data || [];
 
-    const fetchSessions = async () => {
-        try {
-            setLoading(true);
-            const response = await getSessions(mode);
-            if (response?.success) {
-                setSessions(response?.data);
-            }
-        } catch (e) {
-            console.log("Error while fetching sessions", e)
-        }
-        finally {
-            setLoading(false);
-        }
-    };
-
-    const getModeIcon = (mode) => {
+    const getModeIcon = (mode: string) => {
         if (mode === "topic") return <Lightbulb size={18} className="text-[#f0ad4e]" />;
         if (mode === "passage") return <BookText size={18} className="text-[#0d6efd]" />;
         return <Circle size={18} className="text-[#adb5bd]" />;
     };
 
-    const getTitle = (session) => {
+    const getTitle = (session: SessionResponse) => {
         if (session.mode === "topic") return session.Topic?.title;
-        if (session.mode === "passage") return session.Passage?.title;
+        // if (session.mode === "passage") return session.Passage?.title;
 
         return modeTitle;
     };
 
-    const handleNavigation = (session) => {
-        console.log("check", session)
-        const info = {};
+    const handleNavigation = (session: SessionResponse) => {
+        const info: ChatExtraInfo = {};
         switch (session.mode) {
             case "topic":
-                info.title = session.Topic.title;
-                info.description = session.Topic.description;
+                info.title = session.Topic?.title;
                 break;
             case "passage":
-                info.title = session.Passage.title;
-                info.tamilText = session.Passage.tamilText;
+                info.tamilText = session.Passage?.tamilText;
                 break;
             default:
                 break;

@@ -37,12 +37,12 @@ exports.getSessions = async (req, res) => {
             include: [
                 {
                     model: Topic,
-                    attributes: ["title", "description"]
+                    attributes: ["title"]
 
                 },
                 {
                     model: Passage,
-                    attributes: ["title", "tamilText"]
+                    attributes: ["tamilText"]
 
                 },
                 {
@@ -52,7 +52,7 @@ exports.getSessions = async (req, res) => {
                     attributes: ["text"]
                 }
             ],
-            attributes: ["id", "mode"]
+            attributes: ["id", "mode", "updatedAt"]
         });
         return res.status(200).json({
             success: true,

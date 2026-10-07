@@ -1,30 +1,69 @@
 const db = require("../models");
 const { askAI, getPrompt } = require("../services/gemini.service");
+const { Sequelize } = require("sequelize");
 
-const { FunctionalTask, FunctionalExercise, TamilSentence, Attempt, WordTask } = db;
+const { FunctionalTask, FunctionalExercise, Attempt } = db;
 
 exports.getTasks = async (req, res) => {
-
     try {
-
         const { category } = req.query;
+        const userId = req.user.id;
 
         const tasks = await FunctionalTask.findAll({
             where: {
                 category
             },
+
+            attributes: [
+                "id",
+                "type",
+                "title",
+
+                [
+                    Sequelize.fn(
+                        "COUNT",
+                        Sequelize.fn(
+                            "DISTINCT",
+                            Sequelize.col("Attempts.id")
+                        )
+                    ),
+                    "completed"
+                ],
+
+                [
+                    Sequelize.fn(
+                        "COUNT",
+                        Sequelize.fn(
+                            "DISTINCT",
+                            Sequelize.col("FunctionalExercises.id")
+                        )
+                    ),
+                    "totalQuestions"
+                ]
+            ],
+
             include: [
                 {
                     model: Attempt,
+                    attributes: [],
+                    required: false,
                     where: {
-                        userId: req.user.id,
-                    },
-                    required: false
+                        userId
+                    }
                 },
                 {
-                    model: FunctionalExercise
+                    model: FunctionalExercise,
+                    attributes: [],
+                    required: false
                 }
             ],
+
+            group: [
+                "FunctionalTask.id",
+                "FunctionalTask.type",
+                "FunctionalTask.title"
+            ],
+
             order: [["id", "ASC"]]
         });
 
@@ -34,15 +73,15 @@ exports.getTasks = async (req, res) => {
         });
 
     } catch (e) {
-
         console.log("getTasks error", e);
 
         return res.status(500).json({
             success: false
         });
-
     }
 };
+
+
 
 exports.getFunctionalExercises = async (req, res) => {
 

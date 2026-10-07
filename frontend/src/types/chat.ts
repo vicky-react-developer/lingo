@@ -1,7 +1,7 @@
 export type ChatMode = "normal" | "duolingoChat" | "topic" | "duolingoTopic" | "passage" | "passageTranslation";
 
 export interface ChatExtraInfo {
-    title: string;
+    title?: string;
     tamilText?: string;
 }
 
@@ -49,11 +49,9 @@ interface SessionMessage {
 
 interface SessionTopic {
   title: string;
-  description: string;
 }
 
 interface SessionPassage {
-  title: string;
   tamilText: string;
 }
 
