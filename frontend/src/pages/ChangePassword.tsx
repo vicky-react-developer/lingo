@@ -1,32 +1,53 @@
 import { useState } from "react";
 import { Lock, Eye, EyeOff, ShieldAlert, ShieldCheck, CheckCircle2, AlertCircle } from "lucide-react";
-import { changeUserPassword } from "../services/userService";
 import Header from "../layouts/Header";
 import Field from "../components/Field";
 import Button from "../components/Button";
+import { useChangePasswordMutation } from "../state/api/user.api";
+import { handleApiError } from "../services/apiService";
+
+interface PasswordForm {
+    currentPassword: string;
+    newPassword: string;
+    confirmPassword: string;
+}
+
+interface PasswordVisibleState {
+    currentPassword: boolean;
+    newPassword: boolean;
+    confirmPassword: boolean;
+}
+
+interface PasswordField {
+    label: string;
+    name: keyof PasswordForm;
+    hint: string | null;
+}
+
 
 export default function ChangePassword() {
-    const [form, setForm] = useState({
+    const [changepassword, { isLoading: loading }] = useChangePasswordMutation();
+
+    const [form, setForm] = useState<PasswordForm>({
         currentPassword: "",
         newPassword: "",
         confirmPassword: "",
     });
-    const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState("");
     const [error, setError] = useState("");
-    const [showPasswords, setShowPasswords] = useState({
+    const [showPasswords, setShowPasswords] = useState<PasswordVisibleState>({
         currentPassword: false,
         newPassword: false,
         confirmPassword: false,
     });
 
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
         setError("");
         setSuccess("");
     };
 
-    const toggleVisibility = (name) => {
+    const toggleVisibility = (name: keyof PasswordForm) => {
         setShowPasswords(prev => ({ ...prev, [name]: !prev[name] }));
     };
 
@@ -52,15 +73,14 @@ export default function ChangePassword() {
             return;
         }
 
-        setLoading(true);
         setError("");
         setSuccess("");
 
         try {
-            const res = await changeUserPassword({
+            const res = await changepassword({
                 currentPassword: form.currentPassword,
                 newPassword: form.newPassword,
-            });
+            }).unwrap();
 
             if (res?.success) {
                 setSuccess("Password changed successfully!");
@@ -69,19 +89,17 @@ export default function ChangePassword() {
                 setError(res?.message || "Failed to change password. Please try again.");
             }
         } catch (e) {
-            setError(e.message || "Failed to change password. Please try again.");
-        } finally {
-            setLoading(false);
+            setError(handleApiError(e));
         }
     };
 
-    const fields = [
+    const fields: PasswordField[] = [
         { label: "Current Password", name: "currentPassword", hint: null },
         { label: "New Password", name: "newPassword", hint: "Minimum 6 characters" },
         { label: "Confirm New Password", name: "confirmPassword", hint: null },
     ];
 
-    const getStrength = (pwd) => {
+    const getStrength = (pwd: string) => {
         if (!pwd) return null;
         if (pwd.length < 6) return { label: "Too short", color: "#E53935", width: "20%" };
         if (pwd.length < 8) return { label: "Weak", color: "#FB8C00", width: "40%" };
@@ -123,8 +141,8 @@ export default function ChangePassword() {
 
                 {/* Card */}
                 <div className="bg-white rounded-2xl px-5 py-6 shadow-[0_1px_6px_rgba(0,0,0,0.07)]">
-                    {fields.map((field) => (
-                        <div key={field.name} className="mb-4">
+                    {fields.map((field, index) => (
+                        <div key={index} className="mb-4">
                             <div className="relative">
                                 <Field
                                     variant="soft"
@@ -172,7 +190,7 @@ export default function ChangePassword() {
                     ))}
 
                     <Button
-                        variant="primary"
+                        // variant="primary"
                         onClick={handleSubmit}
                         disabled={loading}
                         loading={loading}

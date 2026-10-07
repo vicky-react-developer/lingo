@@ -27,7 +27,7 @@ function PassageList() {
             }
             setPassages(res.data);
         } catch (e) {
-            console.log("createSession error", e)
+            console.log("fetchPassages error", e)
         } finally {
             setLoading(false);
         }

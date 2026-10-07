@@ -8,7 +8,7 @@ export interface PaginationResponse<T> {
 
 export interface DataResponse<T> {
     success: boolean;
-    data: T[],
+    data: T,
 }
 
 export interface MessageResponse {

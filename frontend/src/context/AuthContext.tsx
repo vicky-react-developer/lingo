@@ -1,17 +1,16 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getOneUser } from '../services/userService';
 import { userLogout } from '../services/authService';
 import type { User } from '../types/users';
 import { getUser } from '../utils/auth';
 import { useLogoutUserMutation } from '../state/api/auth.api';
+import { useFetchCurrentUserQuery } from '../state/api/user.api';
 
 interface AuthContextProps {
   token: string | null;
-  user: User | null;
+  user: User | undefined;
   isLoggedIn: boolean;
   login: (newToken: string, userData: User) => void;
   logout: () => Promise<void>;
-  fetchUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextProps | null>(null);
@@ -24,24 +23,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [logoutUser] = useLogoutUserMutation();
 
   const [token, setToken] = useState(() => localStorage.getItem('token'));
-  const [user, setUser] = useState<User | null>(getUser());
 
-  useEffect(() => {
-    if (token) {
-      fetchUser();
-    }
-  }, [token]);
-
-  const fetchUser = async () => {
-    try {
-      const res = await getOneUser();
-      if (res?.success) {
-        setUser(res?.data);
-      }
-    } catch (e) {
-      console.log("fetchUser error:", e);
-    }
-  };
+  const { data } = useFetchCurrentUserQuery(undefined, { skip: !token });
 
   const isLoggedIn = !!token;
 
@@ -50,7 +33,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     setToken(newToken);
     if (userData) {
       localStorage.setItem('user', JSON.stringify(userData));
-      setUser(userData);
     }
   };
 
@@ -62,12 +44,12 @@ export function AuthProvider({ children }: AuthProviderProps) {
     } finally {
       userLogout();         // clears localStorage
       setToken(null);
-      setUser(null);
+      // setUser(null);
     }
   };
 
   return (
-    <AuthContext.Provider value={{ token, user, isLoggedIn, login, logout, fetchUser }}>
+    <AuthContext.Provider value={{ token, user: data?.data, isLoggedIn, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

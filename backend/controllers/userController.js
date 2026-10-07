@@ -11,7 +11,14 @@ exports.getOneUser = async (req, res) => {
 
         const user = await User.findOne({
             where: { id },
-            attributes: ["name", "fatherName", "gender", "role", "dateOfBirth", "qualification", "organisation", "address", "place", "phoneNumber", "userName"]
+            attributes: {
+                exclude: [
+                    "passwordHash",
+                    "tokenHash",
+                    "resetTokenHash",
+                    "resetTokenExpiresAt",
+                ]
+            },
         });
 
         if (!user) {
@@ -87,14 +94,9 @@ exports.updateUserProfile = async (req, res) => {
             { where: { id: userId } }
         );
 
-        const updatedUser = await User.findByPk(userId, {
-            attributes: { exclude: ["password"] },
-        });
-
         return res.status(200).json({
             success: true,
             message: "Profile updated successfully.",
-            user: updatedUser,
         });
     } catch (error) {
         console.error("updateUserProfile error:", error);

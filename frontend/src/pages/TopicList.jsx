@@ -27,7 +27,7 @@ function TopicList() {
             }
             setTopics(res.data);
         } catch (e) {
-            console.log("createSession error", e)
+            console.log("fetchTopics error", e)
         } finally {
             setLoading(false);
         }

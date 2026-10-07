@@ -27,14 +27,16 @@ export const authApi = api.injectEndpoints({
                 url: `auth/login`,
                 method: "POST",
                 data: payload
-            })
+            }),
+            invalidatesTags: ["Profile"]
         }),
         logoutUser: builder.mutation<MessageResponse, void>({
             query: () => ({
                 baseURL: API.base,
                 url: `auth/logout`,
                 method: "POST",
-            })
+            }),
+            invalidatesTags: ["Profile"]
         }),
         forgotPassword: builder.mutation<ForgotPasswordResponse, ForgotPasswordPayload>({
             query: (payload) => ({

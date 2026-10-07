@@ -1,6 +1,6 @@
 export default function useSpeech() {
 
-  const speak = (text: string, callback: () => void) => {
+  const speak = (text: string, callback?: () => void) => {
 
     speechSynthesis.cancel(); // stop any existing speech
 

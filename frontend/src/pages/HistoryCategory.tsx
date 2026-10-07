@@ -9,37 +9,38 @@ import {
     Target,
 } from "lucide-react";
 import ModeList from "../components/ModeList";
+import type { Mode } from "../types/common";
 
 export default function HistoryCategory() {
     const navigate = useNavigate();
 
-    const categories = [
+    const categories: Mode[] = [
         {
-            mode: "normal",
+            id: "normal",
             icon: MessageCircle,
             title: "Free Conversation",
             desc: "Practice natural English conversations."
         },
         {
-            mode: "topic",
+            id: "topic",
             icon: Lightbulb,
             title: "Topic Conversation",
             desc: "Speak about a chosen topic."
         },
         {
-            mode: "passage",
+            id: "passage",
             icon: MessageSquareText,
             title: "Story Q & A",
             desc: "Answer questions from stories."
         },
         {
-            mode: "duolingoChat",
+            id: "duolingoChat",
             icon: Heart,
             title: "Dual Language Chat",
             desc: "Speak Tamil, then English."
         },
         {
-            mode: "duolingoTopic",
+            id: "duolingoTopic",
             icon: Target,
             title: "Dual Language Topic",
             desc: "Discuss topics in two languages."
@@ -58,7 +59,7 @@ export default function HistoryCategory() {
                 onSelect={(item) =>
                     navigate("/chat-history", {
                         state: {
-                            mode: item.mode,
+                            mode: item.id,
                             modeTitle: item.title
                         }
                     })

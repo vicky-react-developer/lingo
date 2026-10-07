@@ -1,7 +1,7 @@
-import type { MessageResponse } from '../../types/common';
-import type { UpdateUserStatusPayload } from '../../types/users';
-import { API } from './config/apiConfig';
-import { api } from './api';
+import type { MessageResponse } from '../../../types/common';
+import type { UpdateUserStatusPayload } from '../../../types/users';
+import { API } from '../config/apiConfig';
+import { api } from '../api';
 
 export const usersApi = api.injectEndpoints({
     endpoints: (builder) => ({

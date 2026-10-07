@@ -6,9 +6,9 @@ import type { User } from "../../types/users";
 import type { Column } from "../../types/table";
 import { formatSelectOptions } from "../../utils/format";
 import DataTable from "../../components/DataTable";
-import { useFetchStudentsQuery, useAssignFacultyMutation } from "../../state/api/students.api";
-import { useFetchFacultiesOptionsQuery } from "../../state/api/faculties.api";
-import { useActivateUserMutation } from "../../state/api/users.api";
+import { useFetchStudentsQuery, useAssignFacultyMutation } from "../../state/api/adminApi/students.api";
+import { useFetchFacultiesOptionsQuery } from "../../state/api/adminApi/faculties.api";
+import { useActivateUserMutation } from "../../state/api/adminApi/users.api";
 
 const ACTIVE_OPTIONS = [
   { value: "true", label: "Active" },

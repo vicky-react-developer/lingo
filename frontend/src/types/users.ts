@@ -45,3 +45,22 @@ export interface FacultyOptions {
   id: number;
   name: string
 }
+
+export interface ChangePasswordPayload {
+  currentPassword: string;
+  newPassword: string;
+}
+
+export interface UserProfile {
+  name: string;
+  fatherName: string;
+  userName: string;
+  phoneNumber: string;
+  dateOfBirth: string;
+  qualification: string;
+  organisation: string;
+  place: string;
+  address: string;
+  gender: string;
+  role: string;
+}

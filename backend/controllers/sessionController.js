@@ -4,15 +4,17 @@ const { ChatSession, Topic, Passage, Message } = db;
 exports.createSession = async (req, res) => {
     try {
         const { id } = req.user;
-        const { payload } = req.body;
-                console.log("getSessions", payload)
+        const payload  = req.body;
+
         const session = await ChatSession.create({
             userId: id,
             ...payload
         });
         return res.status(200).json({
             success: true,
-            session
+            data: {
+                sessionId: session.id
+            }
         });
     } catch (e) {
         console.log("createSession error:", e);
@@ -34,17 +36,23 @@ exports.getSessions = async (req, res) => {
             },
             include: [
                 {
-                    model: Topic
+                    model: Topic,
+                    attributes: ["title", "description"]
+
                 },
                 {
-                    model: Passage
+                    model: Passage,
+                    attributes: ["title", "tamilText"]
+
                 },
                 {
                     model: Message,
                     limit: 1,
-                    order: [["createdAt", "DESC"]]
+                    order: [["createdAt", "DESC"]],
+                    attributes: ["text"]
                 }
             ],
+            attributes: ["id", "mode"]
         });
         return res.status(200).json({
             success: true,

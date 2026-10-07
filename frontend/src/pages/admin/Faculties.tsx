@@ -5,8 +5,8 @@ import { Avatar } from "../../components/StudentBadges";
 import { ageFromDob } from "../../utils/format";
 import { GenderMark } from "../../components/StudentBadges";
 import SelectField from "../../components/SelectField";
-import { useFetchFacultiesQuery } from "../../state/api/faculties.api";
-import { useActivateUserMutation } from "../../state/api/users.api";
+import { useFetchFacultiesQuery } from "../../state/api/adminApi/faculties.api";
+import { useActivateUserMutation } from "../../state/api/adminApi/users.api";
 
 const ACTIVE_OPTIONS = [
     { value: "true", label: "Active" },

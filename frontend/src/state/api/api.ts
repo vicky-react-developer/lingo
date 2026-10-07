@@ -8,6 +8,8 @@ export const api = createApi({
     tagTypes: [
         "Students",
         "Faculties",
+        "Profile",
+        "Chats"
     ],
 
     endpoints: () => ({}),

@@ -1,4 +1,3 @@
-import { getAllMessages, initiateConversation, saveMessage } from "../services/messageService";
 import { useEffect, useRef, useState } from "react";
 import { Send } from "lucide-react";
 
@@ -6,30 +5,45 @@ import ChatWindow from "../components/ChatWindow";
 import ContextBanner from "../components/ContextBanner";
 import Header from "../layouts/Header";
 import VoiceRecorder from "../components/VoiceRecorder";
-import { createSession } from "../services/sessionService";
 import { useLocation } from 'react-router';
 import useSpeech from "../hooks/useSpeech";
+import type {
+  MessageStructure,
+  StartConvo
+} from "../types/chat";
+import { useCreateSessionMutation } from "../state/api/session.api";
+import {
+  useFetchMessagesQuery,
+  useSaveMessageMutation,
+  useInitiateConversationMutation
+} from "../state/api/chat.api";
 
 export default function ChatPage() {
+  const [createSession] = useCreateSessionMutation();
+  const [initiateConversation] = useInitiateConversationMutation();
+  const [saveMessage] = useSaveMessageMutation();
 
-  const [messages, setMessages] = useState([]);
-  const [sessionId, setSessionId] = useState(null);
+  const chatEndRef = useRef<HTMLDivElement | null>(null);
+  const location = useLocation();
+
+  // const [messages, setMessages] = useState<MessageStructure[]>([]);
+  const [sessionId, setSessionId] = useState<number | null>(null);
   const [text, setText] = useState("");
   const [listening, setListening] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const { speak, stop, speakTamil } = useSpeech();
 
-  const chatEndRef = useRef(null);
-  const location = useLocation();
-
   const { sessionPayload, info } = location?.state || {};
 
+  const { data } = useFetchMessagesQuery(sessionId!, { skip: !sessionId });
+
+
   const isDuolingo = sessionPayload?.mode?.startsWith("duolingo");
+  const messages = data?.data ?? [];
 
   useEffect(() => {
     if (sessionPayload?.sessionId) {
       setSessionId(sessionPayload.sessionId);
-      fetchAllMessages(sessionPayload.sessionId)
     } else {
       createCurrentSession();
     }
@@ -45,30 +59,16 @@ export default function ChatPage() {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const fetchAllMessages = async (sessionId) => {
-    try {
-      const res = await getAllMessages(sessionId);
-
-      if (!res.success) {
-        alert("Something went wrong");
-      }
-
-      setMessages(res.data);
-
-    } catch (e) {
-      console.log("createSession error", e);
-    }
-  }
 
   const createCurrentSession = async () => {
     try {
-      const res = await createSession(sessionPayload ?? { mode: "normal" });
+      const res = await createSession(sessionPayload ?? { mode: "normal" }).unwrap();
 
       if (!res.success) {
         alert("Something went wrong");
       }
 
-      const sessionId = res.session.id
+      const sessionId = res.data.sessionId;
 
       setSessionId(sessionId);
 
@@ -79,24 +79,23 @@ export default function ChatPage() {
     }
   };
 
-  const startConvo = async (sessionId, payload) => {
+  const startConvo = async (sessionId: number, payload: StartConvo) => {
     setIsTyping(true);
-
     try {
-      const res = await initiateConversation(sessionId, payload);
-
-      if (!res.success) {
-        alert("Something went wrong");
+      const data = {
+        sessionId,
+        otherInfo: payload
       }
+      const res = await initiateConversation(data).unwrap();
 
-      const aiReply = res.reply;
+      const aiReply = res.aiReply;
 
-      setMessages([
-        {
-          sender: "ai",
-          text: res.reply
-        }
-      ]);
+      // setMessages([
+      //   {
+      //     sender: "ai",
+      //     text: res.aiReply
+      //   }
+      // ]);
 
       if (isDuolingo) {
         speakDuolingo(aiReply)
@@ -111,7 +110,7 @@ export default function ChatPage() {
     }
   };
 
-  const speakDuolingo = (reply) => {
+  const speakDuolingo = (reply: string) => {
     const parts = reply
       .replace(/\r\n/g, "\n")
       .split(/\n\s*\n/);
@@ -130,28 +129,34 @@ export default function ChatPage() {
     });
   };
 
-  const sendMessage = async (messageText) => {
+  const sendMessage = async (messageText: string) => {
     if (!messageText.trim()) return;
 
     stop();
-    setMessages(prev => [
-      ...prev,
-      { sender: "user", text: messageText }
-    ]);
+    // setMessages(prev => [
+    //   ...prev,
+    //   { sender: "user", text: messageText }
+    // ]);
 
     setIsTyping(true); // Set typing to true
 
+    const data = {
+      sessionId: sessionId!,
+      text: messageText,
+      otherInfo:  {...sessionPayload, ...info }
+    } 
+
     try {
-      const res = await saveMessage(sessionId, messageText, { ...sessionPayload, ...info });
-      const { aiReply, correction } = res;
+      const res = await saveMessage(data).unwrap();
+      const { aiReply } = res;
 
-      const aiMessage = {
-        sender: "ai",
-        text: aiReply,
-        correction
-      };
+      // const aiMessage: MessageStructure = {
+      //   sender: "ai",
+      //   text: aiReply,
+      //   Correction
+      // };
 
-      setMessages(prev => [...prev, aiMessage]);
+      // setMessages(prev => [...prev, aiMessage]);
       if (isDuolingo) {
         speakDuolingo(aiReply)
       } else {
@@ -169,13 +174,13 @@ export default function ChatPage() {
     setText("");
   };
 
-  const handleKeyDown = (event) => {
+  const handleKeyDown = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter') {
       handleSubmit();
     }
   };
 
-  const handleVoice = (value) => {
+  const handleVoice = (value: string) => {
     if (isDuolingo) {
       setText(prev => prev + value + "\n");
     } else {

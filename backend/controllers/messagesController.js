@@ -56,7 +56,7 @@ exports.saveMessage = async (req, res) => {
 
         return res.json({
             aiReply: ai.reply,
-            correction
+            Correction: correction
         });
 
     } catch (e) {
@@ -81,7 +81,7 @@ exports.initiateCoversation = async (req, res) => {
             text: ai.reply
         });
 
-        res.json({ success: true, reply: ai.reply });
+        res.json({ aiReply: ai.reply });
 
     } catch (e) {
         console.log("initiateCoversation err", e)
@@ -107,23 +107,6 @@ exports.getAllMessages = async (req, res) => {
             order: [["id", "ASC"]],
             attributes: ["sender", "text"]
         });
-
-        // messages = messages.map((item) => {
-        //     const itemJSON = item.toJSON();
-        //     const payload = {
-        //         sender: itemJSON.sender,
-        //         text: itemJSON.text,
-        //     }
-        //     if (itemJSON.Correction) {
-        //         const { wrongText, correctedText, explanation } = itemJSON.Correction;
-        //         payload.correction = {
-        //             wrongText,
-        //             correctedText,
-        //             explanation
-        //         }
-        //     }
-        //     return payload;
-        // })
 
         return res.json({ success: true, data: messages });
 

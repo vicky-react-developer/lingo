@@ -3,7 +3,7 @@ import type { Mode } from "../types/common";
 interface ModeListProps {
   modes: Mode[]
   onSelect: (mode: Mode) => void;
-  background: string
+  background?: string
 }
 
 export default function ModeList({ modes, onSelect, background }: ModeListProps) {

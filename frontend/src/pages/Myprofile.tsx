@@ -4,13 +4,33 @@ import {
     IdCard, Briefcase, Home, CheckCircle2, AlertCircle, Pencil, Check,
 } from "lucide-react";
 import { useAuth } from "../context/AuthContext";
-import { updateUserProfile } from "../services/userService";
 import Header from "../layouts/Header";
 import Field from "../components/Field";
 import SelectField from "../components/SelectField";
 import Button from "../components/Button";
+import type { UserProfile } from "../types/users";
+import { useUpdateProfileMutation } from "../state/api/user.api";
+import { handleApiError } from "../services/apiService";
 
-const FIELD_CONFIG = [
+interface ProfileField {
+  label: string;
+  name: keyof Omit<UserProfile, "address" | "gender" | "role">;
+  type: "text" | "tel" | "date";
+  icon: React.ElementType;
+  required: boolean;
+}
+
+interface SelectFieldType {
+  label: string;
+  name: keyof Pick<UserProfile, "gender" | "role">;
+  icon: React.ElementType;
+  required: boolean;
+  options: readonly string[];
+}
+
+
+
+const FIELD_CONFIG: ProfileField[] = [
     { label: "Full Name", name: "name", type: "text", icon: User, required: true },
     { label: "Father's Name", name: "fatherName", type: "text", icon: Contact, required: true },
     { label: "Username", name: "userName", type: "text", icon: AtSign, required: true },
@@ -21,7 +41,7 @@ const FIELD_CONFIG = [
     { label: "Place", name: "place", type: "text", icon: MapPin, required: true },
 ];
 
-const SELECT_FIELDS = [
+const SELECT_FIELDS: SelectFieldType[] = [
     {
         label: "Gender", name: "gender", icon: IdCard, required: true,
         options: ["Male", "Female", "Other"]
@@ -33,19 +53,27 @@ const SELECT_FIELDS = [
 ];
 
 const EMPTY_FORM = {
-    name: "", fatherName: "", userName: "", phoneNumber: "",
-    dateOfBirth: "", qualification: "", organisation: "",
-    place: "", address: "", gender: "", role: "",
+    name: "",
+    fatherName: "",
+    userName: "",
+    phoneNumber: "",
+    dateOfBirth: "",
+    qualification: "",
+    organisation: "",
+    place: "",
+    address: "",
+    gender: "",
+    role: "",
 };
 
 export default function MyProfile() {
-    const { user, fetchUser } = useAuth();
+    const [updateProfile, {isLoading: loading}] = useUpdateProfileMutation();
+    const { user } = useAuth();
 
     const [editing, setEditing] = useState(false);
-    const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState("");
     const [error, setError] = useState("");
-    const [form, setForm] = useState(EMPTY_FORM);
+    const [form, setForm] = useState<UserProfile>(EMPTY_FORM);
 
     useEffect(() => {
         if (user) {
@@ -66,7 +94,7 @@ export default function MyProfile() {
         }
     }, [user]);
 
-    const handleChange = (e) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         setForm({ ...form, [e.target.name]: e.target.value });
         setError("");
         setSuccess("");
@@ -74,13 +102,13 @@ export default function MyProfile() {
 
     const handleSave = async () => {
         for (const f of FIELD_CONFIG) {
-            if (f.required && !form[f.name]?.trim()) {
+            if (f.required && !form[f.name as keyof UserProfile]?.trim()) {
                 setError(`${f.label} is required.`);
                 return;
             }
         }
         for (const f of SELECT_FIELDS) {
-            if (f.required && !form[f.name]) {
+            if (f.required && !form[f.name as keyof UserProfile]) {
                 setError(`${f.label} is required.`);
                 return;
             }
@@ -90,7 +118,6 @@ export default function MyProfile() {
             return;
         }
 
-        setLoading(true);
         setError("");
         setSuccess("");
 
@@ -109,19 +136,15 @@ export default function MyProfile() {
                 role: form.role,
             };
 
-            const res = await updateUserProfile(payload);
+            const res = await updateProfile(payload).unwrap();
             if (res?.success) {
                 setSuccess("Profile updated successfully!");
                 setEditing(false);
-                if (fetchUser) fetchUser();
             } else {
                 setError(res?.message || "Update failed. Please try again.");
             }
         } catch (e) {
-            setError(e.message || "Update failed. Please try again.");
-        } finally {
-            setLoading(false);
-            window.scrollTo(0, 0);
+            setError(handleApiError(e));
         }
     };
 
@@ -161,7 +184,6 @@ export default function MyProfile() {
                     </div>
                     <div className="font-semibold text-lg text-[#1a1a1a]">{user?.name}</div>
                     <div className="text-[13px] text-[#888] mt-[3px]">@{user?.userName}</div>
-                    <div className="text-xs text-[#aaa] mt-0.5">{user?.email}</div>
                     <span className="mt-2 inline-block px-3 py-[3px] rounded-[20px] bg-[#E6F1FB] text-[#185FA5] text-xs font-semibold">
                         {user?.role || "Student"}
                     </span>
