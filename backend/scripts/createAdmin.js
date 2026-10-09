@@ -21,7 +21,8 @@ async function createAdmin() {
       name: "Super Admin",
       role: "Admin",
       userName: "superadmin",
-      passwordHash
+      passwordHash,
+      isActive: true
     });
 
     console.log("Admin created successfully");
