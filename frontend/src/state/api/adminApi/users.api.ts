@@ -12,7 +12,7 @@ export const usersApi = api.injectEndpoints({
                 method: "PATCH",
                 data: payload
             }),
-            invalidatesTags: (_result, _error, { payload }) => payload.role === "Students" ? ["Students"] : ["Faculties"]
+            invalidatesTags: (_result, _error, { payload }) => payload.role === "Student" ? ["Students"] : ["Faculties"]
         })
     })
 });

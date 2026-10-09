@@ -9,7 +9,7 @@ const updateUserStatus = async (id, isActive, role) => {
     });
 
     if (!user) {
-        const error = new Error(`${role} not found with this id ${role}`);
+        const error = new Error(`${role} not found with this id ${id}`);
         error.statusCode = 404;
         throw error;
     }

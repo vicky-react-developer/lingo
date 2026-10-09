@@ -25,7 +25,7 @@ export default function StudentDirectory() {
   };
 
   const handleActiveChange = async (userId: number, activeValue: string) => {
-    activateUser({ userId, payload: { isActive: activeValue === "true", role: "Students" } });
+    activateUser({ userId, payload: { isActive: activeValue === "true", role: "Student" } });
   };
 
   const facultyOptions = useMemo(() => {
