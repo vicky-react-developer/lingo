@@ -10,7 +10,9 @@ export const api = createApi({
         "Faculties",
         "Profile",
         "Chats",
-        "FunctionalTasks"
+        "FunctionalTasks",
+        "FunctionalExercises",
+        "Passages"
     ],
 
     endpoints: () => ({}),

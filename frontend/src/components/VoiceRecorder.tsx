@@ -3,7 +3,7 @@ import { TamilMic, EnglishMic } from "../helpers/Constants";
 
 interface VoiceRecorderProps {
   onText: (text: string) => void;
-  language: string;
+  language?: string;
 }
 
 export default function VoiceRecorder({ onText, language }: VoiceRecorderProps) {

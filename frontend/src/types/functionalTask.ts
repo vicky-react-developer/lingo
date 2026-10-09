@@ -4,7 +4,7 @@ export interface Attempt {
     correctedAnswer?: string | null;
     explanation?: string | null;
     isCorrect: boolean;
-    score?: number | null;
+    score: number;
     createdAt: string;
     updatedAt: string;
 }

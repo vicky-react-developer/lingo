@@ -1,82 +1,49 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { ArrowLeft, ArrowRight, CheckCircle2, XCircle } from "lucide-react";
 import Header from "../layouts/Header";
 import { useParams, useLocation, useNavigate } from "react-router";
-import { getFunctionalExercises, submitFunctionalExercise } from "../services/functionalTaskservice";
 import VoiceRecorder from "../components/VoiceRecorder";
 import Loader from "../components/Loader";
 import useSpeech from "../hooks/useSpeech";
+import { useFetchFunctionalExercisesQuery, useSubmitFunctionalExerciseMutation } from "../state/api/functionalTask.api";
 
 export default function FunctionalTask() {
     const { taskId } = useParams();
     const location = useLocation();
     const navigate = useNavigate();
+    const initialized = useRef(false);
 
-    const [answer, setAnswer] = useState("");
-    const [questions, setQuestions] = useState([]);
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [loading, setLoading] = useState(false);
-    const [result, setResult] = useState(null);
-    const [answered, setAnswered] = useState(0);
-    const [submitting, setSubmitting] = useState(false);
     const { speak, stop } = useSpeech();
 
     const { taskType, taskTitle } = location.state || {}
+    const { data } = useFetchFunctionalExercisesQuery(Number(taskId));
+    const [submitFunctionalExercise, { isLoading: submitting }] = useSubmitFunctionalExerciseMutation();
+
+    const questions = data?.data || [];
+
+    const [answer, setAnswer] = useState("");
+    const [currentIndex, setCurrentIndex] = useState(0);
 
     useEffect(() => {
-        fetchFunctionalExercises();
+        if(initialized.current || questions.length === 0) return;
+
+        const firstUnansweredIndex = questions.findIndex(item => item.Attempts.length === 0);
+        setCurrentIndex(firstUnansweredIndex === -1 ? 0 : firstUnansweredIndex);
+        initialized.current = true;
 
         return () => stop();
-    }, [taskType]);
+    }, [questions]);
 
-    useEffect(() => {
-        const currentQuestion = questions[currentIndex];
-        if (currentQuestion?.attempts?.length > 0) {
-            const answer = currentQuestion?.attempts[0]
-            setResult(answer);
-            setAnswer(answer.userAnswer)
-        } else {
-            setResult(null);
-            setAnswer("");
-        }
-    }, [currentIndex, questions]);
-
-    const fetchFunctionalExercises = async () => {
-        try {
-            setLoading(true);
-            const res = await getFunctionalExercises(taskId)
-            if (!res.success) {
-                return;
-            };
-            let answered = 0;
-            let currentIndex = null;
-            const questions = res.data?.map((item, index) => {
-                if (item.Attempts?.length > 0) {
-                    answered += 1
-                } else if (currentIndex === null) {
-                    currentIndex = index
-                }
-
-                return {
-                    id: item.id,
-                    tamilSentence: item.tamilSentence,
-                    englishSentence: item.englishSentence,
-                    attempts: item.Attempts
-                }
-            });
-            setAnswered(answered);
-            setCurrentIndex(currentIndex);
-            setQuestions(questions);
-        } catch (e) {
-            console.log("fetchTamilSentences err:", e)
-        } finally {
-            setLoading(false);
-        }
-    }
+    const answered = useMemo(() => {
+        return questions.filter(item => item.Attempts.length > 0).length;
+    }, [questions]);
 
     const handleSubmit = async () => {
         if (!answer.trim()) return;
-        setSubmitting(true);
+        if (!currentQuestion) {
+            alert("Something went wrong!");
+            return;
+        }
         try {
             const currentQuestion = questions[currentIndex]
             const payload = {
@@ -84,35 +51,16 @@ export default function FunctionalTask() {
                 englishSentence: currentQuestion.englishSentence,
                 userAnswer: answer,
                 exerciseId: currentQuestion.id,
-                taskId,
+                taskId: Number(taskId),
                 taskType
             }
-            const res = await submitFunctionalExercise(payload);
-            if (!res.success) {
-                alert(res.message);
-            };
-            setAnswered(prev => prev + 1);
-            injectAttempt(currentQuestion.id, res?.data)
-            speak(res.data?.explanation);
+            const res = await submitFunctionalExercise(payload).unwrap();
+            speak(res.data?.explanation!);
         } catch (e) {
             alert("Something went wrong!");
-            console.log("handleTamilTranslationSubmit err:", e)
-        } finally {
-            setSubmitting(false);
+            console.log("handleSubmit err:", e)
         }
     };
-
-    const injectAttempt = (questionId, attempt) => {
-        if (!questionId) return;
-        setQuestions(prev => prev.map(item => {
-            if (item.id === questionId) {
-                const itemCopy = { ...item };
-                itemCopy.attempts = [attempt];
-                return itemCopy
-            }
-            return item;
-        }))
-    }
 
     const handleNext = () => {
         stop();
@@ -134,6 +82,8 @@ export default function FunctionalTask() {
     const currentQuestion = questions[currentIndex];
     const progress = (answered / questions?.length) * 100;
     const isLastQuestion = currentIndex === questions?.length - 1;
+
+    const result = currentQuestion?.Attempts[0] || null;
 
     return (
         <div>
@@ -201,11 +151,11 @@ export default function FunctionalTask() {
                     <div className="relative">
 
                         <textarea
-                            value={answer}
+                            value={result?.userAnswer || answer}
                             onChange={(e) => setAnswer(e.target.value)}
                             className="w-full min-h-[150px] border-none outline-none rounded-[20px] p-[18px] text-base bg-white shadow-[0_6px_20px_rgba(0,0,0,0.05)] resize-none disabled:opacity-70"
                             placeholder="Speak your Answer..."
-                            disabled={result}
+                            disabled={Boolean(result)}
                         />
 
                     </div>
@@ -292,6 +242,5 @@ export default function FunctionalTask() {
                 </div>
             }
         </div>
-
     );
 }

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function useVoiceInput(onResult: (text: string) => void, language: string) {
+export default function useVoiceInput(onResult: (text: string) => void, language?: string) {
 
   const [listening, setListening] = useState(false);
 

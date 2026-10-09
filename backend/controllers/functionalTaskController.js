@@ -157,7 +157,8 @@ exports.submitFunctionalExercise = async (req, res) => {
         console.log("submitTamilTranslation error", e);
 
         return res.status(500).json({
-            success: false
+            success: false,
+            message: "Internal server error!"
         });
 
     }

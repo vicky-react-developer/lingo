@@ -1,75 +1,54 @@
 import { useState, useEffect } from "react";
-import { getOnePassage, submitPassageTranslation } from "../services/passageService";
 import { useLocation } from "react-router";
 import Header from "../layouts/Header";
 import VoiceRecorder from "../components/VoiceRecorder";
 import Loader from "../components/Loader";
 import useSpeech from "../hooks/useSpeech";
+import { useFetchOnePassageQuery, useSubmitPassageTranslationMutation } from "../state/api/passage.api";
 
 export default function StoryTranslation() {
     const location = useLocation();
-
-    const [translation, setTranslation] = useState("");
-    const [passage, setPassage] = useState(null);
-    const [result, setResult] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [submitting, setSubmitting] = useState(false);
-    const { speak, stop } = useSpeech();
-
     const { passageId } = location.state || {};
 
+    const { data } = useFetchOnePassageQuery(passageId);
+    const passage = data?.data || null;
+    const result = passage?.Attempts[0] ?? null;
+
+    const [submitPassageTranslation, { isLoading: submitting }] = useSubmitPassageTranslationMutation();
+
+    const [translation, setTranslation] = useState("");
+    const { speak, stop } = useSpeech();
+
     useEffect(() => {
-        if (passageId) {
-            fetchOnePassage();
-        }
-
         return () => stop();
-    }, [passageId])
-
-    const fetchOnePassage = async () => {
-        try {
-            setLoading(true);
-            const res = await getOnePassage(passageId);
-            if (!res.success) {
-                return;
-            }
-            setPassage(res.data);
-            if (res?.data?.Attempts.length > 0) {
-                setResult(res?.data?.Attempts[0])
-            }
-        } catch (e) {
-            console.log("fetchOnePassage error", e)
-        } finally {
-            setLoading(false);
-        }
-    };
+    }, []);
 
     const handleSubmit = async () => {
         if (!translation.trim()) {
             return;
         }
-        setSubmitting(true);
+
+        if (!passage) {
+            alert("Something went wrong!");
+            return;
+        };
+
         try {
             const payload = {
-                passageId: passage?.id,
+                passageId: passage.id,
                 tamilText: passage.tamilText,
                 translation
             }
-            const res = await submitPassageTranslation(payload);
-            if (!res.success) {
-                alert(res.message);
-                return;
-            };
-            setResult(res?.data);
-            speak(res.data?.explanation);
+            const res = await submitPassageTranslation(payload).unwrap();
+            // setResult(res?.data);
+            speak(res.data?.explanation!);
         } catch (e) {
-            console.log("submitPassageTranslation err:", e)
-        } finally {
-            setSubmitting(false);
+            console.log("submitPassageTranslation err:", e);
+            alert("Something went wrong!");
         }
     }
 
-    const handleVoice = (value) => {
+    const handleVoice = (value: string) => {
         setTranslation(prev => prev + value + " ");
     }
 
@@ -114,20 +93,18 @@ export default function StoryTranslation() {
                                 <Loader />
                             }
                         </button>
-
                     </div>
                 }
 
 
                 {result && (
                     <div>
-
                         <div className="bg-white rounded-2xl p-6 text-center mt-5 shadow-[0_4px_12px_rgba(0,0,0,0.06)]">
                             <h1 className="m-0 text-[#00CCFF] text-[42px]">{result.score}%</h1>
                             <span>
                                 {result.score >= 90
                                     ? "Excellent"
-                                    : result.score >= 70
+                                    : result!.score >= 70
                                         ? "Good"
                                         : "Keep Practicing"}
                             </span>

@@ -5,7 +5,7 @@ import type {
     FunctionalTaskResponse,
     FunctionalExerciseResponse,
     Attempt,
-    SubmitFunctionalExercisePayload
+    SubmitFunctionalExercisePayload,
  } from '../../types/functionalTask';
 
 export const functionalTaskApi = api.injectEndpoints({
@@ -22,13 +22,14 @@ export const functionalTaskApi = api.injectEndpoints({
 
         fetchFunctionalExercises: builder.query<
             DataResponse<FunctionalExerciseResponse[]>,
-            string
+            number
         >({
             query: (taskId) => ({
                 baseURL: API.base,
                 url: `functional-tasks/get-functional-exercises/${taskId}`,
                 method: 'GET',
             }),
+            providesTags: ["FunctionalExercises"]
         }),
 
         submitFunctionalExercise: builder.mutation<
@@ -39,9 +40,9 @@ export const functionalTaskApi = api.injectEndpoints({
                 baseURL: API.base,
                 url: 'functional-tasks/submit-functional-exercise',
                 method: 'POST',
-                body: payload,
+                data: payload,
             }),
-            invalidatesTags: ["FunctionalTasks"]
+            invalidatesTags: ["FunctionalTasks", "FunctionalExercises"]
         })
 
     })

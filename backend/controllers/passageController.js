@@ -22,7 +22,6 @@ exports.getAllPassages = async (req, res) => {
                         where: {
                             userId
                         },
-                        attributes: ["id", "score"],
                         required: false
                     }
                 ]
